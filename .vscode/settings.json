@@ -1,0 +1,6 @@
+{
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "eslint.probe": ["javascript", "typescript", "markdown"],
+  "editor.formatOnSave": false,
+  "editor.codeActionsOnSave": ["source.formatDocument", "source.fixAll.eslint"]
+}
