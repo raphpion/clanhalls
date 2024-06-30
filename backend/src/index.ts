@@ -14,7 +14,7 @@ import { createClient } from 'redis';
 config({ path: path.join(__dirname, '../../.env') });
 
 import db from './db';
-import errorMiddleware from './middlewares/errorMiddleware';
+import errorMiddleware from './middleware/errorMiddleware';
 import routes from './routes';
 
 const app = express();
