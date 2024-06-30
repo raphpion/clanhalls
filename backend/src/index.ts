@@ -23,7 +23,12 @@ app.set('trust proxy', process.env.NODE_ENV === 'production');
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser(process.env.SESSION_SECRET));
-app.use(cors());
+app.use(
+  cors({
+    credentials: true,
+    origin: 'http://localhost:3000',
+  })
+);
 
 const redisClient = createClient({
   url: `redis://${process.env.REDIS_URL}:${process.env.REDIS_PORT}`,

@@ -26,7 +26,7 @@ accountRoutes.post(
   createSessionForUser
 );
 
-accountRoutes.post('/sign-out', retrieveAuth(), signOut); // TODO
+accountRoutes.post('/sign-out', retrieveAuth(), signOut);
 
 async function createSessionForUser(
   req: Request,
@@ -69,7 +69,7 @@ async function createSessionForUser(
 async function getCurrentUser(req: Request, res: Response, next: NextFunction) {
   try {
     if (!req.userEntity) {
-      return res.sendStatus(204);
+      return res.json(null);
     }
 
     const { googleId, username, email, emailNormalized, emailVerified } =
@@ -121,7 +121,7 @@ async function signInWithGoogle(req: Request, _: Response, next: NextFunction) {
 async function signOut(req: Request, res: Response, next: NextFunction) {
   try {
     if (req.sessionEntity) {
-      await this.sessionService.signOutSession(req.sessionEntity);
+      await sessionService.signOutSession(req.sessionEntity);
     }
 
     req.session.destroy(console.error);
