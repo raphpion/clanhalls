@@ -1,16 +1,22 @@
 import express from 'express';
+import Joi from 'joi';
 
 import { createSessionForUser } from '.';
 import type { IGoogleService } from '../../account/googleService';
-import {
-  signInWithGoogleSchema,
-  type SignInWithGooglePayload,
-} from '../../account/schemas';
 import container from '../../container';
 import AppError, { AppErrorCodes } from '../../extensions/errors';
 import type { Request, Response, NextFunction } from '../../extensions/express';
 import validate from '../../middleware/validationMiddleware';
 import type { IUserService } from '../../users/userService';
+
+
+type SignInWithGooglePayload = {
+  token: string;
+};
+
+const signInWithGoogleSchema = Joi.object<SignInWithGooglePayload>({
+  token: Joi.string().required(),
+});
 
 const routes = express.Router();
 

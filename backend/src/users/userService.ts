@@ -12,6 +12,10 @@ export interface IUserService {
 
   getUserByGoogleId(googleId: string): Promise<User | null>;
 
+  getUserByUsername(username: string): Promise<User | null>;
+
+  setUsername(user: User, username: string): Promise<void>;
+
   verifyEmail(user: User): Promise<void>;
 }
 
@@ -32,6 +36,15 @@ class UserService implements IUserService {
 
   async getUserByGoogleId(googleId: string) {
     return this.userRepository.getUserByGoogleId(googleId);
+  }
+
+  async getUserByUsername(username: string) {
+    return this.userRepository.getUserByUsername(username);
+  }
+
+  async setUsername(user: User, username: string) {
+    user.setUsername(username);
+    await this.userRepository.saveUser(user);
   }
 
   async verifyEmail(user: User) {

@@ -1,7 +1,9 @@
 import express from 'express';
 
+import setUsername from './set-username';
 import signInWithGoogle from './sign-in-with-google';
 import signOut from './sign-out';
+import verifyUsernameAvailability from './verify-username-availability';
 import container from '../../container';
 import AppError, { AppErrorCodes } from '../../extensions/errors';
 import type { Request, Response, NextFunction } from '../../extensions/express';
@@ -12,7 +14,12 @@ const accountRoutes = express.Router();
 
 accountRoutes.get('/', retrieveAuth(), getCurrentUser);
 
-accountRoutes.use(signInWithGoogle, signOut);
+accountRoutes.use(
+  setUsername,
+  signInWithGoogle,
+  signOut,
+  verifyUsernameAvailability
+);
 
 async function getCurrentUser(req: Request, res: Response, next: NextFunction) {
   try {

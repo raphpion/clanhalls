@@ -8,6 +8,7 @@ export interface IUserRepository {
   getUserByEmail(email: string): Promise<User | null>;
   getUserByGoogleId(googleId: string): Promise<User | null>;
   getUserById(id: number, relations?: UserRelations[]): Promise<User | null>;
+  getUserByUsername(username: string): Promise<User | null>;
   saveUser(user: User): Promise<User>;
 }
 
@@ -26,6 +27,10 @@ export default class UserRepository implements IUserRepository {
 
   public async getUserById(id: number, relations: UserRelations[]) {
     return this.userRepository.findOne({ where: { id }, relations });
+  }
+
+  public async getUserByUsername(username: string) {
+    return this.userRepository.findOneBy({ username });
   }
 
   public async saveUser(user: User) {

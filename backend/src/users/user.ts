@@ -53,6 +53,14 @@ class User {
     this.emailVerified = false;
   }
 
+  setUsername(username: string) {
+    if (this.username) {
+      throw new AppError(AppErrorCodes.BAD_REQUEST, 'Username is already set');
+    }
+
+    this.username = username;
+  }
+
   verifyEmail() {
     if (this.emailVerified) {
       throw new AppError(
