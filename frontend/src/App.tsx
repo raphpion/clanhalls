@@ -11,6 +11,7 @@ import {
   GoogleOAuthProvider,
 } from '@react-oauth/google';
 import { ChangeEvent, useRef, useState } from 'react';
+import { verifyUsernameAvailability } from './api/account';
 
 const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID;
 
@@ -188,4 +189,3 @@ function AuthTest() {
 }
 
 export default App;
-
