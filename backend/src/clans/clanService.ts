@@ -6,7 +6,7 @@ import AppError, { AppErrorCodes } from '../extensions/errors';
 import type User from '../users/user';
 
 export interface IClanService {
-  createClanForUser(name: string, user: User): Promise<Clan>;
+  createClanForUser(user: User, name: string): Promise<Clan>;
 }
 
 @injectable()
@@ -15,7 +15,7 @@ class ClanService implements IClanService {
     @inject('ClanRepository') private readonly clanRepository: IClanRepository
   ) {}
 
-  async createClanForUser(name: string, user: User) {
+  async createClanForUser(user: User, name: string) {
     const existingClan = await this.clanRepository.getClanByName(name);
     if (existingClan) {
       throw new AppError(

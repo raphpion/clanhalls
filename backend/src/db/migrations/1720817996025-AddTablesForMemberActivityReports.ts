@@ -1,12 +1,12 @@
 import { MigrationInterface, QueryRunner } from "typeorm";
 
-export class AddTablesForMemberActivityReports1720814120390 implements MigrationInterface {
-    name = 'AddTablesForMemberActivityReports1720814120390'
+export class AddTablesForMemberActivityReports1720817996025 implements MigrationInterface {
+    name = 'AddTablesForMemberActivityReports1720817996025'
 
     public async up(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.query(`ALTER TABLE "clan_user" DROP CONSTRAINT "FK_1b08433fbb3933ea30477b184c4"`);
         await queryRunner.query(`ALTER TABLE "clan_user" DROP CONSTRAINT "FK_dafa714bc802cd2356c43d655f8"`);
-        await queryRunner.query(`CREATE TABLE "credentials" ("id" SERIAL NOT NULL, "clientId" character varying NOT NULL, "clientSecretHash" character varying NOT NULL, "scope" character varying NOT NULL, "createdAt" TIMESTAMP NOT NULL DEFAULT now(), "lastUsedAt" TIMESTAMP NOT NULL, "userId" integer, CONSTRAINT "UQ_b2afc4579bbea927240a17119f7" UNIQUE ("clientId"), CONSTRAINT "PK_1e38bc43be6697cdda548ad27a6" PRIMARY KEY ("id"))`);
+        await queryRunner.query(`CREATE TABLE "credentials" ("id" SERIAL NOT NULL, "name" character varying(255) NOT NULL, "clientId" character varying NOT NULL, "clientSecretHash" character varying NOT NULL, "scope" character varying NOT NULL, "createdAt" TIMESTAMP NOT NULL DEFAULT now(), "lastUsedAt" TIMESTAMP, "userId" integer, CONSTRAINT "UQ_b2afc4579bbea927240a17119f7" UNIQUE ("clientId"), CONSTRAINT "PK_1e38bc43be6697cdda548ad27a6" PRIMARY KEY ("id"))`);
         await queryRunner.query(`CREATE TABLE "clan_player" ("clanId" integer NOT NULL, "playerId" integer NOT NULL, "lastSeenAt" TIMESTAMP NOT NULL, "rank" character varying NOT NULL, CONSTRAINT "PK_eb6bd76df8684e9e26e48aa89a7" PRIMARY KEY ("clanId", "playerId"))`);
         await queryRunner.query(`CREATE TABLE "member_activity_report" ("id" SERIAL NOT NULL, "uuid" uuid NOT NULL DEFAULT uuid_generate_v4(), "receivedAt" TIMESTAMP NOT NULL DEFAULT now(), "data" jsonb NOT NULL, CONSTRAINT "UQ_d578303e8fded30bc733e040181" UNIQUE ("uuid"), CONSTRAINT "PK_07f3197688b196a9c0431bd92f2" PRIMARY KEY ("id"))`);
         await queryRunner.query(`CREATE TABLE "player" ("id" SERIAL NOT NULL, "uuid" uuid NOT NULL DEFAULT uuid_generate_v4(), "username" character varying(12) NOT NULL, "previousUsername" character varying(12), "usernameChangedAt" TIMESTAMP, CONSTRAINT "UQ_d361920f8c6a8ea7950a34e0200" UNIQUE ("uuid"), CONSTRAINT "UQ_331aaf0d7a5a45f9c74cc699ea8" UNIQUE ("username"), CONSTRAINT "PK_65edadc946a7faf4b638d5e8885" PRIMARY KEY ("id"))`);

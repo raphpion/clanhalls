@@ -1,5 +1,9 @@
 import { container } from 'tsyringe';
 
+import type { ICredentialsRepository } from './account/credentialsRepository';
+import CredentialsRepository from './account/credentialsRepository';
+import type { ICredentialsService } from './account/credentialsService';
+import CredentialsService from './account/credentialsService';
 import GoogleService, { type IGoogleService } from './account/googleService';
 import type { IClanRepository } from './clans/clanRepository';
 import ClanRepository from './clans/clanRepository';
@@ -18,13 +22,19 @@ import UserService from './users/userService';
 
 container
   .register<IClanRepository>('ClanRepository', { useClass: ClanRepository })
+  .register<ICredentialsRepository>('CredentialsRepository', {
+    useClass: CredentialsRepository,
+  })
   .register<ISessionRepository>('SessionRepository', {
     useClass: SessionRepository,
   })
+  .register<ICredentialsService>('CredentialsService', {
+    useClass: CredentialsService,
+  })
+  .register<IGoogleService>('GoogleService', { useClass: GoogleService })
   .register<IUserRepository>('UserRepository', { useClass: UserRepository })
   .register<IClanService>('ClanService', { useClass: ClanService })
   .register<ISessionService>('SessionService', { useClass: SessionService })
-  .register<IUserService>('UserService', { useClass: UserService })
-  .register<IGoogleService>('GoogleService', { useClass: GoogleService });
+  .register<IUserService>('UserService', { useClass: UserService });
 
 export default container;

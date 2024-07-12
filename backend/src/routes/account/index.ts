@@ -1,6 +1,7 @@
 import express from 'express';
 
 import createClan from './create-clan';
+import credentialsRoutes from './credentials';
 import setUsername from './set-username';
 import signInWithGoogle from './sign-in-with-google';
 import signOut from './sign-out';
@@ -26,6 +27,8 @@ accountRoutes.use(
   signOut,
   verifyUsernameAvailability
 );
+
+accountRoutes.use('/credentials', credentialsRoutes);
 
 async function getCurrentUser(req: Request, res: Response, next: NextFunction) {
   try {

@@ -43,7 +43,7 @@ async function createClan(req: Request, res: Response, next: NextFunction) {
       );
     }
 
-    await clanService.createClanForUser(name, req.userEntity);
+    await clanService.createClanForUser(req.userEntity, name);
 
     res.sendStatus(204);
   } catch (error) {

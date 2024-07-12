@@ -13,12 +13,36 @@ export type AccountData = {
   } | null;
 } | null;
 
+export type CreateClanPayload = {
+  name: string;
+};
+
+export type CreateCredentialsPayload = {
+  name: string;
+  scope: string;
+};
+
+export type CreateCredentialsData = {
+  clientId: string;
+  clientSecret: string;
+};
+
 export type SetUsernamePayload = {
   username: string;
 };
 
 export async function createClan(name: string): Promise<void> {
-  await post<{ name: string }>('/account/create-clan', { name });
+  await post<CreateClanPayload>('/account/create-clan', { name });
+}
+
+export async function createCredentials(
+  data: CreateCredentialsPayload,
+): Promise<CreateCredentialsData> {
+  const response = await post<CreateCredentialsPayload, CreateCredentialsData>(
+    '/account/credentials',
+    data,
+  );
+  return response.data;
 }
 
 export async function getCurrentUser(): Promise<AccountData> {

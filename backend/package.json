@@ -21,6 +21,7 @@
   "author": "Raphaël Pion",
   "license": "MIT",
   "dependencies": {
+    "bcrypt": "^5.1.1",
     "body-parser": "^1.20.2",
     "connect-redis": "^7.1.1",
     "cookie-parser": "^1.4.6",
@@ -38,6 +39,7 @@
     "typeorm": "^0.3.20"
   },
   "devDependencies": {
+    "@types/bcrypt": "^5.0.2",
     "@types/body-parser": "^1.19.5",
     "@types/cookie-parser": "^1.4.7",
     "@types/cors": "^2.8.17",
