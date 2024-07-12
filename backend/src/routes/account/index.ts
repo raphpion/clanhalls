@@ -12,7 +12,11 @@ import type { ISessionService } from '../../sessions/sessionService';
 
 const accountRoutes = express.Router();
 
-accountRoutes.get('/', retrieveAuth(), getCurrentUser);
+accountRoutes.get(
+  '/',
+  retrieveAuth(['clanUser', 'clanUser.clan']),
+  getCurrentUser
+);
 
 accountRoutes.use(
   setUsername,
@@ -30,12 +34,18 @@ async function getCurrentUser(req: Request, res: Response, next: NextFunction) {
     const { googleId, username, email, emailNormalized, emailVerified } =
       req.userEntity;
 
+    const clanUser = await req.userEntity.clanUser;
+    const clan = await clanUser?.clan;
+
     res.json({
       googleId,
       username,
       email,
       emailNormalized,
       emailVerified,
+      clan: clan
+        ? { uuid: clan.uuid, name: clan.name, isAdmin: clanUser.isAdmin }
+        : null,
     });
   } catch (error) {
     next(error);

@@ -34,7 +34,6 @@ export default class UserRepository implements IUserRepository {
   }
 
   public async saveUser(user: User) {
-    await this.userRepository.save(user);
-    return user;
+    return this.userRepository.save(user);
   }
 }

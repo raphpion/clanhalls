@@ -3,6 +3,8 @@ import path from 'path';
 import { config } from 'dotenv';
 import { DataSource } from 'typeorm';
 
+import Clan from '../clans/clan';
+import ClanUser from '../clans/clanUser';
 import Session from '../sessions/session';
 import User from '../users/user';
 
@@ -18,7 +20,7 @@ const db = new DataSource({
   synchronize: false,
   logging: process.env.NODE_ENV === 'development',
   logger: 'file',
-  entities: [Session, User],
+  entities: [Clan, ClanUser, Session, User],
   subscribers: [],
   migrations: [__dirname + '/migrations/**/*.ts'],
 });

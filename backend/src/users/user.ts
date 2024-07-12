@@ -1,6 +1,14 @@
 import Joi from 'joi';
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  OneToMany,
+  OneToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
+import type ClanUser from '../clans/clanUser';
+import type { ClanUserRelations } from '../clans/clanUser';
 import AppError, { AppErrorCodes } from '../extensions/errors';
 import type Session from '../sessions/session';
 
@@ -24,6 +32,9 @@ class User {
   @Column({ default: false })
   emailVerified: boolean;
 
+  @OneToOne('ClanUser', (clanUser: ClanUser) => clanUser.user)
+  clanUser: Promise<ClanUser>;
+
   @OneToMany('Session', (session: Session) => session.user)
   sessions: Promise<Session[]>;
 
@@ -36,6 +47,11 @@ class User {
     }
 
     return email.trim().toLowerCase();
+  }
+
+  // custom getter 'clan' that returns the clanUser's clan
+  get clan() {
+    return Promise.resolve(this.clanUser).then((clanUser) => clanUser?.clan);
   }
 
   changeEmail(email: string) {
@@ -75,4 +91,7 @@ class User {
 
 export default User;
 
-export type UserRelations = 'sessions';
+export type UserRelations =
+  | 'clanUser'
+  | 'sessions'
+  | `clanUser.${ClanUserRelations}`;
