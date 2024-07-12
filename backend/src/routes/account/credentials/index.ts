@@ -26,12 +26,34 @@ const createCredentialsSchema = Joi.object<CreateCredentialsPayload>({
 
 const credentialsRoutes = express.Router();
 
+credentialsRoutes.get('/', requireAuth(['credentials']), getCredentials);
+
 credentialsRoutes.post(
   '/',
   requireAuth(),
   validate(createCredentialsSchema),
   createCredentials
 );
+
+async function getCredentials(req: Request, res: Response, next: NextFunction) {
+  try {
+    if (!req.userEntity) {
+      throw new AppError(AppErrorCodes.UNAUTHORIZED, 'Unauthorized');
+    }
+
+    const credentials = (await req.userEntity.credentials).map((c) => ({
+      name: c.name,
+      scope: c.scope,
+      clientId: c.clientId,
+      createdAt: c.createdAt,
+      lastUsedAt: c.lastUsedAt,
+    }));
+
+    res.json(credentials);
+  } catch (error) {
+    next(error);
+  }
+}
 
 async function createCredentials(
   req: Request,

@@ -27,6 +27,14 @@ export type CreateCredentialsData = {
   clientSecret: string;
 };
 
+export type CredentialsData = {
+  name: string;
+  scope: string;
+  clientId: string;
+  createdAt: string;
+  lastUsedAt: string | null;
+};
+
 export type SetUsernamePayload = {
   username: string;
 };
@@ -42,6 +50,11 @@ export async function createCredentials(
     '/account/credentials',
     data,
   );
+  return response.data;
+}
+
+export async function getCredentials(): Promise<CredentialsData[]> {
+  const response = await get<CredentialsData[]>('/account/credentials');
   return response.data;
 }
 

@@ -96,5 +96,6 @@ export default User;
 
 export type UserRelations =
   | 'clanUser'
-  | 'sessions'
-  | `clanUser.${ClanUserRelations}`;
+  | `clanUser.${ClanUserRelations}`
+  | 'credentials'
+  | 'sessions';

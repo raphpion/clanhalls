@@ -6,11 +6,12 @@ import {
 } from '@tanstack/react-router';
 import { Fragment, useContext, useState } from 'react';
 import AppContext from '../context';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import {
   createClan,
   createCredentials,
   CreateCredentialsData,
+  getCredentials,
   signOut,
 } from '../api/account';
 import { Field, Form, FormikProvider, useFormik } from 'formik';
@@ -71,12 +72,91 @@ function CreateClanForm() {
   );
 }
 
-function Credentials() {}
-
-function CreateCredentialsForm() {
+function Credentials() {
   const [createdCredentials, setCreatedCredentials] =
     useState<CreateCredentialsData>();
 
+  const credentialsQuery = useQuery({
+    queryKey: ['credentials'],
+    queryFn: getCredentials,
+  });
+
+  return (
+    <Fragment>
+      <h2>Credentials</h2>
+      {createdCredentials && (
+        <div style={{ border: '1px solid green', padding: '0 0.5rem 1rem' }}>
+          <h4>Credentials created successfully!</h4>
+          <table>
+            <thead>
+              <tr>
+                <th style={{ border: '1px solid gray' }}>Client ID</th>
+                <th style={{ border: '1px solid gray' }}>Client secret</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td style={{ border: '1px solid gray' }}>
+                  {createdCredentials.clientId}
+                </td>
+                <td style={{ border: '1px solid gray' }}>
+                  {createdCredentials.clientSecret}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      )}
+      {credentialsQuery.isLoading ? (
+        <p>Loading...</p>
+      ) : (
+        <Fragment>
+          {credentialsQuery.data?.length ? (
+            <table>
+              <thead>
+                <th style={{ border: '1px solid gray' }}>Name</th>
+                <th style={{ border: '1px solid gray' }}>Scope</th>
+                <th style={{ border: '1px solid gray' }}>Client ID</th>
+                <th style={{ border: '1px solid gray' }}>Created at</th>
+                <th style={{ border: '1px solid gray' }}>Last used at</th>
+              </thead>
+              <tbody>
+                {credentialsQuery.data.map((credential) => (
+                  <tr key={credential.clientId}>
+                    <td style={{ border: '1px solid gray' }}>
+                      {credential.name}
+                    </td>
+                    <td style={{ border: '1px solid gray' }}>
+                      {credential.scope.replace(',', ', ')}
+                    </td>
+                    <td style={{ border: '1px solid gray' }}>
+                      {credential.clientId}
+                    </td>
+                    <td style={{ border: '1px solid gray' }}>
+                      {credential.createdAt}
+                    </td>
+                    <td style={{ border: '1px solid gray' }}>
+                      {credential.lastUsedAt || 'never'}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          ) : (
+            <p>You don't have any credentials.</p>
+          )}
+        </Fragment>
+      )}
+      <CreateCredentialsForm onSuccess={setCreatedCredentials} />
+    </Fragment>
+  );
+}
+
+type CreateCredentialsFormProps = {
+  onSuccess: (data: CreateCredentialsData) => void;
+};
+
+function CreateCredentialsForm({ onSuccess }: CreateCredentialsFormProps) {
   const formik = useFormik({
     initialValues: {
       name: '',
@@ -97,35 +177,12 @@ function CreateCredentialsForm() {
   const createCredentialsMutation = useMutation({
     mutationKey: ['create-credentials'],
     mutationFn: createCredentials,
-    onSuccess: setCreatedCredentials,
+    onSuccess,
   });
 
   return (
     <Fragment>
       <h3>Create credentials</h3>
-      {createdCredentials && (
-        <div style={{ border: '1px solid green', padding: '0 0.5rem 1rem' }}>
-          <h4>Credentials created successfully!</h4>
-          <table>
-            <thead>
-              <tr>
-                <th style={{ border: '1px solid black' }}>Client ID</th>
-                <th style={{ border: '1px solid black' }}>Client secret</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td style={{ border: '1px solid black' }}>
-                  {createdCredentials.clientId}
-                </td>
-                <td style={{ border: '1px solid black' }}>
-                  {createdCredentials.clientSecret}
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      )}
       <p>
         Create a set of credentials to access the API via webhooks. You will
         only be able to see your client secret once!
@@ -172,7 +229,7 @@ function HomeComponent() {
   return (
     <div>
       <h1>Welcome, {user.username}!</h1>
-      <CreateCredentialsForm />
+      <Credentials />
       {user.clan ? <ClanInfo /> : <CreateClanForm />}
       <p>
         <button onClick={() => signOutMutation.mutate()}>Sign out</button>
