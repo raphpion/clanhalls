@@ -7,6 +7,7 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
+import type Credentials from '../account/credentials';
 import type ClanUser from '../clans/clanUser';
 import type { ClanUserRelations } from '../clans/clanUser';
 import AppError, { AppErrorCodes } from '../extensions/errors';
@@ -34,6 +35,9 @@ class User {
 
   @OneToOne('ClanUser', (clanUser: ClanUser) => clanUser.user)
   clanUser: Promise<ClanUser>;
+
+  @OneToMany('Credentials', (credentials: Credentials) => credentials.user)
+  credentials: Promise<Credentials[]>;
 
   @OneToMany('Session', (session: Session) => session.user)
   sessions: Promise<Session[]>;

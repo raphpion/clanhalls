@@ -7,8 +7,11 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
+import ClanPlayer from './clanPlayer';
 import ClanUser from './clanUser';
+import type MemberActivityReport from './memberActivityReport';
 import AppError, { AppErrorCodes } from '../extensions/errors';
+import type Player from '../players/player';
 import type User from '../users/user';
 
 @Entity()
@@ -30,6 +33,17 @@ class Clan {
     cascade: true,
   })
   clanUsers: Promise<ClanUser[]>;
+
+  @OneToMany('ClanPlayer', (clanPlayer: ClanPlayer) => clanPlayer.clan, {
+    cascade: true,
+  })
+  clanPlayers: Promise<ClanPlayer[]>;
+
+  @OneToMany(
+    'MemberActivityReport',
+    (memberActivityReport: MemberActivityReport) => memberActivityReport.clan
+  )
+  memberActivityReports: Promise<MemberActivityReport[]>;
 
   static normalizeName(name: string) {
     return slugify(name, {
@@ -60,8 +74,34 @@ class Clan {
 
     clanUsers.push(clanUser);
   }
+
+  async addOrUpdatePlayer(player: Player, rank: string, lastSeenAt: Date) {
+    const clanPlayers = await this.clanPlayers;
+
+    const existingClanUser = clanPlayers.find(
+      (clanPlayer) => clanPlayer.playerId === player.id
+    );
+
+    if (existingClanUser) {
+      existingClanUser.rank = rank;
+      existingClanUser.lastSeenAt = lastSeenAt;
+
+      return;
+    }
+
+    const clanPlayer = new ClanPlayer();
+    clanPlayer.player = Promise.resolve(player);
+    clanPlayer.clan = Promise.resolve(this);
+    clanPlayer.rank = rank;
+    clanPlayer.lastSeenAt = lastSeenAt;
+
+    clanPlayers.push(clanPlayer);
+  }
 }
 
 export default Clan;
 
-export type ClanRelations = 'clanUsers';
+export type ClanRelations =
+  | 'clanUsers'
+  | 'clanPlayers'
+  | 'memberActivityReports';
