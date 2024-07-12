@@ -16,17 +16,18 @@ class ClanService implements IClanService {
   ) {}
 
   async createClanForUser(name: string, user: User) {
-    const clan = new Clan();
-    clan.name = name;
-    clan.nameNormalized = Clan.normalizeName(name);
-
-    const existingClan = await this.clanRepository.getClanByName(clan.name);
+    const existingClan = await this.clanRepository.getClanByName(name);
     if (existingClan) {
       throw new AppError(
         AppErrorCodes.ALREADY_EXISTS,
         'A clan with this name already exists'
       );
     }
+
+    const clan = new Clan();
+    clan.name = name;
+    clan.nameNormalized = Clan.normalizeName(name);
+    await this.clanRepository.saveClan(clan);
 
     await clan.addUser(user, true);
 

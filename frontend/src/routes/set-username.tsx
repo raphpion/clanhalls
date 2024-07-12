@@ -5,7 +5,7 @@ import {
   signOut,
   verifyUsernameAvailability,
 } from '../api/account';
-import { Form, FormikProvider, useFormik } from 'formik';
+import { Field, Form, FormikProvider, useFormik } from 'formik';
 import { ChangeEvent } from 'react';
 
 export const Route = createFileRoute('/set-username')({
@@ -79,10 +79,9 @@ function SetUsernameComponent() {
       <p>Please set a username before you can access the application.</p>
       <FormikProvider value={formik}>
         <Form>
-          <input
-            type="text"
+          <Field
             name="username"
-            value={formik.values.username}
+            placeholder="Username"
             onChange={handleUsernameChange}
           />
           <button type="submit" disabled={!formik.values.usernameAvailable}>

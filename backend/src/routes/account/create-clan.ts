@@ -50,3 +50,5 @@ async function createClan(req: Request, res: Response, next: NextFunction) {
     next(error);
   }
 }
+
+export default routes;

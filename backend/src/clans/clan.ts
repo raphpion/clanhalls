@@ -26,7 +26,9 @@ class Clan {
   @Column({ unique: true, length: 255 })
   nameNormalized: string;
 
-  @OneToMany('ClanUser', (clanUser: ClanUser) => clanUser.clan)
+  @OneToMany('ClanUser', (clanUser: ClanUser) => clanUser.clan, {
+    cascade: true,
+  })
   clanUsers: Promise<ClanUser[]>;
 
   static normalizeName(name: string) {

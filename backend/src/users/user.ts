@@ -49,7 +49,6 @@ class User {
     return email.trim().toLowerCase();
   }
 
-  // custom getter 'clan' that returns the clanUser's clan
   get clan() {
     return Promise.resolve(this.clanUser).then((clanUser) => clanUser?.clan);
   }

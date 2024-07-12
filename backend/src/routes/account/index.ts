@@ -1,5 +1,6 @@
 import express from 'express';
 
+import createClan from './create-clan';
 import setUsername from './set-username';
 import signInWithGoogle from './sign-in-with-google';
 import signOut from './sign-out';
@@ -19,6 +20,7 @@ accountRoutes.get(
 );
 
 accountRoutes.use(
+  createClan,
   setUsername,
   signInWithGoogle,
   signOut,

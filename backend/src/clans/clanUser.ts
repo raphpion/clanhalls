@@ -21,11 +21,11 @@ class ClanUser {
   @Column({ default: false })
   isAdmin: boolean;
 
-  @ManyToOne('Clan', (clan: Clan) => clan.clanUsers)
+  @ManyToOne('Clan', (clan: Clan) => clan.clanUsers, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'clanId' })
   clan: Promise<Clan>;
 
-  @OneToOne('User', (user: User) => user.clanUser)
+  @OneToOne('User', (user: User) => user.clanUser, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'userId' })
   user: Promise<User>;
 }

@@ -6,11 +6,20 @@ export type AccountData = {
   email: string;
   emailNormalized: string;
   emailVerified: boolean;
+  clan: {
+    uuid: string;
+    name: string;
+    isAdmin: boolean;
+  } | null;
 } | null;
 
 export type SetUsernamePayload = {
   username: string;
 };
+
+export async function createClan(name: string): Promise<void> {
+  await post<{ name: string }>('/account/create-clan', { name });
+}
 
 export async function getCurrentUser(): Promise<AccountData> {
   const response = await get<AccountData>('/account');
