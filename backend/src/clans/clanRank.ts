@@ -1,6 +1,7 @@
 import {
   Column,
   Entity,
+  JoinColumn,
   ManyToOne,
   PrimaryGeneratedColumn,
   Unique,
@@ -15,13 +16,17 @@ class ClanRank {
   readonly id: number;
 
   @Column()
+  readonly clanId: number;
+
+  @Column()
   rank: string;
 
   @Column()
   title: string;
 
   @ManyToOne(() => Clan, (clan: Clan) => clan.clanRanks)
-  clan: Clan;
+  @JoinColumn({ name: 'clanId' })
+  clan: Promise<Clan>;
 }
 
 export default ClanRank;

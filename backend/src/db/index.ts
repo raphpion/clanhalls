@@ -11,6 +11,7 @@ import ClanUser from '../clans/clanUser';
 import MemberActivityReport from '../clans/reports/memberActivityReport';
 import MemberActivityReportSubscriber from '../clans/reports/memberActivityReportSubscriber';
 import SettingsReport from '../clans/reports/settingsReport';
+import SettingsReportSubscriber from '../clans/reports/settingsReportSubscriber';
 import Player from '../players/player';
 import Session from '../sessions/session';
 import User from '../users/user';
@@ -39,7 +40,7 @@ const db = new DataSource({
     Session,
     User,
   ],
-  subscribers: [MemberActivityReportSubscriber],
+  subscribers: [MemberActivityReportSubscriber, SettingsReportSubscriber],
   migrations: [__dirname + '/migrations/**/*.ts'],
 });
 

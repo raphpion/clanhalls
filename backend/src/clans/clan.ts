@@ -30,6 +30,9 @@ class Clan {
   @Column({ unique: true, length: 255 })
   nameNormalized: string;
 
+  @Column({ length: 20, nullable: true })
+  nameInGame: string | null;
+
   @OneToMany(() => ClanUser, (clanUser: ClanUser) => clanUser.clan, {
     cascade: true,
   })
