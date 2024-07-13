@@ -1,13 +1,10 @@
 import { injectable } from 'tsyringe';
 
-import Session, { type SessionRelations } from './session';
+import Session from './session';
 import db from '../db';
 
 export interface ISessionRepository {
-  getSessionByUuid(
-    uuid: string,
-    relations?: SessionRelations[]
-  ): Promise<Session | null>;
+  getSessionByUuid(uuid: string, relations?: string[]): Promise<Session | null>;
   saveSession(session: Session): Promise<Session>;
 }
 
@@ -15,10 +12,7 @@ export interface ISessionRepository {
 export default class SessionRepository implements ISessionRepository {
   private readonly sessionRepository = db.getRepository(Session);
 
-  public async getSessionByUuid(
-    uuid: string,
-    relations: SessionRelations[] = []
-  ) {
+  public async getSessionByUuid(uuid: string, relations: string[] = []) {
     return this.sessionRepository.findOne({ where: { uuid }, relations });
   }
 

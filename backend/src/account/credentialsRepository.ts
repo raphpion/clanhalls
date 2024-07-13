@@ -1,13 +1,12 @@
 import { injectable } from 'tsyringe';
 
-import type { CredentialsRelations } from './credentials';
 import Credentials from './credentials';
 import db from '../db';
 
 export interface ICredentialsRepository {
   getCredentialsByClientId(
     clientId: string,
-    relations: CredentialsRelations[]
+    relations: string[]
   ): Promise<Credentials | null>;
   saveCredentials(credentials: Credentials): Promise<Credentials>;
 }
@@ -18,7 +17,7 @@ class CredentialsRepository implements ICredentialsRepository {
 
   public async getCredentialsByClientId(
     clientId: string,
-    relations: CredentialsRelations[] = []
+    relations: string[] = []
   ) {
     return this.credentialsRepository.findOne({
       where: { clientId },

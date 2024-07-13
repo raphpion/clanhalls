@@ -1,6 +1,6 @@
 import express from 'express';
 
-import createClan from './create-clan';
+import clanRoutes from './clan';
 import credentialsRoutes from './credentials';
 import setUsername from './set-username';
 import signInWithGoogle from './sign-in-with-google';
@@ -21,13 +21,13 @@ accountRoutes.get(
 );
 
 accountRoutes.use(
-  createClan,
   setUsername,
   signInWithGoogle,
   signOut,
   verifyUsernameAvailability
 );
 
+accountRoutes.use('/clan', clanRoutes);
 accountRoutes.use('/credentials', credentialsRoutes);
 
 async function getCurrentUser(req: Request, res: Response, next: NextFunction) {
@@ -39,18 +39,12 @@ async function getCurrentUser(req: Request, res: Response, next: NextFunction) {
     const { googleId, username, email, emailNormalized, emailVerified } =
       req.userEntity;
 
-    const clanUser = await req.userEntity.clanUser;
-    const clan = await clanUser?.clan;
-
     res.json({
       googleId,
       username,
       email,
       emailNormalized,
       emailVerified,
-      clan: clan
-        ? { uuid: clan.uuid, name: clan.name, isAdmin: clanUser.isAdmin }
-        : null,
     });
   } catch (error) {
     next(error);

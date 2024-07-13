@@ -8,8 +8,9 @@ import {
 } from 'typeorm';
 
 import ClanPlayer from './clanPlayer';
+import ClanRank from './clanRank';
 import ClanUser from './clanUser';
-import type MemberActivityReport from './memberActivityReport';
+import MemberActivityReport from './reports/memberActivityReport';
 import AppError, { AppErrorCodes } from '../extensions/errors';
 import type Player from '../players/player';
 import type User from '../users/user';
@@ -29,18 +30,23 @@ class Clan {
   @Column({ unique: true, length: 255 })
   nameNormalized: string;
 
-  @OneToMany('ClanUser', (clanUser: ClanUser) => clanUser.clan, {
+  @OneToMany(() => ClanUser, (clanUser: ClanUser) => clanUser.clan, {
     cascade: true,
   })
   clanUsers: Promise<ClanUser[]>;
 
-  @OneToMany('ClanPlayer', (clanPlayer: ClanPlayer) => clanPlayer.clan, {
+  @OneToMany(() => ClanPlayer, (clanPlayer: ClanPlayer) => clanPlayer.clan, {
     cascade: true,
   })
   clanPlayers: Promise<ClanPlayer[]>;
 
+  @OneToMany(() => ClanRank, (clanRank: ClanRank) => clanRank.clan, {
+    cascade: true,
+  })
+  clanRanks: Promise<ClanRank[]>;
+
   @OneToMany(
-    'MemberActivityReport',
+    () => MemberActivityReport,
     (memberActivityReport: MemberActivityReport) => memberActivityReport.clan,
     {
       cascade: true,
@@ -103,8 +109,3 @@ class Clan {
 }
 
 export default Clan;
-
-export type ClanRelations =
-  | 'clanUsers'
-  | 'clanPlayers'
-  | 'memberActivityReports';

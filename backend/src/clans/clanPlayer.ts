@@ -7,8 +7,8 @@ import {
   PrimaryColumn,
 } from 'typeorm';
 
-import type Clan from './clan';
-import type Player from '../players/player';
+import Clan from './clan';
+import Player from '../players/player';
 
 @Entity()
 class ClanPlayer {
@@ -24,15 +24,13 @@ class ClanPlayer {
   @Column()
   rank: string;
 
-  @OneToOne('Clan', (clan: Clan) => clan.clanPlayers)
+  @OneToOne(() => Clan, (clan: Clan) => clan.clanPlayers)
   @JoinColumn({ name: 'clanId' })
   clan: Promise<Clan>;
 
-  @ManyToOne('Player', (player: Player) => player.clanPlayers)
+  @ManyToOne(() => Player, (player: Player) => player.clanPlayers)
   @JoinColumn({ name: 'playerId' })
   player: Promise<Player>;
 }
 
 export default ClanPlayer;
-
-export type ClanPlayerRelations = 'clan' | 'player';

@@ -1,13 +1,12 @@
 import { injectable } from 'tsyringe';
 
-import type { UserRelations } from './user';
 import User from './user';
 import db from '../db';
 
 export interface IUserRepository {
   getUserByEmail(email: string): Promise<User | null>;
   getUserByGoogleId(googleId: string): Promise<User | null>;
-  getUserById(id: number, relations?: UserRelations[]): Promise<User | null>;
+  getUserById(id: number, relations?: string[]): Promise<User | null>;
   getUserByUsername(username: string): Promise<User | null>;
   saveUser(user: User): Promise<User>;
 }
@@ -25,7 +24,7 @@ export default class UserRepository implements IUserRepository {
     return this.userRepository.findOneBy({ googleId });
   }
 
-  public async getUserById(id: number, relations: UserRelations[]) {
+  public async getUserById(id: number, relations: string[]) {
     return this.userRepository.findOne({ where: { id }, relations });
   }
 

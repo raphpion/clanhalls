@@ -6,11 +6,6 @@ export type AccountData = {
   email: string;
   emailNormalized: string;
   emailVerified: boolean;
-  clan: {
-    uuid: string;
-    name: string;
-    isAdmin: boolean;
-  } | null;
 } | null;
 
 export type CreateClanPayload = {
@@ -35,12 +30,23 @@ export type CredentialsData = {
   lastUsedAt: string | null;
 };
 
+export type ClanData = {
+  uuid: string;
+  name: string;
+  isAdmin: boolean;
+} | null;
+
 export type SetUsernamePayload = {
   username: string;
 };
 
 export async function createClan(name: string): Promise<void> {
-  await post<CreateClanPayload>('/account/create-clan', { name });
+  await post<CreateClanPayload>('/account/clan', { name });
+}
+
+export async function getClan(): Promise<ClanData> {
+  const response = await get<ClanData>('/account/clan');
+  return response.data;
 }
 
 export async function createCredentials(

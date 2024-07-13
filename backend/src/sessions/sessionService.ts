@@ -1,6 +1,5 @@
 import { inject, injectable } from 'tsyringe';
 
-import type { SessionRelations } from './session';
 import Session from './session';
 import type { ISessionRepository } from './sessionRepository';
 import type User from '../users/user';
@@ -14,10 +13,7 @@ export interface ISessionService {
     ip: string
   ): Promise<Session>;
 
-  getSessionByUuid(
-    uuid: string,
-    relations?: SessionRelations[]
-  ): Promise<Session | null>;
+  getSessionByUuid(uuid: string, relations?: string[]): Promise<Session | null>;
 
   signOutSession(session: Session): Promise<void>;
 }
@@ -46,10 +42,7 @@ export class SessionService implements ISessionService {
     return this.sessionRepository.saveSession(session);
   }
 
-  public async getSessionByUuid(
-    uuid: string,
-    relations: SessionRelations[] = []
-  ) {
+  public async getSessionByUuid(uuid: string, relations: string[] = []) {
     return this.sessionRepository.getSessionByUuid(uuid, relations);
   }
 

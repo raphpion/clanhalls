@@ -8,16 +8,18 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
-import type Clan from './clan';
-import type User from '../users/user';
+import type User from '../../users/user';
+import type Clan from '../clan';
+import type { Rank } from '../ranks';
+import type { Title } from '../titles';
 
-export type MemberActivity = {
+export type Settings = {
   name: string;
-  rank: string;
+  ranks: Record<Rank, Title>;
 };
 
 @Entity()
-class MemberActivityReport {
+class SettingsReport {
   @PrimaryGeneratedColumn()
   readonly id: number;
 
@@ -29,7 +31,7 @@ class MemberActivityReport {
   receivedAt: Date;
 
   @Column('jsonb')
-  data: MemberActivity[];
+  data: Settings;
 
   @ManyToOne('Clan', (clan: Clan) => clan.memberActivityReports)
   @JoinColumn({ name: 'clanId' })
@@ -40,6 +42,4 @@ class MemberActivityReport {
   user: Promise<User>;
 }
 
-export default MemberActivityReport;
-
-export type MemberActivityReportRelations = 'clan' | 'user';
+export default SettingsReport;

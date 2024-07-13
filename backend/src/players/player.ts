@@ -6,7 +6,7 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
-import type ClanPlayer from '../clans/clanPlayer';
+import ClanPlayer from '../clans/clanPlayer';
 
 @Entity()
 class Player {
@@ -26,10 +26,8 @@ class Player {
   @Column({ nullable: true })
   usernameChangedAt: Date;
 
-  @OneToMany('ClanPlayer', (clanPlayer: ClanPlayer) => clanPlayer.player)
+  @OneToMany(() => ClanPlayer, (clanPlayer: ClanPlayer) => clanPlayer.player)
   clanPlayers: Promise<ClanPlayer[]>;
 }
 
 export default Player;
-
-export type ClanPlayerRelations = 'clan' | 'player';

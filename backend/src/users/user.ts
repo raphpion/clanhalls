@@ -7,13 +7,11 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
-import type Credentials from '../account/credentials';
-import type ClanUser from '../clans/clanUser';
-import type { ClanUserRelations } from '../clans/clanUser';
-import type { MemberActivityReportRelations } from '../clans/memberActivityReport';
-import type MemberActivityReport from '../clans/memberActivityReport';
+import Credentials from '../account/credentials';
+import ClanUser from '../clans/clanUser';
+import MemberActivityReport from '../clans/reports/memberActivityReport';
 import AppError, { AppErrorCodes } from '../extensions/errors';
-import type Session from '../sessions/session';
+import Session from '../sessions/session';
 
 @Entity()
 class User {
@@ -35,19 +33,19 @@ class User {
   @Column({ default: false })
   emailVerified: boolean;
 
-  @OneToOne('ClanUser', (clanUser: ClanUser) => clanUser.user)
+  @OneToOne(() => ClanUser, (clanUser: ClanUser) => clanUser.user)
   clanUser: Promise<ClanUser>;
 
-  @OneToMany('Credentials', (credentials: Credentials) => credentials.user)
+  @OneToMany(() => Credentials, (credentials: Credentials) => credentials.user)
   credentials: Promise<Credentials[]>;
 
   @OneToMany(
-    'MemberActivityReport',
+    () => MemberActivityReport,
     (memberActivityReport: MemberActivityReport) => memberActivityReport.user
   )
   memberActivityReports: Promise<MemberActivityReport[]>;
 
-  @OneToMany('Session', (session: Session) => session.user)
+  @OneToMany(() => Session, (session: Session) => session.user)
   sessions: Promise<Session[]>;
 
   static normalizeEmail(email: string) {
@@ -101,11 +99,3 @@ class User {
 }
 
 export default User;
-
-export type UserRelations =
-  | 'clanUser'
-  | `clanUser.${ClanUserRelations}`
-  | 'credentials'
-  | 'memberActivityReports'
-  | `memberActivityReports.${MemberActivityReportRelations}`
-  | 'sessions';

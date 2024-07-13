@@ -6,8 +6,11 @@ import { DataSource } from 'typeorm';
 import Credentials from '../account/credentials';
 import Clan from '../clans/clan';
 import ClanPlayer from '../clans/clanPlayer';
+import ClanRank from '../clans/clanRank';
 import ClanUser from '../clans/clanUser';
-import MemberActivityReport from '../clans/memberActivityReport';
+import MemberActivityReport from '../clans/reports/memberActivityReport';
+import MemberActivityReportSubscriber from '../clans/reports/memberActivityReportSubscriber';
+import SettingsReport from '../clans/reports/settingsReport';
 import Player from '../players/player';
 import Session from '../sessions/session';
 import User from '../users/user';
@@ -27,14 +30,16 @@ const db = new DataSource({
   entities: [
     Clan,
     ClanPlayer,
+    ClanRank,
     ClanUser,
     Credentials,
     MemberActivityReport,
     Player,
+    SettingsReport,
     Session,
     User,
   ],
-  subscribers: [],
+  subscribers: [MemberActivityReportSubscriber],
   migrations: [__dirname + '/migrations/**/*.ts'],
 });
 

@@ -11,6 +11,8 @@ import {
   createClan,
   createCredentials,
   CreateCredentialsData,
+  getClan,
+  ClanData,
   getCredentials,
   signOut,
 } from '../api/account';
@@ -29,15 +31,37 @@ export const Route = createFileRoute('/')({
   component: HomeComponent,
 });
 
-function ClanInfo() {
+function Clan() {
+  const clanQuery = useQuery({
+    queryKey: ['clan'],
+    queryFn: getClan,
+  });
+
+  if (clanQuery.isLoading) {
+    return <p>Loading...</p>;
+  }
+
+  if (!clanQuery.data) {
+    return <CreateClanForm />;
+  }
+
+  return <ClanInfo clan={clanQuery.data} />;
+}
+
+type ClanInfoProps = {
+  clan: ClanData;
+};
+
+function ClanInfo({ clan }: ClanInfoProps) {
   const { user } = useContext(AppContext);
 
-  if (!user || !user.clan) return null;
+  if (!user || !clan) return null;
 
   return (
     <div>
-      <h2>{user.clan.name}</h2>
-      <p>Admin: {user.clan?.isAdmin ? 'Yes' : 'No'}</p>
+      <h2>{clan.name}</h2>
+      <p>UUID: {clan.uuid}</p>
+      <p>Admin: {clan.isAdmin ? 'Yes' : 'No'}</p>
     </div>
   );
 }
@@ -114,11 +138,13 @@ function Credentials() {
           {credentialsQuery.data?.length ? (
             <table>
               <thead>
-                <th style={{ border: '1px solid gray' }}>Name</th>
-                <th style={{ border: '1px solid gray' }}>Scope</th>
-                <th style={{ border: '1px solid gray' }}>Client ID</th>
-                <th style={{ border: '1px solid gray' }}>Created at</th>
-                <th style={{ border: '1px solid gray' }}>Last used at</th>
+                <tr>
+                  <th style={{ border: '1px solid gray' }}>Name</th>
+                  <th style={{ border: '1px solid gray' }}>Scope</th>
+                  <th style={{ border: '1px solid gray' }}>Client ID</th>
+                  <th style={{ border: '1px solid gray' }}>Created at</th>
+                  <th style={{ border: '1px solid gray' }}>Last used at</th>
+                </tr>
               </thead>
               <tbody>
                 {credentialsQuery.data.map((credential) => (
@@ -230,7 +256,7 @@ function HomeComponent() {
     <div>
       <h1>Welcome, {user.username}!</h1>
       <Credentials />
-      {user.clan ? <ClanInfo /> : <CreateClanForm />}
+      <Clan />
       <p>
         <button onClick={() => signOutMutation.mutate()}>Sign out</button>
       </p>

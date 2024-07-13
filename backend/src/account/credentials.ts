@@ -9,8 +9,7 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
-import type User from '../users/user';
-import type { UserRelations } from '../users/user';
+import User from '../users/user';
 
 export enum Scopes {
   CLAN_REPORTING = 'clan:reporting',
@@ -39,7 +38,9 @@ class Credentials {
   @Column({ nullable: true })
   lastUsedAt: Date | null;
 
-  @ManyToOne('User', (user: User) => user.credentials, { onDelete: 'CASCADE' })
+  @ManyToOne(() => User, (user: User) => user.credentials, {
+    onDelete: 'CASCADE',
+  })
   user: Promise<User>;
 
   generateClientId() {
@@ -66,5 +67,3 @@ class Credentials {
 }
 
 export default Credentials;
-
-export type CredentialsRelations = 'user' | `user.${UserRelations}`;

@@ -2,8 +2,10 @@ import { inject, injectable } from 'tsyringe';
 
 import Clan from './clan';
 import type { IClanRepository } from './clanRepository';
-import MemberActivityReport from './memberActivityReport';
-import type { MemberActivity } from './memberActivityReport';
+import MemberActivityReport from './reports/memberActivityReport';
+import type { MemberActivity } from './reports/memberActivityReport';
+import type { Settings } from './reports/settingsReport';
+import SettingsReport from './reports/settingsReport';
 import AppError, { AppErrorCodes } from '../extensions/errors';
 import type User from '../users/user';
 
@@ -14,6 +16,11 @@ export interface IClanService {
     clan: Clan,
     members: MemberActivity[]
   ): Promise<MemberActivityReport>;
+  createSettingsReport(
+    user: User,
+    clan: Clan,
+    settings: Settings
+  ): Promise<SettingsReport>;
 }
 
 @injectable()
@@ -53,6 +60,16 @@ class ClanService implements IClanService {
     memberActivityReport.user = Promise.resolve(user);
 
     return this.clanRepository.saveMemberActivityReport(memberActivityReport);
+  }
+
+  async createSettingsReport(user: User, clan: Clan, settings: Settings) {
+    const settingsReport = new SettingsReport();
+
+    settingsReport.data = settings;
+    settingsReport.clan = Promise.resolve(clan);
+    settingsReport.user = Promise.resolve(user);
+
+    return this.clanRepository.saveSettingsReport(settingsReport);
   }
 }
 

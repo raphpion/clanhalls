@@ -1,7 +1,13 @@
-import { Column, Entity, Generated, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  Generated,
+  JoinColumn,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
-import type User from '../users/user';
-import type { UserRelations } from '../users/user';
+import User from '../users/user';
 
 @Entity()
 class Session {
@@ -27,7 +33,7 @@ class Session {
   @Column({ nullable: true })
   signedOutAt: Date | null;
 
-  @ManyToOne('User', (user: User) => user.sessions)
+  @ManyToOne(() => User, (user: User) => user.sessions)
   user: Promise<User>;
 
   @JoinColumn()
@@ -47,5 +53,3 @@ class Session {
 }
 
 export default Session;
-
-export type SessionRelations = 'user' | `user.${UserRelations}`;

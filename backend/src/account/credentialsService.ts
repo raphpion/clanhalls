@@ -1,6 +1,5 @@
 import { inject, injectable } from 'tsyringe';
 
-import type { CredentialsRelations } from './credentials';
 import Credentials from './credentials';
 import type { ICredentialsRepository } from './credentialsRepository';
 import type User from '../users/user';
@@ -14,8 +13,10 @@ export interface ICredentialsService {
 
   getCredentialsByClientId(
     clientId: string,
-    relations: CredentialsRelations[]
+    relations: string[]
   ): Promise<Credentials | null>;
+
+  updateLastUsedAt(credentials: Credentials): Promise<Credentials>;
 }
 
 @injectable()
@@ -46,12 +47,20 @@ class CredentialsService implements ICredentialsService {
 
   public async getCredentialsByClientId(
     clientId: string,
-    relations: CredentialsRelations[] = []
+    relations: string[] = []
   ): Promise<Credentials | null> {
     return this.credentialsRepository.getCredentialsByClientId(
       clientId,
       relations
     );
+  }
+
+  public async updateLastUsedAt(
+    credentials: Credentials
+  ): Promise<Credentials> {
+    credentials.lastUsedAt = new Date();
+
+    return this.credentialsRepository.saveCredentials(credentials);
   }
 }
 
