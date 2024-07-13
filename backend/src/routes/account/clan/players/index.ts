@@ -18,6 +18,7 @@ playersRoutes.get(
     'clanUser',
     'clanUser.clan',
     'clanUser.clan.clanPlayers',
+    'clanUser.clan.clanRanks',
     'clanUser.clan.clanPlayers.player',
   ]),
   getClanPlayers
@@ -41,6 +42,7 @@ export async function getClanPlayers(
 
     const clan = await clanUser.clan;
     const clanPlayers = await clan.clanPlayers;
+    const clanRanks = await clan.clanRanks;
 
     const ignoredRanks = ['GUEST', 'JMOD'];
 
@@ -53,12 +55,13 @@ export async function getClanPlayers(
         )
         .filter((cp) => !ignoredRanks.includes(cp.rank))
         .map(async (cp) => {
+          const clanRank = clanRanks.find((cr) => cr.rank === cp.rank);
           const player = await cp.player;
           const { rank, lastSeenAt } = cp;
           const { uuid, username } = player;
           return {
             uuid,
-            rank, // TODO: rank's title
+            rank: clanRank?.title || rank, // TODO: rank's title
             username,
             lastSeenAt,
           };
