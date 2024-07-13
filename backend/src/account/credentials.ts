@@ -1,6 +1,6 @@
 import { randomBytes } from 'crypto';
 
-import { hash } from 'bcrypt';
+import { compare, hash } from 'bcrypt';
 import {
   Column,
   CreateDateColumn,
@@ -10,6 +10,11 @@ import {
 } from 'typeorm';
 
 import type User from '../users/user';
+import type { UserRelations } from '../users/user';
+
+export enum Scopes {
+  CLAN_REPORTING = 'clan:reporting',
+}
 
 @Entity()
 class Credentials {
@@ -48,8 +53,18 @@ class Credentials {
 
     return secret;
   }
+
+  async validateClientSecret(clientSecret: string) {
+    return compare(clientSecret, this.clientSecretHash);
+  }
+
+  validateScope(scope: Scopes[]) {
+    const parsedScope = this.scope.split(',');
+
+    return scope.every((s) => parsedScope.includes(s));
+  }
 }
 
 export default Credentials;
 
-export type CredentialsRelations = 'user';
+export type CredentialsRelations = 'user' | `user.${UserRelations}`;

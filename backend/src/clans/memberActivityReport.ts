@@ -4,16 +4,16 @@ import {
   Entity,
   Generated,
   JoinColumn,
-  OneToMany,
+  ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
 import type Clan from './clan';
+import type User from '../users/user';
 
 export type MemberActivity = {
   name: string;
   rank: string;
-  prevName?: string;
 };
 
 @Entity()
@@ -31,11 +31,15 @@ class MemberActivityReport {
   @Column('jsonb')
   data: MemberActivity[];
 
-  @OneToMany('Clan', (clan: Clan) => clan.memberActivityReports)
+  @ManyToOne('Clan', (clan: Clan) => clan.memberActivityReports)
   @JoinColumn({ name: 'clanId' })
   clan: Promise<Clan>;
+
+  @ManyToOne('User', (user: User) => user.memberActivityReports)
+  @JoinColumn({ name: 'userId' })
+  user: Promise<User>;
 }
 
 export default MemberActivityReport;
 
-export type MemberActivityReportRelations = 'clan';
+export type MemberActivityReportRelations = 'clan' | 'user';

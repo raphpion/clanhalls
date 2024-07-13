@@ -10,6 +10,8 @@ import {
 import type Credentials from '../account/credentials';
 import type ClanUser from '../clans/clanUser';
 import type { ClanUserRelations } from '../clans/clanUser';
+import type { MemberActivityReportRelations } from '../clans/memberActivityReport';
+import type MemberActivityReport from '../clans/memberActivityReport';
 import AppError, { AppErrorCodes } from '../extensions/errors';
 import type Session from '../sessions/session';
 
@@ -38,6 +40,12 @@ class User {
 
   @OneToMany('Credentials', (credentials: Credentials) => credentials.user)
   credentials: Promise<Credentials[]>;
+
+  @OneToMany(
+    'MemberActivityReport',
+    (memberActivityReport: MemberActivityReport) => memberActivityReport.user
+  )
+  memberActivityReports: Promise<MemberActivityReport[]>;
 
   @OneToMany('Session', (session: Session) => session.user)
   sessions: Promise<Session[]>;
@@ -98,4 +106,6 @@ export type UserRelations =
   | 'clanUser'
   | `clanUser.${ClanUserRelations}`
   | 'credentials'
+  | 'memberActivityReports'
+  | `memberActivityReports.${MemberActivityReportRelations}`
   | 'sessions';

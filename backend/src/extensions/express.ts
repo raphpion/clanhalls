@@ -5,6 +5,7 @@ import type {
 } from 'express';
 import type { Session as ExpressSession } from 'express-session';
 
+import type Credentials from '../account/credentials';
 import type SessionEntity from '../sessions/session';
 import type User from '../users/user';
 export interface Session extends ExpressSession {
@@ -14,6 +15,7 @@ export interface Session extends ExpressSession {
 export interface Request extends ExpressRequest {
   session: Session;
   persist?: boolean;
+  credentialsEntity?: Credentials;
   userEntity?: User;
   sessionEntity?: SessionEntity;
 }

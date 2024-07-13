@@ -41,7 +41,10 @@ class Clan {
 
   @OneToMany(
     'MemberActivityReport',
-    (memberActivityReport: MemberActivityReport) => memberActivityReport.clan
+    (memberActivityReport: MemberActivityReport) => memberActivityReport.clan,
+    {
+      cascade: true,
+    }
   )
   memberActivityReports: Promise<MemberActivityReport[]>;
 
