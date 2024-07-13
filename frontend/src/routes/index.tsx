@@ -18,7 +18,6 @@ import {
   getClanPlayers,
 } from '../api/account';
 import { Field, Form, FormikProvider, useFormik } from 'formik';
-import RANK_IMAGES from '../rankImages';
 
 export const Route = createFileRoute('/')({
   beforeLoad: ({ context }) => {
@@ -90,15 +89,11 @@ function ClanInfo({ clan }: ClanInfoProps) {
                       {player.username}
                     </td>
                     <td style={{ border: '1px solid gray' }}>
-                      {Object.keys(RANK_IMAGES).find(
-                        (k) => k === player.rank,
-                      ) && (
-                        <img
-                          style={{ marginRight: '0.25rem' }}
-                          src={`https://oldschool.runescape.wiki${RANK_IMAGES[player.rank as keyof typeof RANK_IMAGES]}`}
-                          alt={player.rank}
-                        />
-                      )}
+                      <img
+                        style={{ marginRight: '0.25rem' }}
+                        src={`/images/ranks/${player.rank.replace(/\s+/g, '').toLowerCase()}.webp`}
+                        alt={player.rank}
+                      />
                       {player.rank}
                     </td>
                     <td style={{ border: '1px solid gray' }}>
