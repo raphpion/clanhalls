@@ -1,6 +1,7 @@
 import express from 'express';
 import Joi from 'joi';
 
+import playersRoutes from './players';
 import type { IClanService } from '../../../clans/clanService';
 import container from '../../../container';
 import AppError, { AppErrorCodes } from '../../../extensions/errors';
@@ -22,6 +23,8 @@ const createClanSchema = Joi.object<CreateClanPayload>({
 });
 
 const clanRoutes = express.Router();
+
+clanRoutes.use('/players', playersRoutes);
 
 clanRoutes.get('/', requireAuth(['clanUser', 'clanUser.clan']), getClan);
 

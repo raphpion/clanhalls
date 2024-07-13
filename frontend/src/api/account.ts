@@ -36,6 +36,13 @@ export type ClanData = {
   isAdmin: boolean;
 } | null;
 
+export type ClanPlayerData = {
+  uuid: string;
+  rank: string;
+  username: string;
+  lastSeenAt: string;
+};
+
 export type SetUsernamePayload = {
   username: string;
 };
@@ -46,6 +53,11 @@ export async function createClan(name: string): Promise<void> {
 
 export async function getClan(): Promise<ClanData> {
   const response = await get<ClanData>('/account/clan');
+  return response.data;
+}
+
+export async function getClanPlayers(): Promise<ClanPlayerData[]> {
+  const response = await get<ClanPlayerData[]>('/account/clan/players');
   return response.data;
 }
 

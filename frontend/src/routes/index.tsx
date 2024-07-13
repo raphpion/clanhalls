@@ -15,6 +15,7 @@ import {
   ClanData,
   getCredentials,
   signOut,
+  getClanPlayers,
 } from '../api/account';
 import { Field, Form, FormikProvider, useFormik } from 'formik';
 
@@ -57,11 +58,52 @@ function ClanInfo({ clan }: ClanInfoProps) {
 
   if (!user || !clan) return null;
 
+  const clanPlayersQuery = useQuery({
+    queryKey: ['clan-players'],
+    queryFn: getClanPlayers,
+  });
+
   return (
     <div>
       <h2>{clan.name}</h2>
       <p>UUID: {clan.uuid}</p>
       <p>Admin: {clan.isAdmin ? 'Yes' : 'No'}</p>
+      <h3>Clan members</h3>
+      {clanPlayersQuery.isLoading ? (
+        <p>Loading...</p>
+      ) : (
+        <Fragment>
+          {clanPlayersQuery.data?.length ? (
+            <table>
+              <thead>
+                <tr>
+                  <th style={{ border: '1px solid gray' }}>Username</th>
+                  <th style={{ border: '1px solid gray' }}>Rank</th>
+                  <th style={{ border: '1px solid gray' }}>Last seen at</th>
+                </tr>
+              </thead>
+              <tbody>
+                {clanPlayersQuery.data.map((player) => (
+                  <tr key={player.uuid}>
+                    <td style={{ border: '1px solid gray' }}>
+                      {player.username}
+                    </td>
+                    <td style={{ border: '1px solid gray' }}>{player.rank}</td>
+                    <td style={{ border: '1px solid gray' }}>
+                      {player.lastSeenAt}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          ) : (
+            <p>
+              There are currently no players. Use the RuneLite plugin to
+              generate data!
+            </p>
+          )}
+        </Fragment>
+      )}
     </div>
   );
 }
