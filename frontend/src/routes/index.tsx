@@ -304,12 +304,11 @@ function HomeComponent() {
   return (
     <div>
       <h1>Welcome, {user.username}!</h1>
-      <Credentials />
-      <Clan />
       <p>
         <button onClick={() => signOutMutation.mutate()}>Sign out</button>
       </p>
+      <Credentials />
+      <Clan />
     </div>
   );
 }
-
