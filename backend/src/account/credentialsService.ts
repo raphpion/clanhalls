@@ -2,6 +2,7 @@ import { inject, injectable } from 'tsyringe';
 
 import Credentials from './credentials';
 import type { ICredentialsRepository } from './credentialsRepository';
+import AppError, { AppErrorCodes } from '../extensions/errors';
 import type User from '../users/user';
 
 export interface ICredentialsService {
@@ -10,6 +11,8 @@ export interface ICredentialsService {
     name: string,
     scope: string
   ): Promise<[Credentials, string]>;
+
+  deleteCredentialsForUser(user: User, clientId: string): Promise<void>;
 
   getCredentialsByClientId(
     clientId: string,
@@ -43,6 +46,17 @@ class CredentialsService implements ICredentialsService {
     );
 
     return [savedCredentials, clientSecret];
+  }
+
+  public async deleteCredentialsForUser(user: User, clientId: string) {
+    const credentials =
+      await this.credentialsRepository.getCredentialsByClientId(clientId);
+
+    if (!credentials || (await credentials.user).id !== user.id) {
+      throw new AppError(AppErrorCodes.UNAUTHORIZED, 'Unauthorized');
+    }
+
+    await this.credentialsRepository.deleteCredentials(credentials);
   }
 
   public async getCredentialsByClientId(

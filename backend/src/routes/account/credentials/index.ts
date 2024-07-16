@@ -1,6 +1,7 @@
 import express from 'express';
 import Joi from 'joi';
 
+import credentialsClientIdRoutes from './[clientId]';
 import type { ICredentialsService } from '../../../account/credentialsService';
 import container from '../../../container';
 import AppError, { AppErrorCodes } from '../../../extensions/errors';
@@ -25,6 +26,8 @@ const createCredentialsSchema = Joi.object<CreateCredentialsPayload>({
 });
 
 const credentialsRoutes = express.Router();
+
+credentialsRoutes.use('/:clientId', credentialsClientIdRoutes);
 
 credentialsRoutes.get('/', requireAuth(['credentials']), getCredentials);
 

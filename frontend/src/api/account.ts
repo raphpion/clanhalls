@@ -1,5 +1,5 @@
 import type { PaginatedQueryParams, PaginatedQueryResult } from '.';
-import { get, post } from '.';
+import { _delete, get, post } from '.';
 
 export type AccountData = {
   googleId: string;
@@ -90,6 +90,10 @@ export async function createCredentials(
     data,
   );
   return response.data;
+}
+
+export async function deleteCredentials(clientId: string): Promise<void> {
+  await _delete<{ clientId: string }>(`/account/credentials/${clientId}`);
 }
 
 export async function getCredentials(): Promise<CredentialsData[]> {

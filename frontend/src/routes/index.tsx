@@ -17,6 +17,7 @@ import {
   signOut,
   queryClanPlayers,
   ClanPlayerQueryParams,
+  deleteCredentials,
 } from '../api/account';
 import { Field, Form, FormikProvider, useFormik } from 'formik';
 
@@ -264,11 +265,40 @@ function Credentials() {
     queryFn: getCredentials,
   });
 
+  const deleteCredentialsMutation = useMutation({
+    mutationKey: ['delete-credentials'],
+    mutationFn: deleteCredentials,
+    onSuccess: () => {
+      credentialsQuery.refetch();
+    },
+  });
+
+  const handleClickDeleteCredentials = (clientId: string) => {
+    if (
+      confirm(
+        'Are you sure you want to delete these credentials? This action cannot be undone.',
+      )
+    ) {
+      deleteCredentialsMutation.mutate(clientId);
+    }
+  };
+
+  const handleCreateCredentialsSuccess = (data: CreateCredentialsData) => {
+    setCreatedCredentials(data);
+    credentialsQuery.refetch();
+  };
+
   return (
     <Fragment>
       <h2>Credentials</h2>
       {createdCredentials && (
-        <div style={{ border: '1px solid green', padding: '0 0.5rem 1rem' }}>
+        <div
+          style={{
+            border: '1px solid green',
+            padding: '0 0.5rem 1rem',
+            marginBottom: '1 rem',
+          }}
+        >
           <h4>Credentials created successfully!</h4>
           <table>
             <thead>
@@ -303,6 +333,7 @@ function Credentials() {
                   <th style={{ border: '1px solid gray' }}>Client ID</th>
                   <th style={{ border: '1px solid gray' }}>Created at</th>
                   <th style={{ border: '1px solid gray' }}>Last used at</th>
+                  <th style={{ border: '1px solid gray' }}>Actions</th>
                 </tr>
               </thead>
               <tbody>
@@ -323,6 +354,15 @@ function Credentials() {
                     <td style={{ border: '1px solid gray' }}>
                       {credential.lastUsedAt || 'never'}
                     </td>
+                    <td style={{ border: '1px solid gray' }}>
+                      <button
+                        onClick={() =>
+                          handleClickDeleteCredentials(credential.clientId)
+                        }
+                      >
+                        Delete
+                      </button>
+                    </td>
                   </tr>
                 ))}
               </tbody>
@@ -332,7 +372,7 @@ function Credentials() {
           )}
         </Fragment>
       )}
-      <CreateCredentialsForm onSuccess={setCreatedCredentials} />
+      <CreateCredentialsForm onSuccess={handleCreateCredentialsSuccess} />
     </Fragment>
   );
 }
@@ -350,7 +390,6 @@ function CreateCredentialsForm({ onSuccess }: CreateCredentialsFormProps) {
       },
     },
     onSubmit: async ({ name, scope }) => {
-      console.log(scope);
       const scopeString = Object.keys(scope)
         .filter((key) => scope[key as keyof typeof scope])
         .join();
