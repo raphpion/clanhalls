@@ -4,7 +4,7 @@ import {
   useNavigate,
   useRouter,
 } from '@tanstack/react-router';
-import { Fragment, useContext, useState } from 'react';
+import { Fragment, useContext, useEffect, useState } from 'react';
 import AppContext from '../context';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import {
@@ -15,7 +15,8 @@ import {
   ClanData,
   getCredentials,
   signOut,
-  getClanPlayers,
+  queryClanPlayers,
+  ClanPlayerQueryParams,
 } from '../api/account';
 import { Field, Form, FormikProvider, useFormik } from 'formik';
 
@@ -53,15 +54,51 @@ type ClanInfoProps = {
   clan: ClanData;
 };
 
+const CLAN_PLAYERS_IPP = 50;
+
 function ClanInfo({ clan }: ClanInfoProps) {
   const { user } = useContext(AppContext);
 
+  const [page, setPage] = useState(1);
+  const [orderBy, setOrderBy] = useState<ClanPlayerQueryParams['orderBy']>({
+    field: 'rank',
+    order: 'DESC',
+  });
+  const [search, setSearch] = useState('');
+
+  useEffect(
+    () =>
+      queryClanPlayersMutation.mutate({
+        ipp: CLAN_PLAYERS_IPP,
+        page,
+        search,
+        orderBy,
+      }),
+    [page, orderBy.field, orderBy.order, search],
+  );
+
+  useEffect(() => {
+    setPage(1);
+  }, [search, orderBy.field, orderBy.order]);
+
   if (!user || !clan) return null;
 
-  const clanPlayersQuery = useQuery({
-    queryKey: ['clan-players'],
-    queryFn: getClanPlayers,
+  const queryClanPlayersMutation = useMutation({
+    mutationKey: ['query-clan-players'],
+    mutationFn: queryClanPlayers,
   });
+
+  const handleClickHeader = (
+    newField: ClanPlayerQueryParams['orderBy']['field'],
+  ) =>
+    setOrderBy(({ field, order }) => ({
+      field: newField,
+      order: newField === field ? (order === 'ASC' ? 'DESC' : 'ASC') : 'ASC',
+    }));
+
+  const totalPages = Math.ceil(
+    (queryClanPlayersMutation.data?.totalCount || 0) / CLAN_PLAYERS_IPP,
+  );
 
   return (
     <div>
@@ -69,40 +106,113 @@ function ClanInfo({ clan }: ClanInfoProps) {
       <p>UUID: {clan.uuid}</p>
       <p>Admin: {clan.isAdmin ? 'Yes' : 'No'}</p>
       <h3>Clan members</h3>
-      {clanPlayersQuery.isLoading ? (
+      <p>
+        <input
+          type="text"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          placeholder="Search by username"
+        />
+      </p>
+      {queryClanPlayersMutation.isPending ? (
         <p>Loading...</p>
       ) : (
         <Fragment>
-          {clanPlayersQuery.data?.length ? (
-            <table>
-              <thead>
-                <tr>
-                  <th style={{ border: '1px solid gray' }}>Username</th>
-                  <th style={{ border: '1px solid gray' }}>Rank</th>
-                  <th style={{ border: '1px solid gray' }}>Last seen at</th>
-                </tr>
-              </thead>
-              <tbody>
-                {clanPlayersQuery.data.map((player) => (
-                  <tr key={player.uuid}>
-                    <td style={{ border: '1px solid gray' }}>
-                      {player.username}
-                    </td>
-                    <td style={{ border: '1px solid gray' }}>
-                      <img
-                        style={{ marginRight: '0.25rem' }}
-                        src={`/images/ranks/${player.rank.replace(/\s+/g, '').toLowerCase()}.webp`}
-                        alt={player.rank}
-                      />
-                      {player.rank}
-                    </td>
-                    <td style={{ border: '1px solid gray' }}>
-                      {player.lastSeenAt}
-                    </td>
-                  </tr>
+          {queryClanPlayersMutation.data?.items.length ? (
+            <Fragment>
+              <p>
+                Page:
+                {Array.from({ length: totalPages }).map((_, index) => (
+                  <button
+                    key={index}
+                    style={{ margin: '0 0.25rem' }}
+                    onClick={() => setPage(index + 1)}
+                    disabled={index + 1 === page}
+                  >
+                    {index + 1}
+                  </button>
                 ))}
-              </tbody>
-            </table>
+              </p>
+              <table>
+                <thead>
+                  <tr>
+                    <th
+                      style={{
+                        border: '1px solid gray',
+                        color: 'blue',
+                        textDecoration: 'underline',
+                        cursor: 'pointer',
+                      }}
+                    >
+                      <span onClick={() => handleClickHeader('username')}>
+                        Username
+                        {orderBy.field === 'username' && (
+                          <span style={{ marginLeft: '0.25rem' }}>
+                            {orderBy.order === 'ASC' ? '↑' : '↓'}
+                          </span>
+                        )}
+                      </span>
+                    </th>
+                    <th
+                      style={{
+                        border: '1px solid gray',
+                        color: 'blue',
+                        textDecoration: 'underline',
+                        cursor: 'pointer',
+                      }}
+                    >
+                      <span onClick={() => handleClickHeader('rank')}>
+                        Rank
+                        {orderBy.field === 'rank' && (
+                          <span style={{ marginLeft: '0.25rem' }}>
+                            {orderBy.order === 'ASC' ? '↑' : '↓'}
+                          </span>
+                        )}
+                      </span>
+                    </th>
+                    <th
+                      style={{
+                        border: '1px solid gray',
+                        color: 'blue',
+                        textDecoration: 'underline',
+                        cursor: 'pointer',
+                      }}
+                    >
+                      <span onClick={() => handleClickHeader('lastSeenAt')}>
+                        Last seen at
+                        {orderBy.field === 'lastSeenAt' && (
+                          <span style={{ marginLeft: '0.25rem' }}>
+                            {orderBy.order === 'ASC' ? '↑' : '↓'}
+                          </span>
+                        )}
+                      </span>
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {queryClanPlayersMutation.data.items.map((player) => (
+                    <tr key={player.uuid}>
+                      <td style={{ border: '1px solid gray' }}>
+                        {player.username}
+                      </td>
+                      <td style={{ border: '1px solid gray' }}>
+                        {player.title && (
+                          <img
+                            style={{ marginRight: '0.25rem' }}
+                            src={`/images/ranks/${player.title.replace(/\s+/g, '').toLowerCase()}.webp`}
+                            alt={player.title}
+                          />
+                        )}
+                        {player.title || player.rank}
+                      </td>
+                      <td style={{ border: '1px solid gray' }}>
+                        {player.lastSeenAt}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </Fragment>
           ) : (
             <p>
               There are currently no players. Use the RuneLite plugin to
@@ -312,3 +422,4 @@ function HomeComponent() {
     </div>
   );
 }
+

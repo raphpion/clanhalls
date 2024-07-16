@@ -1,11 +1,13 @@
 import { inject, injectable } from 'tsyringe';
 
 import Clan from './clan';
+import type { ClanPlayerQueryData, ClanPlayerQueryParams } from './clanPlayer';
 import type { IClanRepository } from './clanRepository';
 import MemberActivityReport from './reports/memberActivityReport';
 import type { MemberActivity } from './reports/memberActivityReport';
 import type { Settings } from './reports/settingsReport';
 import SettingsReport from './reports/settingsReport';
+import type { PaginatedQueryResult } from '../db/queries';
 import AppError, { AppErrorCodes } from '../extensions/errors';
 import type User from '../users/user';
 
@@ -21,6 +23,10 @@ export interface IClanService {
     clan: Clan,
     settings: Settings
   ): Promise<SettingsReport>;
+  queryClanPlayers(
+    clan: Clan,
+    params: ClanPlayerQueryParams
+  ): Promise<PaginatedQueryResult<ClanPlayerQueryData>>;
 }
 
 @injectable()
@@ -70,6 +76,32 @@ class ClanService implements IClanService {
     settingsReport.user = Promise.resolve(user);
 
     return this.clanRepository.saveSettingsReport(settingsReport);
+  }
+
+  async queryClanPlayers(clan: Clan, params: ClanPlayerQueryParams) {
+    const { items, ...queryResult } =
+      await this.clanRepository.queryClanPlayers(clan, params);
+
+    const clanRanks = await clan.clanRanks;
+
+    const clanPlayers: ClanPlayerQueryData[] = await Promise.all(
+      items.map(async (clanPlayer) => {
+        const player = await clanPlayer.player;
+        const { uuid, username } = player;
+        const { rank, lastSeenAt } = clanPlayer;
+        const title = clanRanks.find((r) => r.rank === rank)?.title;
+
+        return {
+          uuid,
+          username,
+          rank,
+          title,
+          lastSeenAt,
+        };
+      })
+    );
+
+    return { ...queryResult, items: clanPlayers };
   }
 }
 

@@ -27,9 +27,6 @@ function SignInComponent() {
   const signInMutation = useMutation({
     mutationKey: ['sign-in'],
     mutationFn: signInWithGoogle,
-    onError: () => {
-      // TODO: handle error
-    },
     onSuccess: () => navigate({ to: '/' }),
   });
 

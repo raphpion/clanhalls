@@ -1,3 +1,4 @@
+import type { PaginatedQueryParams, PaginatedQueryResult } from '.';
 import { get, post } from '.';
 
 export type AccountData = {
@@ -7,6 +8,22 @@ export type AccountData = {
   emailNormalized: string;
   emailVerified: boolean;
 } | null;
+
+export type ClanPlayerQueryData = {
+  uuid: string;
+  username: string;
+  rank: string;
+  title: string | undefined;
+  lastSeenAt: string;
+};
+
+export type ClanPlayerQueryParams = PaginatedQueryParams<{
+  search: string;
+  orderBy: {
+    field: 'username' | 'rank' | 'lastSeenAt';
+    order: 'ASC' | 'DESC';
+  };
+}>;
 
 export type CreateClanPayload = {
   name: string;
@@ -36,13 +53,6 @@ export type ClanData = {
   isAdmin: boolean;
 } | null;
 
-export type ClanPlayerData = {
-  uuid: string;
-  rank: string;
-  username: string;
-  lastSeenAt: string;
-};
-
 export type SetUsernamePayload = {
   username: string;
 };
@@ -56,8 +66,19 @@ export async function getClan(): Promise<ClanData> {
   return response.data;
 }
 
-export async function getClanPlayers(): Promise<ClanPlayerData[]> {
-  const response = await get<ClanPlayerData[]>('/account/clan/players');
+export async function queryClanPlayers(
+  params: ClanPlayerQueryParams,
+): Promise<PaginatedQueryResult<ClanPlayerQueryData>> {
+  const searchParams = new URLSearchParams();
+  searchParams.append('search', params.search);
+  searchParams.append('sort', params.orderBy.field);
+  searchParams.append('order', params.orderBy.order);
+  searchParams.append('ipp', String(params.ipp));
+  searchParams.append('page', String(params.page));
+
+  const response = await get<PaginatedQueryResult<ClanPlayerQueryData>>(
+    `/account/clan/players?${searchParams.toString()}`,
+  );
   return response.data;
 }
 

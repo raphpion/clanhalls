@@ -1,7 +1,9 @@
 import express from 'express';
 
-import type { Rank } from '../../../../clans/ranks';
-import CLAN_RANKS from '../../../../clans/ranks';
+import type { ClanPlayerQueryParams } from '../../../../clans/clanPlayer';
+import type { IClanService } from '../../../../clans/clanService';
+import container from '../../../../container';
+import db from '../../../../db';
 import AppError, { AppErrorCodes } from '../../../../extensions/errors';
 import type {
   Request,
@@ -9,31 +11,29 @@ import type {
   NextFunction,
 } from '../../../../extensions/express';
 import { requireAuth } from '../../../../middleware/authMiddleware';
+import User from '../../../../users/user';
 
 const playersRoutes = express.Router();
 
 playersRoutes.get(
   '/',
-  requireAuth([
-    'clanUser',
-    'clanUser.clan',
-    'clanUser.clan.clanPlayers',
-    'clanUser.clan.clanRanks',
-    'clanUser.clan.clanPlayers.player',
-  ]),
+  requireAuth(['clanUser', 'clanUser.clan']),
   getClanPlayers
 );
 
-// TODO: add pagination and query params
 export async function getClanPlayers(
   req: Request,
   res: Response,
   next: NextFunction
 ) {
   try {
+    const clanService = container.resolve<IClanService>('ClanService');
+
     if (!req.userEntity) {
       throw new AppError(AppErrorCodes.UNAUTHORIZED, 'Unauthorized');
     }
+
+    req.userEntity = await db.getRepository(User).findOne({ where: { id: 1 } });
 
     const clanUser = await req.userEntity.clanUser;
     if (!clanUser) {
@@ -41,34 +41,21 @@ export async function getClanPlayers(
     }
 
     const clan = await clanUser.clan;
-    const clanPlayers = await clan.clanPlayers;
-    const clanRanks = await clan.clanRanks;
 
-    const ignoredRanks = ['GUEST', 'JMOD'];
+    const { ipp, page, sort, order, search } = req.query;
 
-    const players = await Promise.all(
-      clanPlayers
-        .sort(
-          (a, b) =>
-            CLAN_RANKS.indexOf(b.rank as Rank) -
-            CLAN_RANKS.indexOf(a.rank as Rank)
-        )
-        .filter((cp) => !ignoredRanks.includes(cp.rank))
-        .map(async (cp) => {
-          const clanRank = clanRanks.find((cr) => cr.rank === cp.rank);
-          const player = await cp.player;
-          const { rank, lastSeenAt } = cp;
-          const { uuid, username } = player;
-          return {
-            uuid,
-            rank: clanRank?.title || rank, // TODO: rank's title
-            username,
-            lastSeenAt,
-          };
-        })
-    );
+    const data = await clanService.queryClanPlayers(clan, {
+      ipp: ipp ? Number(ipp) : 50,
+      page: page ? Number(page) : 1,
+      search: search as string,
+      orderBy: {
+        field: (sort || 'rank') as ClanPlayerQueryParams['orderBy']['field'],
+        order: (order || 'ASC') as ClanPlayerQueryParams['orderBy']['order'],
+      },
+      withTotalCount: true,
+    });
 
-    res.json(players);
+    res.json(data);
   } catch (error) {
     next(error);
   }

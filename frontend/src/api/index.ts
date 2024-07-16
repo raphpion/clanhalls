@@ -12,6 +12,21 @@ export type ApiError = {
   status: number;
 };
 
+export type PaginatedQueryParams<T> = T & {
+  ipp?: number;
+  page?: number;
+  withTotalCount?: boolean;
+};
+
+export type PaginatedQueryResult<T> = {
+  ipp: number;
+  page: number;
+  items: T[];
+  totalCount?: number;
+  hasNextPage: boolean;
+  hasPreviousPage: boolean;
+};
+
 async function execute<TData, TResult>(
   method: Request['method'],
   url: string,

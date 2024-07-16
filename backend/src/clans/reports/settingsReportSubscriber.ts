@@ -29,6 +29,10 @@ class SettingsReportSubscriber
           where: { clanId: clan.id, rank },
         });
 
+        if (clanRank && clanRank.title === title) {
+          continue;
+        }
+
         if (!clanRank) {
           clanRank = new ClanRank();
           clanRank.clan = Promise.resolve(clan);
