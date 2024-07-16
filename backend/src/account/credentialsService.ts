@@ -19,6 +19,12 @@ export interface ICredentialsService {
     relations: string[]
   ): Promise<Credentials | null>;
 
+  updateCredentialsForUser(
+    user: User,
+    clientId: string,
+    updates: Pick<Credentials, 'name' | 'scope'>
+  ): Promise<void>;
+
   updateLastUsedAt(credentials: Credentials): Promise<Credentials>;
 }
 
@@ -67,6 +73,23 @@ class CredentialsService implements ICredentialsService {
       clientId,
       relations
     );
+  }
+
+  public async updateCredentialsForUser(
+    user: User,
+    clientId: string,
+    updates: Pick<Credentials, 'name' | 'scope'>
+  ): Promise<void> {
+    const credentials =
+      await this.credentialsRepository.getCredentialsByClientId(clientId);
+
+    if (!credentials || (await credentials.user).id !== user.id) {
+      throw new AppError(AppErrorCodes.UNAUTHORIZED, 'Unauthorized');
+    }
+
+    Object.assign(credentials, updates);
+
+    await this.credentialsRepository.saveCredentials(credentials);
   }
 
   public async updateLastUsedAt(

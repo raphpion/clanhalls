@@ -1,5 +1,5 @@
 import type { PaginatedQueryParams, PaginatedQueryResult } from '.';
-import { _delete, get, post } from '.';
+import { _delete, get, post, put } from '.';
 
 export type AccountData = {
   googleId: string;
@@ -30,6 +30,11 @@ export type CreateClanPayload = {
 };
 
 export type CreateCredentialsPayload = {
+  name: string;
+  scope: string;
+};
+
+export type UpdateCredentialsPayload = {
   name: string;
   scope: string;
 };
@@ -83,11 +88,11 @@ export async function queryClanPlayers(
 }
 
 export async function createCredentials(
-  data: CreateCredentialsPayload,
+  payload: CreateCredentialsPayload,
 ): Promise<CreateCredentialsData> {
   const response = await post<CreateCredentialsPayload, CreateCredentialsData>(
     '/account/credentials',
-    data,
+    payload,
   );
   return response.data;
 }
@@ -112,6 +117,17 @@ export async function signInWithGoogle(token: string): Promise<void> {
 
 export async function signOut(): Promise<void> {
   await post('/account/sign-out');
+}
+
+export async function updateCredentials(
+  payload: UpdateCredentialsPayload & { clientId: string },
+): Promise<void> {
+  const { clientId, ...payloadWithoutClientId } = payload;
+
+  await put<UpdateCredentialsPayload>(
+    `/account/credentials/${clientId}`,
+    payloadWithoutClientId,
+  );
 }
 
 export async function verifyUsernameAvailability(

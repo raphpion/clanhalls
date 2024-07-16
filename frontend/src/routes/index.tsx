@@ -4,7 +4,14 @@ import {
   useNavigate,
   useRouter,
 } from '@tanstack/react-router';
-import { Fragment, useContext, useEffect, useState } from 'react';
+import {
+  Fragment,
+  useContext,
+  useEffect,
+  useId,
+  useMemo,
+  useState,
+} from 'react';
 import AppContext from '../context';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import {
@@ -18,8 +25,25 @@ import {
   queryClanPlayers,
   ClanPlayerQueryParams,
   deleteCredentials,
+  CredentialsData,
+  updateCredentials,
 } from '../api/account';
-import { Field, Form, FormikProvider, useFormik } from 'formik';
+import {
+  Field,
+  Form,
+  FormikProvider,
+  useFormik,
+  useFormikContext,
+} from 'formik';
+
+function parseScope(scope: string): { [key: string]: boolean } {
+  const scopeArray = scope.split(',');
+
+  return {
+    'clan:reporting': scopeArray.includes('clan:reporting'),
+    // TODO: add more scopes here
+  };
+}
 
 export const Route = createFileRoute('/')({
   beforeLoad: ({ context }) => {
@@ -260,10 +284,20 @@ function Credentials() {
   const [createdCredentials, setCreatedCredentials] =
     useState<CreateCredentialsData>();
 
+  const [credentialsIdToUpdate, setCredentialsIdToUpdate] = useState<string>();
+
   const credentialsQuery = useQuery({
     queryKey: ['credentials'],
     queryFn: getCredentials,
   });
+
+  const credentialsToUpdate = useMemo(
+    () =>
+      credentialsQuery.data?.find(
+        (credential) => credential.clientId === credentialsIdToUpdate,
+      ),
+    [credentialsQuery.data, credentialsIdToUpdate],
+  );
 
   const deleteCredentialsMutation = useMutation({
     mutationKey: ['delete-credentials'],
@@ -288,9 +322,28 @@ function Credentials() {
     credentialsQuery.refetch();
   };
 
+  const handleUpdateCredentialsSuccess = () => {
+    setCredentialsIdToUpdate(undefined);
+    credentialsQuery.refetch();
+  };
+
   return (
     <Fragment>
       <h2>Credentials</h2>
+      {credentialsToUpdate && (
+        <div
+          style={{
+            border: '1px solid blue',
+            padding: '0 0.5rem 1rem',
+            marginBottom: '1rem',
+          }}
+        >
+          <UpdateCredentialsForm
+            credentials={credentialsToUpdate}
+            onSuccess={handleUpdateCredentialsSuccess}
+          />
+        </div>
+      )}
       {createdCredentials && (
         <div
           style={{
@@ -357,6 +410,13 @@ function Credentials() {
                     <td style={{ border: '1px solid gray' }}>
                       <button
                         onClick={() =>
+                          setCredentialsIdToUpdate(credential.clientId)
+                        }
+                      >
+                        Edit
+                      </button>{' '}
+                      <button
+                        onClick={() =>
                           handleClickDeleteCredentials(credential.clientId)
                         }
                       >
@@ -377,11 +437,40 @@ function Credentials() {
   );
 }
 
+function SelectCredentialsScope() {
+  // TODO: useId might not be needed anymore once we separate views
+  const id = useId();
+
+  return (
+    <Fragment>
+      <h4>Scope</h4>
+      <p>
+        These correspond to the permissions your credentials will have access
+        to.
+      </p>
+      <p>
+        <Field
+          type="checkbox"
+          id={`${id}-scope.clan:reporting`}
+          name="scope.clan:reporting"
+        />
+        <label htmlFor={`${id}-scope.clan:reporting`}>Clan reporting</label>
+      </p>
+    </Fragment>
+  );
+}
+
 type CreateCredentialsFormProps = {
   onSuccess: (data: CreateCredentialsData) => void;
 };
 
 function CreateCredentialsForm({ onSuccess }: CreateCredentialsFormProps) {
+  const createCredentialsMutation = useMutation({
+    mutationKey: ['create-credentials'],
+    mutationFn: createCredentials,
+    onSuccess,
+  });
+
   const formik = useFormik({
     initialValues: {
       name: '',
@@ -398,12 +487,6 @@ function CreateCredentialsForm({ onSuccess }: CreateCredentialsFormProps) {
     },
   });
 
-  const createCredentialsMutation = useMutation({
-    mutationKey: ['create-credentials'],
-    mutationFn: createCredentials,
-    onSuccess,
-  });
-
   return (
     <Fragment>
       <h3>Create credentials</h3>
@@ -416,20 +499,57 @@ function CreateCredentialsForm({ onSuccess }: CreateCredentialsFormProps) {
           <p>
             <Field name="name" placeholder="Name" />
           </p>
-          <h4>Scope</h4>
-          <p>
-            These correspond to the permissions your credentials will have
-            access to.
-          </p>
-          <p>
-            <Field
-              type="checkbox"
-              id="scope.clan:reporting"
-              name="scope.clan:reporting"
-            />
-            <label htmlFor="scope.clan:reporting">Clan reporting</label>
-          </p>
+          <SelectCredentialsScope />
           <button type="submit">Create credentials</button>
+        </Form>
+      </FormikProvider>
+    </Fragment>
+  );
+}
+
+type UpdateCredentialsFormProps = {
+  credentials: CredentialsData;
+  onSuccess: () => void;
+};
+
+function UpdateCredentialsForm({
+  credentials,
+  onSuccess,
+}: UpdateCredentialsFormProps) {
+  const formik = useFormik({
+    initialValues: {
+      name: credentials.name,
+      scope: parseScope(credentials.scope),
+    },
+    onSubmit: async ({ name, scope }) => {
+      const scopeString = Object.keys(scope)
+        .filter((key) => scope[key as keyof typeof scope])
+        .join();
+
+      updateCredentialsMutation.mutate({
+        name,
+        scope: scopeString,
+        clientId: credentials.clientId,
+      });
+    },
+  });
+
+  const updateCredentialsMutation = useMutation({
+    mutationKey: ['update-credentials'],
+    mutationFn: updateCredentials,
+    onSuccess,
+  });
+
+  return (
+    <Fragment>
+      <h3>Update '{credentials.name}'</h3>
+      <FormikProvider value={formik}>
+        <Form>
+          <p>
+            <Field name="name" placeholder="Name" />
+          </p>
+          <SelectCredentialsScope />
+          <button type="submit">Update credentials</button>
         </Form>
       </FormikProvider>
     </Fragment>
