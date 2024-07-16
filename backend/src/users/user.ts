@@ -58,11 +58,6 @@ class User {
 
     return email.trim().toLowerCase();
   }
-
-  get clan() {
-    return Promise.resolve(this.clanUser).then((clanUser) => clanUser?.clan);
-  }
-
   changeEmail(email: string) {
     if (Joi.string().email().validate(email).error) {
       throw new AppError(

@@ -55,7 +55,8 @@ async function sendSettingsReport(
       throw new AppError(AppErrorCodes.UNAUTHORIZED, 'Unauthorized');
     }
 
-    const clan = await req.userEntity.clan;
+    const clanUser = await req.userEntity.clanUser;
+    const clan = await clanUser?.clan;
     if (!clan) {
       throw new AppError(
         AppErrorCodes.BAD_REQUEST,

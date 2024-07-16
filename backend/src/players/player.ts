@@ -17,14 +17,11 @@ class Player {
   @Generated('uuid')
   readonly uuid: string;
 
+  @Column({ unique: true, nullable: true, type: 'int' })
+  wiseOldManId: number | null;
+
   @Column({ unique: true, length: 12 })
   username: string;
-
-  @Column({ nullable: true, length: 12 })
-  previousUsername: string;
-
-  @Column({ nullable: true })
-  usernameChangedAt: Date;
 
   @OneToMany(() => ClanPlayer, (clanPlayer: ClanPlayer) => clanPlayer.player)
   clanPlayers: Promise<ClanPlayer[]>;

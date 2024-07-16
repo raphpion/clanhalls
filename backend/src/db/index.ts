@@ -13,6 +13,7 @@ import MemberActivityReportSubscriber from '../clans/reports/memberActivityRepor
 import SettingsReport from '../clans/reports/settingsReport';
 import SettingsReportSubscriber from '../clans/reports/settingsReportSubscriber';
 import Player from '../players/player';
+import PlayerSubscriber from '../players/playerSubscriber';
 import Session from '../sessions/session';
 import User from '../users/user';
 
@@ -40,7 +41,11 @@ const db = new DataSource({
     Session,
     User,
   ],
-  subscribers: [MemberActivityReportSubscriber, SettingsReportSubscriber],
+  subscribers: [
+    MemberActivityReportSubscriber,
+    PlayerSubscriber,
+    SettingsReportSubscriber,
+  ],
   migrations: [__dirname + '/migrations/**/*.ts'],
 });
 

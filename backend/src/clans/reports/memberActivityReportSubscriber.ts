@@ -1,6 +1,12 @@
-import type { EntitySubscriberInterface, InsertEvent } from 'typeorm';
+import { WOMClient } from '@wise-old-man/utils';
+import type {
+  EntitySubscriberInterface,
+  InsertEvent,
+  QueryRunner,
+} from 'typeorm';
 import { EventSubscriber } from 'typeorm';
 
+import type { MemberActivity } from './memberActivityReport';
 import MemberActivityReport from './memberActivityReport';
 import Player from '../../players/player';
 import ClanPlayer from '../clanPlayer';
@@ -15,8 +21,9 @@ class MemberActivityReportSubscriber
   }
 
   async afterInsert(event: InsertEvent<MemberActivityReport>) {
-    await event.queryRunner.connect();
-    await event.queryRunner.startTransaction();
+    const queryRunner = event.connection.createQueryRunner();
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
 
     try {
       const receivedAt = event.entity.receivedAt;
@@ -27,17 +34,41 @@ class MemberActivityReportSubscriber
           continue;
         }
 
-        let player = await event.queryRunner.manager.findOne(Player, {
+        let player = await queryRunner.manager.findOne(Player, {
           where: { username: member.name },
         });
 
         if (!player) {
-          player = new Player();
-          player.username = member.name;
-          player = await event.queryRunner.manager.save(player);
+          // eslint-disable-next-line no-constant-condition
+          while (true) {
+            try {
+              player = await this.findPlayerWithPreviousName(
+                queryRunner,
+                member
+              );
+              break;
+            } catch (error) {
+              // Retry in 60 seconds if the request fails because of rate limiting
+              // See https://docs.wiseoldman.net/#rate-limits--api-keys
+              console.log(Object.entries(error).map(([k, v]) => `${k}: ${v}`));
+              if (error.name === 'RateLimitError') {
+                console.log('Rate Limit Error... Retrying in 60 seconds...');
+                await new Promise((r) => setTimeout(r, 60000));
+                console.log('Resuming...');
+              } else if (error.name !== 'NotFoundError') {
+                throw error;
+              }
+            }
+          }
+
+          if (!player) {
+            player = new Player();
+            player.username = member.name;
+            player = await queryRunner.manager.save(player);
+          }
         }
 
-        let clanPlayer = await event.queryRunner.manager.findOne(ClanPlayer, {
+        let clanPlayer = await queryRunner.manager.findOne(ClanPlayer, {
           where: { clanId: clan.id, playerId: player.id },
         });
 
@@ -50,13 +81,47 @@ class MemberActivityReportSubscriber
         clanPlayer.rank = member.rank;
         clanPlayer.lastSeenAt = receivedAt;
 
-        await event.queryRunner.manager.save(clanPlayer);
+        await queryRunner.manager.save(clanPlayer);
       }
 
-      await event.queryRunner.commitTransaction();
+      await queryRunner.commitTransaction();
+      console.log('Transaction committed!');
     } catch (error) {
-      await event.queryRunner.rollbackTransaction();
+      console.log('Error processing member activity report:', error);
+      await queryRunner.rollbackTransaction();
+    } finally {
+      await queryRunner.release();
     }
+  }
+
+  private async findPlayerWithPreviousName(
+    queryRunner: QueryRunner,
+    member: MemberActivity
+  ) {
+    const wiseOldMan = new WOMClient();
+    const nameChanges = await wiseOldMan.players.getPlayerNames(member.name);
+    console.log(`nameChanges for ${member.name}:`, nameChanges);
+
+    let player: Player | undefined;
+
+    // TODO: check if it's possible that the player went from old name to new name
+    if (nameChanges.length > 0) {
+      for (const nameChange of nameChanges) {
+        player = await queryRunner.manager.findOne(Player, {
+          where: { username: nameChange.oldName },
+        });
+
+        if (player) {
+          player.wiseOldManId = nameChange.playerId;
+          player.username = member.name;
+          player = await queryRunner.manager.save(player);
+
+          break;
+        }
+      }
+    }
+
+    return player;
   }
 }
 
