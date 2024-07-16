@@ -9,6 +9,7 @@ import ClanPlayer from '../clanPlayer';
 class MemberActivityReportSubscriber
   implements EntitySubscriberInterface<MemberActivityReport>
 {
+  private readonly ignoredRanks = ['GUEST', 'JMOD'];
   listenTo() {
     return MemberActivityReport;
   }
@@ -22,6 +23,10 @@ class MemberActivityReportSubscriber
       const clan = await event.entity.clan;
 
       for (const member of event.entity.data) {
+        if (this.ignoredRanks.includes(member.rank)) {
+          continue;
+        }
+
         let player = await event.queryRunner.manager.findOne(Player, {
           where: { username: member.name },
         });
