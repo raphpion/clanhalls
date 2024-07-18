@@ -1,3 +1,4 @@
+// eslint-disable-next-line import/order
 import 'reflect-metadata';
 
 import path from 'path';
@@ -57,6 +58,10 @@ app.use(
   })
 );
 
+app.use((req, _, next) => {
+  console.log(req.method, req.url, JSON.stringify(req.body));
+  next();
+});
 app.use(routes);
 app.use(errorMiddleware);
 

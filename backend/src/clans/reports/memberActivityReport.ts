@@ -29,6 +29,9 @@ class MemberActivityReport {
   @CreateDateColumn()
   receivedAt: Date;
 
+  @Column({ nullable: true })
+  appliedAt: Date | null = null;
+
   @Column('jsonb')
   data: MemberActivity[];
 

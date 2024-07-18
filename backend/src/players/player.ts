@@ -18,7 +18,7 @@ class Player {
   readonly uuid: string;
 
   @Column({ unique: true, nullable: true, type: 'int' })
-  wiseOldManId: number | null;
+  wiseOldManId: number | null = null;
 
   @Column({ unique: true, length: 12 })
   username: string;

@@ -36,7 +36,7 @@ class Credentials {
   createdAt: Date;
 
   @Column({ nullable: true })
-  lastUsedAt: Date | null;
+  lastUsedAt: Date | null = null;
 
   @ManyToOne(() => User, (user: User) => user.credentials, {
     onDelete: 'CASCADE',

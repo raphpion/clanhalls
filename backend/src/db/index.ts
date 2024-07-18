@@ -9,11 +9,8 @@ import ClanPlayer from '../clans/clanPlayer';
 import ClanRank from '../clans/clanRank';
 import ClanUser from '../clans/clanUser';
 import MemberActivityReport from '../clans/reports/memberActivityReport';
-import MemberActivityReportSubscriber from '../clans/reports/memberActivityReportSubscriber';
 import SettingsReport from '../clans/reports/settingsReport';
-import SettingsReportSubscriber from '../clans/reports/settingsReportSubscriber';
 import Player from '../players/player';
-import PlayerSubscriber from '../players/playerSubscriber';
 import Session from '../sessions/session';
 import User from '../users/user';
 
@@ -41,11 +38,7 @@ const db = new DataSource({
     Session,
     User,
   ],
-  subscribers: [
-    MemberActivityReportSubscriber,
-    PlayerSubscriber,
-    SettingsReportSubscriber,
-  ],
+  subscribers: [__dirname + '/subscribers/**/*.ts'],
   migrations: [__dirname + '/migrations/**/*.ts'],
 });
 

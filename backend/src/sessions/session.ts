@@ -31,7 +31,7 @@ class Session {
   userAgent: string;
 
   @Column({ nullable: true })
-  signedOutAt: Date | null;
+  signedOutAt: Date | null = null;
 
   @ManyToOne(() => User, (user: User) => user.sessions)
   user: Promise<User>;
