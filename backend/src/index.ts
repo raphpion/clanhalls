@@ -14,7 +14,9 @@ import { createClient } from 'redis';
 
 config({ path: path.join(__dirname, '../../.env') });
 
+import container from './container';
 import db from './db';
+import type { IJobsService } from './jobs/jobsService';
 import errorMiddleware from './middleware/errorMiddleware';
 import routes from './routes';
 
@@ -27,7 +29,7 @@ app.use(cookieParser(process.env.SESSION_SECRET));
 app.use(
   cors({
     credentials: true,
-    origin: 'http://localhost:3000',
+    origin: 'http://localhost:3000', // TODO: Update this to the actual frontend URL
   })
 );
 
@@ -65,7 +67,12 @@ app.use((req, _, next) => {
 app.use(routes);
 app.use(errorMiddleware);
 
-app.listen(process.env.PORT, () => {
+app.listen(process.env.PORT, async () => {
+  await container.resolve<IJobsService>('JobsService').initialize();
+  process.on('SIGTERM', shutdown);
+  process.on('SIGINT', shutdown);
+  process.on('exit', shutdown);
+
   db.initialize()
     .catch((error) => {
       console.error('Failed to connect to database!', error);
@@ -74,3 +81,8 @@ app.listen(process.env.PORT, () => {
       console.log(`Server is running on http://localhost:${process.env.PORT}`);
     });
 });
+
+async function shutdown() {
+  await container.resolve<IJobsService>('JobsService').shutdown();
+  process.exit();
+}

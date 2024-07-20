@@ -1,11 +1,17 @@
 import { type Job as BullMQJob, Queue, Worker } from 'bullmq';
 import { singleton } from 'tsyringe';
 
+import ApplyMemberActivityReportDataJob from './clans/reports/applyMemberActivityReportDataJob';
 import ApplyPendingMemberActivityReportDataJob from './clans/reports/applyPendingMemberActivityReportsDataJob';
+import ApplySettingsReportDataJob from './clans/reports/applySettingsReportDataJob';
 import type { JobClass } from './job';
 import type Job from './job';
+import AssociatePlayerToWiseOldManJob from './players/associatePlayerToWiseOldManJob';
+import { getThreadIndex } from '../env';
 
 export interface IJobsService {
+  initialize(): Promise<void>;
+  shutdown(): Promise<void>;
   add<T>(job: JobClass<T>, payload?: T): Promise<unknown>;
 }
 
@@ -16,66 +22,119 @@ export type CronJob = {
 
 const PREFIX = 'jobs';
 
-const CRON_JOBS = [
+const JOBS = [
+  ApplyMemberActivityReportDataJob,
+  ApplyPendingMemberActivityReportDataJob,
+  ApplySettingsReportDataJob,
+  AssociatePlayerToWiseOldManJob,
+] as JobClass<unknown>[];
+
+const CRON_JOBS: CronJob[] = [
   // every day at 00:00
-  { interval: '0 0 * * *', job: ApplyPendingMemberActivityReportDataJob },
-] as CronJob[];
+  { job: ApplyMemberActivityReportDataJob, interval: '0 0 * * *' },
+];
+
+const STARTUP_JOBS: JobClass<unknown>[] = [];
 
 @singleton()
 class JobsService implements IJobsService {
-  private queues: Map<string, Queue>;
-  private workers: Map<string, Worker>;
+  private queues: Queue[];
+  private workers: Worker[];
 
   constructor() {
-    this.queues = new Map();
-    this.workers = new Map();
+    this.queues = [];
+    this.workers = [];
   }
 
   async add<T>(job: JobClass<T>, payload?: T) {
     console.log(`Adding job of type ${job.name}`);
-    const queue = await this.getQueueOrInit(job);
+    const queue = this.queues.find((queue) => queue.name === job.name);
+    if (!queue) {
+      throw new Error(`Implementation queue for job ${job.name} not found`);
+    }
+
     const task = await queue.add(job.name, payload);
-
-    console.log(`Added job ${job.name} with id ${task.id}`);
-
     return task;
   }
 
-  private async getQueueOrInit<T>(job: JobClass<T>) {
-    const jobInstance = new job();
+  async initialize() {
+    const isMainThread =
+      process.env.NODE_ENV === 'development' || getThreadIndex() === 0;
 
-    if (this.queues.has(jobInstance.name)) {
-      return this.queues.get(jobInstance.name);
+    for (const job of JOBS) {
+      const jobInstance = new job();
+
+      const connection = {
+        host: process.env.REDIS_HOST,
+        port: parseInt(process.env.REDIS_PORT!, 10),
+        password: process.env.REDIS_PASSWORD!,
+      };
+
+      const queue = new Queue(jobInstance.name, {
+        prefix: PREFIX,
+        defaultJobOptions: jobInstance.options,
+        connection,
+      });
+
+      const worker = new Worker(
+        job.name,
+        (bullMQJob) => this.handleJob(bullMQJob, jobInstance),
+        {
+          prefix: PREFIX,
+          autorun: false,
+          connection,
+        }
+      );
+
+      worker.run();
+
+      this.queues.push(queue);
+      this.workers.push(worker);
     }
 
-    const connection = {
-      host: process.env.REDIS_HOST,
-      port: parseInt(process.env.REDIS_PORT!, 10),
-      password: process.env.REDIS_PASSWORD!,
-    };
+    // Only schedule startup and repeatable jobs on the main thread
+    if (!isMainThread) {
+      return;
+    }
 
-    const queue = new Queue(jobInstance.name, {
-      prefix: PREFIX,
-      defaultJobOptions: jobInstance.options,
-      connection,
-    });
+    // Clear previously scheduled jobs
+    for (const queue of this.queues) {
+      const activeJobs = await queue.getRepeatableJobs();
 
-    const worker = new Worker(
-      job.name,
-      (bullMQJob) => this.handleJob(bullMQJob, jobInstance),
-      {
-        prefix: PREFIX,
-        autorun: false,
-        connection,
+      for (const job of activeJobs) {
+        await queue.removeRepeatableByKey(job.key);
       }
-    );
+    }
 
-    worker.run();
+    for (const { job, interval } of CRON_JOBS) {
+      const queue = this.queues.find((queue) => queue.name === job.name);
+      if (!queue) {
+        throw new Error(`Implementation queue for job ${job.name} not found`);
+      }
 
-    this.queues.set(job.name, queue);
-    this.workers.set(job.name, worker);
+      console.log(`Scheduling CRON job ${job.name} with pattern ${interval}`);
+      await queue.add(job.name, undefined, { repeat: { pattern: interval } });
+    }
 
-    return queue;
+    for (const job of Array.from(STARTUP_JOBS.values())) {
+      const queue = this.queues.find((queue) => queue.name === job.name);
+      if (!queue) {
+        throw new Error(`Implementation queue for job ${job.name} not found`);
+      }
+
+      console.log(`Scheduling startup job ${job.name}`);
+      await queue.add(job.name, undefined, { priority: 1 });
+    }
+  }
+
+  async shutdown() {
+    for (const queue of this.queues) {
+      await queue.close();
+    }
+
+    for (const worker of this.workers) {
+      await worker.close();
+    }
   }
 
   private async handleJob(bullMQJob: BullMQJob, job: Job<unknown>) {
