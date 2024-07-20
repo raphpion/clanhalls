@@ -1,13 +1,9 @@
-
-import type { IClanReportService } from '../../../clans/reports/clanReportService';
-import container from '../../../container';
+import ApplyMemberActivityReportDataCommand from '../../../clans/reports/commands/applyMemberActivityReportDataCommand';
 import Job from '../../job';
 
 class ApplyMemberActivityReportDataJob extends Job<number> {
   async execute(reportId: number) {
-    return container
-      .resolve<IClanReportService>('ClanReportService')
-      .applyMemberActivityReportData(reportId);
+    return new ApplyMemberActivityReportDataCommand({ reportId }).execute();
   }
 }
 

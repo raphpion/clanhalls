@@ -1,11 +1,8 @@
 import express from 'express';
 import Joi from 'joi';
 
-import { Scopes } from '../../../account/credentials';
-import type { ICredentialsService } from '../../../account/credentialsService';
-import type { IClanService } from '../../../clans/clanService';
+import CreateMemberActivityReportCommand from '../../../clans/reports/commands/createMemberActivityReportCommand';
 import type { MemberActivity } from '../../../clans/reports/memberActivityReport';
-import container from '../../../container';
 import AppError, { AppErrorCodes } from '../../../extensions/errors';
 import type {
   Request,
@@ -15,6 +12,8 @@ import type {
 import { requireCredentials } from '../../../middleware/authMiddleware';
 import type { CredentialsPayload } from '../../../middleware/authMiddleware';
 import validate from '../../../middleware/validationMiddleware';
+import UpdateCredentialsCommand from '../../../users/credentials/commands/updateCredentialsCommand';
+import { Scopes } from '../../../users/credentials/credentials';
 
 type SendMemberActivityReportPayload = CredentialsPayload & {
   members: MemberActivity[];
@@ -52,10 +51,6 @@ async function sendMemberActivityReport(
   next: NextFunction
 ) {
   try {
-    const clanService = container.resolve<IClanService>('ClanService');
-    const credentialsService =
-      container.resolve<ICredentialsService>('CredentialsService');
-
     if (!req.credentialsEntity || !req.userEntity) {
       throw new AppError(AppErrorCodes.UNAUTHORIZED, 'Unauthorized');
     }
@@ -71,13 +66,18 @@ async function sendMemberActivityReport(
 
     const { members } = req.body as SendMemberActivityReportPayload;
 
-    await clanService.createMemberActivityReport(req.userEntity, clan, members);
+    const report = await new CreateMemberActivityReportCommand({
+      user: req.userEntity,
+      clan,
+      members,
+    }).execute();
 
-    req.credentialsEntity = await credentialsService.updateLastUsedAt(
-      req.credentialsEntity
-    );
+    await new UpdateCredentialsCommand({
+      clientId: req.credentialsEntity.clientId,
+      updates: { lastUsedAt: new Date() },
+    }).execute();
 
-    res.status(204).send();
+    res.status(201).json({ uuid: report.uuid });
   } catch (error) {
     next(error);
   }

@@ -1,8 +1,8 @@
 import express from 'express';
 
-import type { ClanPlayerQueryParams } from '../../../../clans/clanPlayer';
-import type { IClanService } from '../../../../clans/clanService';
-import container from '../../../../container';
+import ClanPlayersQuery, {
+  type Params as ClanPlayersQueryParams,
+} from '../../../../clans/queries/clanPlayersQuery';
 import db from '../../../../db';
 import AppError, { AppErrorCodes } from '../../../../extensions/errors';
 import type {
@@ -27,8 +27,6 @@ export async function getClanPlayers(
   next: NextFunction
 ) {
   try {
-    const clanService = container.resolve<IClanService>('ClanService');
-
     if (!req.userEntity) {
       throw new AppError(AppErrorCodes.UNAUTHORIZED, 'Unauthorized');
     }
@@ -44,16 +42,17 @@ export async function getClanPlayers(
 
     const { ipp, page, sort, order, search } = req.query;
 
-    const data = await clanService.queryClanPlayers(clan, {
+    const data = await new ClanPlayersQuery({
+      clan,
       ipp: ipp ? Number(ipp) : 50,
       page: page ? Number(page) : 1,
       search: search as string,
       orderBy: {
-        field: (sort || 'rank') as ClanPlayerQueryParams['orderBy']['field'],
-        order: (order || 'ASC') as ClanPlayerQueryParams['orderBy']['order'],
+        field: (sort || 'rank') as ClanPlayersQueryParams['orderBy']['field'],
+        order: (order || 'ASC') as ClanPlayersQueryParams['orderBy']['order'],
       },
       withTotalCount: true,
-    });
+    }).execute();
 
     res.json(data);
   } catch (error) {

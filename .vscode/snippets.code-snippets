@@ -1,0 +1,62 @@
+{
+  "Command": {
+    "prefix": "cmd",
+    "body": [
+      "type Params = $1;",
+      "",
+      "type Result = $2;",
+      "",
+      "class $3 extends Command<Params, Result> {",
+      "  async execute() {",
+      "    $4",
+      "  }",
+      "}",
+      "",
+      "export default $3;"
+    ]
+  },
+  "Command with QueryRunner": {
+    "prefix": "cmdqr",
+    "body": [
+      "type Params = $1;",
+      "",
+      "type Result = $2;",
+      "",
+      "class $3 extends Command<Params, Result> {",
+      "  async execute() {",
+      "    const queryRunner = db.createQueryRunner();",
+      "    await queryRunner.connect();",
+      "    await queryRunner.startTransaction();",
+      "",
+      "    try {",
+      "      $4",
+      "      await queryRunner.commitTransaction();",
+      "    } catch (error) {",
+      "      await queryRunner.rollbackTransaction();",
+      "      throw error;",
+      "    } finally {",
+      "      await queryRunner.release();",
+      "    }",
+      "  }",
+      "}",
+      "",
+      "export default $3;"
+    ]
+  },
+  "Query": {
+    "prefix": "query",
+    "body": [
+      "type Params = $1;",
+      "",
+      "type Result = $2;",
+      "",
+      "class $3 extends Query<Params, Result> {",
+      "  async execute() {",
+      "    $4",
+      "  }",
+      "}",
+      "",
+      "export default $3;"
+    ]
+  }
+}

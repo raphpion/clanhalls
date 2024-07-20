@@ -2,13 +2,14 @@ import express from 'express';
 import Joi from 'joi';
 
 import { createSessionForUser } from '.';
-import type { IGoogleService } from '../../account/googleService';
 import container from '../../container';
 import AppError, { AppErrorCodes } from '../../extensions/errors';
 import type { Request, Response, NextFunction } from '../../extensions/express';
 import validate from '../../middleware/validationMiddleware';
-import type { IUserService } from '../../users/userService';
-
+import type { IGoogleService } from '../../services/googleService';
+import CreateUserCommand from '../../users/commands/createUserCommand';
+import VerifyEmailCommand from '../../users/commands/verifyEmailCommand';
+import UserByGoogleIdQuery from '../../users/queries/userByGoogleIdQuery';
 
 type SignInWithGooglePayload = {
   token: string;
@@ -30,7 +31,6 @@ routes.post(
 async function signInWithGoogle(req: Request, _: Response, next: NextFunction) {
   try {
     const googleService = container.resolve<IGoogleService>('GoogleService');
-    const userService = container.resolve<IUserService>('UserService');
 
     const { token } = req.body as SignInWithGooglePayload;
     const payload = await googleService.verifyIdToken(token);
@@ -43,13 +43,17 @@ async function signInWithGoogle(req: Request, _: Response, next: NextFunction) {
 
     const { sub: googleId, email, email_verified: emailVerified } = payload;
 
-    let user = await userService.getUserByGoogleId(googleId);
+    let user = await new UserByGoogleIdQuery({ googleId }).execute();
     if (user === null) {
-      user = await userService.createUser(googleId, email, true);
+      user = await new CreateUserCommand({
+        googleId,
+        email,
+        emailVerified,
+      }).execute();
     }
 
     if (emailVerified && !user.emailVerified) {
-      await userService.verifyEmail(user);
+      user = await new VerifyEmailCommand({ user }).execute();
     }
 
     req.persist = true;

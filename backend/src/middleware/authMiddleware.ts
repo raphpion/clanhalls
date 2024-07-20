@@ -1,11 +1,10 @@
 import Joi from 'joi';
 
-import type { Scopes } from '../account/credentials';
-import type { ICredentialsService } from '../account/credentialsService';
-import container from '../container';
 import AppError, { AppErrorCodes } from '../extensions/errors';
 import type { NextFunction, Request, Response } from '../extensions/express';
-import type { ISessionService } from '../sessions/sessionService';
+import SessionByUuidQuery from '../sessions/queries/sessionByUuidQuery';
+import type { Scopes } from '../users/credentials/credentials';
+import CredentialsByClientIdQuery from '../users/credentials/queries/credentialsByClientIdQuery';
 
 export type CredentialsPayload = {
   clientId: string;
@@ -26,13 +25,10 @@ export function requireAuth(relations: string[] = []) {
 
       const sessionRelations = ['user', ...relations.map((r) => `user.${r}`)];
 
-      const sessionService =
-        container.resolve<ISessionService>('SessionService');
-
-      const session = await sessionService.getSessionByUuid(
-        req.session.uuid,
-        sessionRelations
-      );
+      const session = await new SessionByUuidQuery({
+        uuid: req.session.uuid,
+        relations: sessionRelations,
+      }).execute();
 
       if (!session || session.signedOutAt) {
         req.session.destroy(console.error);
@@ -58,13 +54,10 @@ export function retrieveAuth(relations: string[] = []) {
 
       const sessionRelations = ['user', ...relations.map((r) => `user.${r}`)];
 
-      const sessionService =
-        container.resolve<ISessionService>('SessionService');
-
-      const session = await sessionService.getSessionByUuid(
-        req.session.uuid,
-        sessionRelations
-      );
+      const session = await new SessionByUuidQuery({
+        uuid: req.session.uuid,
+        relations: sessionRelations,
+      }).execute();
       if (!session || session.isSignedOut) {
         req.session.destroy(console.error);
         return next();
@@ -83,18 +76,15 @@ export function retrieveAuth(relations: string[] = []) {
 export function requireCredentials(scope: Scopes[], relations: string[] = []) {
   return async function (req: Request, res: Response, next: NextFunction) {
     try {
-      const credentialsService =
-        container.resolve<ICredentialsService>('CredentialsService');
-
       const { clientId, clientSecret } = req.body as CredentialsPayload;
       if (!clientId || !clientSecret) {
         return res.sendStatus(401);
       }
 
-      const credentials = await credentialsService.getCredentialsByClientId(
+      const credentials = await new CredentialsByClientIdQuery({
         clientId,
-        relations
-      );
+        relations,
+      }).execute();
       if (!credentials) {
         return res.sendStatus(401);
       }

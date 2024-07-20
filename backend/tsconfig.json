@@ -13,11 +13,11 @@
     "sourceMap": true,
     "resolveJsonModule": true,
     "baseUrl": "./src",
-    "outDir": "build",
+    "outDir": "dist",
     "rootDir": "src",
     "types": ["jest"],
     "typeRoots": ["node_modules/@types"]
   },
   "include": ["src"],
-  "exclude": ["node_modules", "build"]
+  "exclude": ["node_modules", "dist"]
 }

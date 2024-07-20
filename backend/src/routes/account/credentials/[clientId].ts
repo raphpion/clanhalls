@@ -1,8 +1,6 @@
 import express from 'express';
 import Joi from 'joi';
 
-import type { ICredentialsService } from '../../../account/credentialsService';
-import container from '../../../container';
 import AppError, { AppErrorCodes } from '../../../extensions/errors';
 import type {
   NextFunction,
@@ -11,6 +9,8 @@ import type {
 } from '../../../extensions/express';
 import { requireAuth } from '../../../middleware/authMiddleware';
 import validate from '../../../middleware/validationMiddleware';
+import DeleteCredentialsCommand from '../../../users/credentials/commands/deleteCredentialsCommand';
+import UpdateCredentialsCommand from '../../../users/credentials/commands/updateCredentialsCommand';
 
 type UpdateCredentialsPayload = {
   name: string;
@@ -40,16 +40,15 @@ export async function deleteCredentials(
   next: NextFunction
 ) {
   try {
-    const credentialsService =
-      container.resolve<ICredentialsService>('CredentialsService');
     if (!req.userEntity) {
       throw new AppError(AppErrorCodes.UNAUTHORIZED, 'Unauthorized');
     }
 
     const { clientId } = req.params;
-    console.log(req.params);
 
-    await credentialsService.deleteCredentialsForUser(req.userEntity, clientId);
+    await new DeleteCredentialsCommand({
+      clientId,
+    }).execute();
 
     res.sendStatus(204);
   } catch (error) {
@@ -63,8 +62,6 @@ export async function updateCredentials(
   next: NextFunction
 ) {
   try {
-    const credentialsService =
-      container.resolve<ICredentialsService>('CredentialsService');
     if (!req.userEntity) {
       throw new AppError(AppErrorCodes.UNAUTHORIZED, 'Unauthorized');
     }
@@ -72,11 +69,10 @@ export async function updateCredentials(
     const { clientId } = req.params;
     const updates = req.body as UpdateCredentialsPayload;
 
-    await credentialsService.updateCredentialsForUser(
-      req.userEntity,
+    await new UpdateCredentialsCommand({
       clientId,
-      updates
-    );
+      updates,
+    }).execute();
 
     res.sendStatus(204);
   } catch (error) {

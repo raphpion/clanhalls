@@ -9,7 +9,7 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
-import User from '../users/user';
+import User from '../user';
 
 export enum Scopes {
   CLAN_REPORTING = 'clan:reporting',

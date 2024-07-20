@@ -6,11 +6,12 @@ import setUsername from './set-username';
 import signInWithGoogle from './sign-in-with-google';
 import signOut from './sign-out';
 import verifyUsernameAvailability from './verify-username-availability';
-import container from '../../container';
 import AppError, { AppErrorCodes } from '../../extensions/errors';
 import type { Request, Response, NextFunction } from '../../extensions/express';
 import { retrieveAuth } from '../../middleware/authMiddleware';
-import type { ISessionService } from '../../sessions/sessionService';
+import CreateSessionForUserCommand from '../../sessions/commands/createSessionForUserCommand';
+import SignOutSessionCommand from '../../sessions/commands/signOutSessionCommand';
+import SessionByUuidQuery from '../../sessions/queries/sessionByUuidQuery';
 
 const accountRoutes = express.Router();
 
@@ -57,26 +58,26 @@ export async function createSessionForUser(
   next: NextFunction
 ) {
   try {
-    const sessionService = container.resolve<ISessionService>('SessionService');
-
     const { headers, ip, persist, session, userEntity } = req;
     if (!userEntity) {
       throw new AppError(AppErrorCodes.UNAUTHORIZED, 'Unauthorized');
     }
 
     // TODO: change "google" to auth method when there are more available
-    const sessionEntity = await sessionService.createSessionForUser(
-      userEntity,
-      session.id,
-      headers['user-agent'],
-      'google',
-      ip
-    );
+    const sessionEntity = await new CreateSessionForUserCommand({
+      user: userEntity,
+      sessionId: session.id,
+      userAgent: headers['user-agent'],
+      method: 'google',
+      ip,
+    }).execute();
 
     if (session.uuid) {
-      const prevSession = await sessionService.getSessionByUuid(session.uuid);
+      const prevSession = await new SessionByUuidQuery({
+        uuid: session.uuid,
+      }).execute();
 
-      await sessionService.signOutSession(prevSession);
+      await new SignOutSessionCommand({ session: prevSession }).execute();
     }
 
     if (!persist) {

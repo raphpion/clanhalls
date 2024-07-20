@@ -3,7 +3,6 @@ import path from 'path';
 import { config } from 'dotenv';
 import { DataSource } from 'typeorm';
 
-import Credentials from '../account/credentials';
 import Clan from '../clans/clan';
 import ClanPlayer from '../clans/clanPlayer';
 import ClanRank from '../clans/clanRank';
@@ -12,6 +11,7 @@ import MemberActivityReport from '../clans/reports/memberActivityReport';
 import SettingsReport from '../clans/reports/settingsReport';
 import Player from '../players/player';
 import Session from '../sessions/session';
+import Credentials from '../users/credentials/credentials';
 import User from '../users/user';
 
 config({ path: path.join(__dirname, '../../../.env') });

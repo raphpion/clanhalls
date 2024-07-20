@@ -1,12 +1,11 @@
 import express from 'express';
 import Joi from 'joi';
 
-import container from '../../container';
 import AppError, { AppErrorCodes } from '../../extensions/errors';
 import type { NextFunction, Request, Response } from '../../extensions/express';
 import { requireAuth } from '../../middleware/authMiddleware';
 import validate from '../../middleware/validationMiddleware';
-import type { IUserService } from '../../users/userService';
+import SetUsernameCommand from '../../users/commands/setUsernameCommand';
 
 type SetUsernamePayload = {
   username: string;
@@ -28,15 +27,13 @@ routes.post(
 
 async function setUsername(req: Request, res: Response, next: NextFunction) {
   try {
-    const userService = container.resolve<IUserService>('UserService');
-
     const { username } = req.body as SetUsernamePayload;
 
     if (!req.userEntity) {
       throw new AppError(AppErrorCodes.UNAUTHORIZED, 'Unauthorized');
     }
 
-    await userService.setUsername(req.userEntity, username);
+    await new SetUsernameCommand({ user: req.userEntity, username }).execute();
 
     res.sendStatus(204);
   } catch (error) {

@@ -2,8 +2,6 @@ import express from 'express';
 import Joi from 'joi';
 
 import credentialsClientIdRoutes from './[clientId]';
-import type { ICredentialsService } from '../../../account/credentialsService';
-import container from '../../../container';
 import AppError, { AppErrorCodes } from '../../../extensions/errors';
 import type {
   NextFunction,
@@ -12,6 +10,7 @@ import type {
 } from '../../../extensions/express';
 import { requireAuth } from '../../../middleware/authMiddleware';
 import validate from '../../../middleware/validationMiddleware';
+import CreateCredentialsCommand from '../../../users/credentials/commands/createCredentialsCommand';
 
 type CreateCredentialsPayload = {
   name: string;
@@ -64,21 +63,17 @@ async function createCredentials(
   next: NextFunction
 ) {
   try {
-    const credentialsService =
-      container.resolve<ICredentialsService>('CredentialsService');
-
     const { name, scope } = req.body as CreateCredentialsPayload;
 
     if (!req.userEntity) {
       throw new AppError(AppErrorCodes.UNAUTHORIZED, 'Unauthorized');
     }
 
-    const [credentials, clientSecret] =
-      await credentialsService.createCredentialsForUser(
-        req.userEntity,
-        name,
-        scope
-      );
+    const [credentials, clientSecret] = await new CreateCredentialsCommand({
+      user: req.userEntity,
+      name,
+      scope,
+    }).execute();
 
     res.json({ clientId: credentials.clientId, clientSecret });
   } catch (error) {

@@ -1,6 +1,7 @@
 import { type Job as BullMQJob, Queue, Worker } from 'bullmq';
 import { singleton } from 'tsyringe';
 
+import ApplyPendingMemberActivityReportDataJob from './clans/reports/applyPendingMemberActivityReportsDataJob';
 import type { JobClass } from './job';
 import type Job from './job';
 
@@ -8,7 +9,17 @@ export interface IJobsService {
   add<T>(job: JobClass<T>, payload?: T): Promise<unknown>;
 }
 
+export type CronJob = {
+  interval: string;
+  job: JobClass<unknown>;
+};
+
 const PREFIX = 'jobs';
+
+const CRON_JOBS = [
+  // every day at 00:00
+  { interval: '0 0 * * *', job: ApplyPendingMemberActivityReportDataJob },
+] as CronJob[];
 
 @singleton()
 class JobsService implements IJobsService {

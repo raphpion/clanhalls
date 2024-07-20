@@ -7,7 +7,7 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
-import Credentials from '../account/credentials';
+import Credentials from './credentials/credentials';
 import ClanUser from '../clans/clanUser';
 import MemberActivityReport from '../clans/reports/memberActivityReport';
 import AppError, { AppErrorCodes } from '../extensions/errors';
@@ -23,6 +23,9 @@ class User {
 
   @Column({ length: 25, nullable: true, unique: true })
   username: string;
+
+  @Column({ length: 25, nullable: true, unique: true })
+  usernameNormalized: string;
 
   @Column({ unique: true, length: 255 })
   email: string;
@@ -58,6 +61,11 @@ class User {
 
     return email.trim().toLowerCase();
   }
+
+  static normalizeUsername(username: string) {
+    return username.trim().toLowerCase();
+  }
+
   changeEmail(email: string) {
     if (Joi.string().email().validate(email).error) {
       throw new AppError(
@@ -79,6 +87,7 @@ class User {
     }
 
     this.username = username;
+    this.usernameNormalized = User.normalizeUsername(username);
   }
 
   verifyEmail() {

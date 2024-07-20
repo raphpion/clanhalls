@@ -1,11 +1,8 @@
 import express from 'express';
 import Joi from 'joi';
 
-import { Scopes } from '../../../account/credentials';
-import type { ICredentialsService } from '../../../account/credentialsService';
-import type { IClanService } from '../../../clans/clanService';
+import CreateSettingsReportCommand from '../../../clans/reports/commands/createSettingsReportCommand';
 import type { Settings } from '../../../clans/reports/settingsReport';
-import container from '../../../container';
 import AppError, { AppErrorCodes } from '../../../extensions/errors';
 import type {
   Request,
@@ -15,6 +12,8 @@ import type {
 import { requireCredentials } from '../../../middleware/authMiddleware';
 import type { CredentialsPayload } from '../../../middleware/authMiddleware';
 import validate from '../../../middleware/validationMiddleware';
+import UpdateCredentialsCommand from '../../../users/credentials/commands/updateCredentialsCommand';
+import { Scopes } from '../../../users/credentials/credentials';
 
 type SendSettingsReportPayload = CredentialsPayload & {
   settings: Settings;
@@ -47,10 +46,6 @@ async function sendSettingsReport(
   next: NextFunction
 ) {
   try {
-    const clanService = container.resolve<IClanService>('ClanService');
-    const credentialsService =
-      container.resolve<ICredentialsService>('CredentialsService');
-
     if (!req.credentialsEntity || !req.userEntity) {
       throw new AppError(AppErrorCodes.UNAUTHORIZED, 'Unauthorized');
     }
@@ -66,13 +61,18 @@ async function sendSettingsReport(
 
     const { settings } = req.body as SendSettingsReportPayload;
 
-    await clanService.createSettingsReport(req.userEntity, clan, settings);
+    const report = await new CreateSettingsReportCommand({
+      user: req.userEntity,
+      clan,
+      settings,
+    }).execute();
 
-    req.credentialsEntity = await credentialsService.updateLastUsedAt(
-      req.credentialsEntity
-    );
+    await new UpdateCredentialsCommand({
+      clientId: req.credentialsEntity.clientId,
+      updates: { lastUsedAt: new Date() },
+    }).execute();
 
-    res.status(204).send();
+    res.status(201).send({ uuid: report.uuid });
   } catch (error) {
     next(error);
   }

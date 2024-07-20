@@ -1,13 +1,12 @@
 import express from 'express';
 import Joi from 'joi';
 
-import container from '../../container';
 import type { Request, Response, NextFunction } from '../../extensions/express';
 import { requireAuth } from '../../middleware/authMiddleware';
 import validate, {
   ValidationType,
 } from '../../middleware/validationMiddleware';
-import type { IUserService } from '../../users/userService';
+import UsernameAvailabilityQuery from '../../users/queries/usernameAvailabilityQuery';
 
 type VerifyUsernameAvailabilityPayload = {
   username: string;
@@ -34,12 +33,13 @@ async function verifyUsernameAvailability(
   next: NextFunction
 ) {
   try {
-    const userService = container.resolve<IUserService>('UserService');
-
     const { username } = req.query as VerifyUsernameAvailabilityPayload;
 
-    const user = await userService.getUserByUsername(username);
-    res.json({ available: user === null });
+    const available = await new UsernameAvailabilityQuery({
+      username,
+    }).execute();
+
+    res.json({ available });
   } catch (error) {
     next(error);
   }

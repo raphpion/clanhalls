@@ -1,12 +1,9 @@
-import container from '../../container';
-import type { IPlayerService } from '../../players/playerService';
+import AssociatePlayerToWiseOldManCommand from '../../players/commands/associatePlayerToWiseOldManCommand';
 import Job from '../job';
 
 class AssociatePlayerToWiseOldManJob extends Job<number> {
-  async execute(reportId: number) {
-    return container
-      .resolve<IPlayerService>('PlayerService')
-      .associatePlayerToWiseOldMan(reportId);
+  async execute(playerId: number) {
+    return new AssociatePlayerToWiseOldManCommand({ playerId }).execute();
   }
 }
 
