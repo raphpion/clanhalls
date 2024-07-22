@@ -5,6 +5,8 @@ import ReactDOM from 'react-dom/client';
 
 import { routeTree } from './routeTree.gen';
 
+import './main.css';
+
 const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID;
 
 const queryClient = new QueryClient();

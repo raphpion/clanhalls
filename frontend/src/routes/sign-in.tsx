@@ -2,6 +2,7 @@ import { CredentialResponse, GoogleLogin } from '@react-oauth/google';
 import { createFileRoute, redirect, useNavigate } from '@tanstack/react-router';
 import { signInWithGoogle } from '../api/account';
 import { useMutation } from '@tanstack/react-query';
+import AuthLayout from '@/components/layout/auth-layout';
 
 export const Route = createFileRoute('/sign-in')({
   beforeLoad: ({ context, location }) => {
@@ -40,11 +41,12 @@ function SignInComponent() {
   };
 
   return (
-    <div>
-      <h1>Sign in</h1>
-      <p>Welcome! Please sign in to continue.</p>
-      <GoogleLogin onSuccess={handleGoogleSuccess} />
-    </div>
+    <AuthLayout>
+      <h1 className="mb-2 text-2xl font-bold">Sign in to your account</h1>
+      <p className="mb-8">
+        If you don't have an account, it will be automatically created.
+      </p>
+      <GoogleLogin locale="en" onSuccess={handleGoogleSuccess} />
+    </AuthLayout>
   );
 }
-

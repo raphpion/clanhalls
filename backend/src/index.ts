@@ -30,7 +30,7 @@ app.use(
   cors({
     credentials: true,
     origin: 'http://localhost:3000', // TODO: Update this to the actual frontend URL
-  })
+  }),
 );
 
 const redisClient = createClient({
@@ -42,7 +42,7 @@ redisClient.connect().catch((error) => {
   console.error(
     'Failed to connect to Redis!',
     `redis://${process.env.REDIS_URL}:${process.env.REDIS_PORT}`,
-    error
+    error,
   );
 });
 
@@ -57,7 +57,7 @@ app.use(
     saveUninitialized: false,
     secret: process.env.SESSION_SECRET,
     store: new RedisStore({ client: redisClient }),
-  })
+  }),
 );
 
 app.use(routes);
