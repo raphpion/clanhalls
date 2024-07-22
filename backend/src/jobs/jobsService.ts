@@ -65,7 +65,7 @@ class JobsService implements IJobsService {
       const jobInstance = new job();
 
       const connection = {
-        host: process.env.REDIS_HOST,
+        host: process.env.REDIS_URL!,
         port: parseInt(process.env.REDIS_PORT!, 10),
         password: process.env.REDIS_PASSWORD!,
       };
@@ -83,7 +83,7 @@ class JobsService implements IJobsService {
           prefix: PREFIX,
           autorun: false,
           connection,
-        }
+        },
       );
 
       worker.run();
@@ -145,11 +145,11 @@ class JobsService implements IJobsService {
       await job.onSuccess(bullMQJob.data);
 
       console.log(
-        `Processed job ${job.name} with id ${bullMQJob.id} successfully`
+        `Processed job ${job.name} with id ${bullMQJob.id} successfully`,
       );
     } catch (error) {
       console.error(
-        `Failed to process job ${job.name} with id ${bullMQJob.id}`
+        `Failed to process job ${job.name} with id ${bullMQJob.id}`,
       );
       console.error(error);
 

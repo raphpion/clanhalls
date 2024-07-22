@@ -31,7 +31,7 @@ clanRoutes.post(
   '/',
   requireAuth(['clanUser', 'clanUser.clan']),
   validate(createClanSchema),
-  createClan
+  createClan,
 );
 
 async function createClan(req: Request, res: Response, next: NextFunction) {
@@ -45,7 +45,7 @@ async function createClan(req: Request, res: Response, next: NextFunction) {
     if (await req.userEntity.clanUser) {
       throw new AppError(
         AppErrorCodes.BAD_REQUEST,
-        'User is already in a clan'
+        'User is already in a clan',
       );
     }
 
@@ -70,7 +70,7 @@ async function getClan(req: Request, res: Response, next: NextFunction) {
     const clan = await clanUser?.clan;
 
     if (!clanUser || !clan) {
-      res.json(null);
+      return res.json(null);
     }
 
     res.json({

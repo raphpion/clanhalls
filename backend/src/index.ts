@@ -12,7 +12,7 @@ import express from 'express';
 import session from 'express-session';
 import { createClient } from 'redis';
 
-config({ path: path.join(__dirname, '../../.env') });
+config({ path: path.join(__dirname, '../.env') });
 
 import container from './container';
 import db from './db';
@@ -63,7 +63,7 @@ app.use(
 app.use(routes);
 app.use(errorMiddleware);
 
-app.listen(process.env.PORT, async () => {
+app.listen(Number(process.env.PORT!), '0.0.0.0', async () => {
   await container.resolve<IJobsService>('JobsService').initialize();
   process.on('SIGTERM', shutdown);
   process.on('SIGINT', shutdown);

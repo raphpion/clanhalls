@@ -1,0 +1,11 @@
+# Shared
+**/node_modules
+**/dist
+**/Dockerfile
+**/docker-compose.yml
+**/tsconfig.tsbuildinfo
+
+# Backend
+backend/ormlogs.log
+
+# Frontend

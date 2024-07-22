@@ -15,7 +15,6 @@
     "baseUrl": "./src",
     "outDir": "dist",
     "rootDir": "src",
-    "types": ["jest"],
     "typeRoots": ["node_modules/@types"]
   },
   "include": ["src"],
