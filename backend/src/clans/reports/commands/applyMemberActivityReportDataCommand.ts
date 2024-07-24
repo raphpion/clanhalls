@@ -41,7 +41,7 @@ class ApplyMemberActivityReportDataCommand extends Command<Params> {
 
         if (!player) {
           player = await withSafeWiseOldMan(() =>
-            this.findPlayerWithPreviousName(queryRunner, member)
+            this.findPlayerWithPreviousName(queryRunner, member),
           );
 
           if (!player) {
@@ -61,7 +61,10 @@ class ApplyMemberActivityReportDataCommand extends Command<Params> {
           clanPlayer.clan = Promise.resolve(clan);
         }
 
-        if (clanPlayer.lastSeenAt < report.receivedAt) {
+        if (
+          !clanPlayer.lastSeenAt ||
+          clanPlayer.lastSeenAt < report.receivedAt
+        ) {
           clanPlayer.lastSeenAt = report.receivedAt;
           clanPlayer.rank = member.rank;
 
@@ -73,6 +76,7 @@ class ApplyMemberActivityReportDataCommand extends Command<Params> {
       await queryRunner.manager.save(report);
       await queryRunner.commitTransaction();
     } catch (error) {
+      console.log(error);
       await queryRunner.rollbackTransaction();
     } finally {
       await queryRunner.release();
@@ -81,24 +85,14 @@ class ApplyMemberActivityReportDataCommand extends Command<Params> {
 
   private async findPlayerWithPreviousName(
     queryRunner: QueryRunner,
-    member: MemberActivity
+    member: MemberActivity,
   ) {
     const wiseOldMan = new WOMClient();
 
-    // const safeUsername = member.name.toLowerCase().replace(' ', '%20');
-    // const matchingPlayer = (
-    //   await wiseOldMan.players.searchPlayers(safeUsername)
-    const matchingPlayer = (
-      await wiseOldMan.players.searchPlayers(member.name)
-    ).find((player) => player.displayName === member.name);
-    if (!matchingPlayer) {
-      return undefined;
-    }
-
-    const nameChanges = await wiseOldMan.players.getPlayerNames(
-      matchingPlayer.username
+    const nameChanges = await withSafeWiseOldMan(() =>
+      wiseOldMan.players.getPlayerNames(member.name),
     );
-    if (nameChanges.length === 0) {
+    if (!nameChanges?.length) {
       return undefined;
     }
 

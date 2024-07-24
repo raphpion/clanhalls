@@ -1,12 +1,11 @@
 export async function withSafeWiseOldMan<T>(
-  callback: () => Promise<T>
+  callback: () => Promise<T>,
 ): Promise<T | undefined> {
   // eslint-disable-next-line no-constant-condition
   while (true) {
     try {
       return await callback();
     } catch (error) {
-      console.log(Object.entries(error).map(([k, v]) => `${k}: ${v}`));
       if (error.name === 'NotFoundError') {
         return undefined;
       }

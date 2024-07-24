@@ -1,9 +1,9 @@
-import ApplyMemberActivityReportDataCommand from '../../../clans/reports/commands/applyMemberActivityReportDataCommand';
+import ApplySettingsReportDataCommand from '../../../clans/reports/commands/applySettingsReportDataCommand';
 import Job from '../../job';
 
 class ApplySettingsReportDataJob extends Job<number> {
   async execute(reportId: number) {
-    return new ApplyMemberActivityReportDataCommand({ reportId }).execute();
+    return new ApplySettingsReportDataCommand({ reportId }).execute();
   }
 }
 

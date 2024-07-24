@@ -1,5 +1,5 @@
 import { type Job as BullMQJob, Queue, Worker } from 'bullmq';
-import { singleton } from 'tsyringe';
+import { inject, singleton } from 'tsyringe';
 
 import ApplyMemberActivityReportDataJob from './clans/reports/applyMemberActivityReportDataJob';
 import ApplyPendingMemberActivityReportDataJob from './clans/reports/applyPendingMemberActivityReportsDataJob';
@@ -7,7 +7,7 @@ import ApplySettingsReportDataJob from './clans/reports/applySettingsReportDataJ
 import type { JobClass } from './job';
 import type Job from './job';
 import AssociatePlayerToWiseOldManJob from './players/associatePlayerToWiseOldManJob';
-import { getThreadIndex } from '../env';
+import type ConfigService from '../config';
 
 export interface IJobsService {
   initialize(): Promise<void>;
@@ -31,7 +31,7 @@ const JOBS = [
 
 const CRON_JOBS: CronJob[] = [
   // every day at 00:00
-  { job: ApplyMemberActivityReportDataJob, interval: '0 0 * * *' },
+  { job: ApplyPendingMemberActivityReportDataJob, interval: '0 0 * * *' },
 ];
 
 const STARTUP_JOBS: JobClass<unknown>[] = [];
@@ -41,7 +41,9 @@ class JobsService implements IJobsService {
   private queues: Queue[];
   private workers: Worker[];
 
-  constructor() {
+  constructor(
+    @inject('ConfigService') private readonly configService: ConfigService,
+  ) {
     this.queues = [];
     this.workers = [];
   }
@@ -58,9 +60,6 @@ class JobsService implements IJobsService {
   }
 
   async initialize() {
-    const isMainThread =
-      process.env.NODE_ENV === 'development' || getThreadIndex() === 0;
-
     for (const job of JOBS) {
       const jobInstance = new job();
 
@@ -93,7 +92,7 @@ class JobsService implements IJobsService {
     }
 
     // Only schedule startup and repeatable jobs on the main thread
-    if (!isMainThread) {
+    if (!this.configService.isMainThread()) {
       return;
     }
 
