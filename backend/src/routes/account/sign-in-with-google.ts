@@ -8,7 +8,7 @@ import type { Request, Response, NextFunction } from '../../extensions/express';
 import validate from '../../middleware/validationMiddleware';
 import type { IGoogleService } from '../../services/googleService';
 import CreateUserCommand from '../../users/commands/createUserCommand';
-import VerifyEmailCommand from '../../users/commands/verifyEmailCommand';
+import UpdateUserCommand from '../../users/commands/updateUserCommand';
 import UserByGoogleIdQuery from '../../users/queries/userByGoogleIdQuery';
 
 type SignInWithGooglePayload = {
@@ -25,7 +25,7 @@ routes.post(
   '/sign-in-with-google',
   validate(signInWithGoogleSchema),
   signInWithGoogle,
-  createSessionForUser
+  createSessionForUser,
 );
 
 async function signInWithGoogle(req: Request, _: Response, next: NextFunction) {
@@ -37,11 +37,16 @@ async function signInWithGoogle(req: Request, _: Response, next: NextFunction) {
     if (payload === undefined) {
       throw new AppError(
         AppErrorCodes.INVALID_CREDENTIALS,
-        'Invalid credentials'
+        'Invalid credentials',
       );
     }
 
-    const { sub: googleId, email, email_verified: emailVerified } = payload;
+    const {
+      sub: googleId,
+      email,
+      email_verified: emailVerified,
+      picture: pictureUrl,
+    } = payload;
 
     let user = await new UserByGoogleIdQuery({ googleId }).execute();
     if (user === null) {
@@ -49,11 +54,17 @@ async function signInWithGoogle(req: Request, _: Response, next: NextFunction) {
         googleId,
         email,
         emailVerified,
+        pictureUrl,
       }).execute();
     }
 
-    if (emailVerified && !user.emailVerified) {
-      user = await new VerifyEmailCommand({ user }).execute();
+    const updates = {
+      ...(emailVerified && !user.emailVerified && { emailVerified }),
+      ...(pictureUrl !== user.pictureUrl && { pictureUrl }),
+    };
+
+    if (Object.keys(updates).length > 0) {
+      user = await new UpdateUserCommand({ user, updates }).execute();
     }
 
     req.persist = true;

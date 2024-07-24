@@ -22,10 +22,10 @@ class User {
   googleId: string;
 
   @Column({ length: 25, nullable: true, unique: true })
-  username: string;
+  username: string | null;
 
   @Column({ length: 25, nullable: true, unique: true })
-  usernameNormalized: string;
+  usernameNormalized: string | null;
 
   @Column({ unique: true, length: 255 })
   email: string;
@@ -36,6 +36,9 @@ class User {
   @Column({ default: false })
   emailVerified: boolean;
 
+  @Column({ nullable: true })
+  pictureUrl: string | null;
+
   @OneToOne(() => ClanUser, (clanUser: ClanUser) => clanUser.user)
   clanUser: Promise<ClanUser>;
 
@@ -44,7 +47,7 @@ class User {
 
   @OneToMany(
     () => MemberActivityReport,
-    (memberActivityReport: MemberActivityReport) => memberActivityReport.user
+    (memberActivityReport: MemberActivityReport) => memberActivityReport.user,
   )
   memberActivityReports: Promise<MemberActivityReport[]>;
 
@@ -55,7 +58,7 @@ class User {
     if (Joi.string().email().validate(email).error) {
       throw new AppError(
         AppErrorCodes.INVALID_PARAMETER,
-        `Invalid email address: ${email}`
+        `Invalid email address: ${email}`,
       );
     }
 
@@ -70,7 +73,7 @@ class User {
     if (Joi.string().email().validate(email).error) {
       throw new AppError(
         AppErrorCodes.INVALID_PARAMETER,
-        `Invalid email address: ${email}`
+        `Invalid email address: ${email}`,
       );
     }
 
@@ -79,6 +82,25 @@ class User {
     this.email = email;
     this.emailNormalized = emailNormalized;
     this.emailVerified = false;
+  }
+
+  setPictureUrl(pictureUrl: string | null) {
+    if (pictureUrl === this.pictureUrl) {
+      return;
+    }
+
+    if (pictureUrl === null) {
+      this.pictureUrl = null;
+      return;
+    }
+
+    try {
+      const url = new URL(pictureUrl || '');
+
+      this.pictureUrl = url.toString();
+    } catch (error) {
+      throw new AppError(AppErrorCodes.BAD_REQUEST, 'Invalid picture URL');
+    }
   }
 
   setUsername(username: string) {
@@ -94,7 +116,7 @@ class User {
     if (this.emailVerified) {
       throw new AppError(
         AppErrorCodes.BAD_REQUEST,
-        'Email is already verified'
+        'Email is already verified',
       );
     }
 

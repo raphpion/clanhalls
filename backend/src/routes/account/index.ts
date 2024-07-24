@@ -18,14 +18,14 @@ const accountRoutes = express.Router();
 accountRoutes.get(
   '/',
   retrieveAuth(['clanUser', 'clanUser.clan']),
-  getCurrentUser
+  getCurrentUser,
 );
 
 accountRoutes.use(
   setUsername,
   signInWithGoogle,
   signOut,
-  verifyUsernameAvailability
+  verifyUsernameAvailability,
 );
 
 accountRoutes.use('/clan', clanRoutes);
@@ -37,8 +37,14 @@ async function getCurrentUser(req: Request, res: Response, next: NextFunction) {
       return res.json(null);
     }
 
-    const { googleId, username, email, emailNormalized, emailVerified } =
-      req.userEntity;
+    const {
+      googleId,
+      username,
+      email,
+      emailNormalized,
+      emailVerified,
+      pictureUrl,
+    } = req.userEntity;
 
     res.json({
       googleId,
@@ -46,6 +52,7 @@ async function getCurrentUser(req: Request, res: Response, next: NextFunction) {
       email,
       emailNormalized,
       emailVerified,
+      pictureUrl,
     });
   } catch (error) {
     next(error);
@@ -55,7 +62,7 @@ async function getCurrentUser(req: Request, res: Response, next: NextFunction) {
 export async function createSessionForUser(
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) {
   try {
     const { headers, ip, persist, session, userEntity } = req;
