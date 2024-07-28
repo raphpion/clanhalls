@@ -21,8 +21,7 @@ startup();
 async function startup() {
   const app = express();
 
-  await initializeSession(app);
-  await db.initialize();
+  await Promise.all([initializeSession(app), db.initialize()]);
   await container.resolve<IJobsService>('JobsService').initialize();
 
   process.on('SIGTERM', () => shutdown('SIGTERM'));
