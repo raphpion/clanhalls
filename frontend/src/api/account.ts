@@ -7,6 +7,7 @@ export type AccountData = {
   email: string;
   emailNormalized: string;
   emailVerified: boolean;
+  pictureUrl: string | null;
 } | null;
 
 export type ClanPlayerQueryData = {

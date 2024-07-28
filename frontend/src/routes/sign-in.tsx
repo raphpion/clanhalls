@@ -3,6 +3,9 @@ import { createFileRoute, redirect, useNavigate } from '@tanstack/react-router';
 import { signInWithGoogle } from '../api/account';
 import { useMutation } from '@tanstack/react-query';
 import AuthLayout from '@/components/layout/auth-layout';
+import Loading from '../components/loading';
+import { useTheme } from '../components/theme-provider';
+import usePageTitle from '../hooks/usePageTitle';
 
 export const Route = createFileRoute('/sign-in')({
   beforeLoad: ({ context, location }) => {
@@ -24,6 +27,8 @@ export const Route = createFileRoute('/sign-in')({
 
 function SignInComponent() {
   const navigate = useNavigate();
+  const { actualTheme } = useTheme();
+  usePageTitle('Sign In');
 
   const signInMutation = useMutation({
     mutationKey: ['sign-in'],
@@ -46,7 +51,15 @@ function SignInComponent() {
       <p className="mb-8">
         If you don't have an account, it will be automatically created.
       </p>
-      <GoogleLogin locale="en" onSuccess={handleGoogleSuccess} />
+      {signInMutation.isPending ? (
+        <Loading />
+      ) : (
+        <GoogleLogin
+          theme={actualTheme === 'dark' ? 'filled_blue' : 'outline'}
+          locale="en"
+          onSuccess={handleGoogleSuccess}
+        />
+      )}
     </AuthLayout>
   );
 }

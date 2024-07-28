@@ -1,10 +1,5 @@
 import { useMutation } from '@tanstack/react-query';
-import {
-  Link,
-  createFileRoute,
-  redirect,
-  useNavigate,
-} from '@tanstack/react-router';
+import { createFileRoute, redirect, useNavigate } from '@tanstack/react-router';
 import {
   setUsername,
   signOut,
@@ -16,6 +11,7 @@ import AuthLayout from '@/components/layout/auth-layout';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import AppContext from '@/context';
+import usePageTitle from '../hooks/usePageTitle';
 
 export const Route = createFileRoute('/set-username')({
   beforeLoad: ({ context }) => {
@@ -32,8 +28,8 @@ export const Route = createFileRoute('/set-username')({
 
 function SetUsernameComponent() {
   const { user } = useContext(AppContext);
-
   const navigate = useNavigate();
+  usePageTitle('Set Username');
 
   const formik = useFormik({
     initialValues: {
@@ -88,37 +84,39 @@ function SetUsernameComponent() {
 
   return (
     <AuthLayout>
-      <h1 className="mb-2 text-2xl font-bold">Welcome to Clan Halls!</h1>
-      <p className="text-gray mb-4 text-sm">
-        Currently signed in with Google account{' '}
-        <a className="text-blue-500" href={`mailto:${user.email}`}>
-          {user.email}
-        </a>
-        .
-      </p>
-      <p className="mb-8">
-        Please set a username before you can access the application.
-      </p>
-      <FormikProvider value={formik}>
-        <Form className="mb-8 flex w-full flex-row space-x-4">
-          <Field
-            name="username"
-            placeholder="Username"
-            onChange={handleUsernameChange}
-            component={Input}
-          />
-          <Button
-            color="blue"
-            type="submit"
-            disabled={!formik.values.usernameAvailable}
-          >
-            Set username
-          </Button>
-        </Form>
-      </FormikProvider>
-      <p>
-        <button onClick={() => signOutMutation.mutate()}>Sign out</button>
-      </p>
+      <div className="max-w-md">
+        <h1 className="mb-2 text-2xl font-bold">Welcome to Clan Halls!</h1>
+        <p className="text-gray mb-4 text-sm">
+          Currently signed in with Google account{' '}
+          <a className="text-blue-500" href={`mailto:${user.email}`}>
+            {user.email}
+          </a>
+          .
+        </p>
+        <p className="mb-8">
+          Please set a username before you can access the application.
+        </p>
+        <FormikProvider value={formik}>
+          <Form className="mb-8 flex w-full max-w-sm flex-row space-x-4">
+            <Field
+              name="username"
+              placeholder="Username"
+              onChange={handleUsernameChange}
+              component={Input}
+            />
+            <Button
+              color="blue"
+              type="submit"
+              disabled={!formik.values.usernameAvailable}
+            >
+              Set username
+            </Button>
+          </Form>
+        </FormikProvider>
+        <p>
+          <button onClick={() => signOutMutation.mutate()}>Sign out</button>
+        </p>
+      </div>
     </AuthLayout>
   );
 }

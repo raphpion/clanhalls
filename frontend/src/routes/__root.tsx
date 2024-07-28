@@ -1,6 +1,7 @@
 import { Outlet, createRootRouteWithContext } from '@tanstack/react-router';
 import AppContext from '../context';
 import { AccountData, getCurrentUser } from '../api/account';
+import { ThemeProvider } from '../components/theme-provider';
 
 type Context = {
   user: AccountData | null;
@@ -23,7 +24,9 @@ function RootComponent() {
 
   return (
     <AppContext.Provider value={data}>
-      <Outlet />
+      <ThemeProvider defaultTheme="system" storageKey="vite-ui-theme">
+        <Outlet />
+      </ThemeProvider>
     </AppContext.Provider>
   );
 }

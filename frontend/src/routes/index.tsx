@@ -12,7 +12,7 @@ import {
   useMemo,
   useState,
 } from 'react';
-import AppContext from '../context';
+import AppContext from '@/context';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import {
   createClan,
@@ -27,14 +27,12 @@ import {
   deleteCredentials,
   CredentialsData,
   updateCredentials,
-} from '../api/account';
-import {
-  Field,
-  Form,
-  FormikProvider,
-  useFormik,
-  useFormikContext,
-} from 'formik';
+} from '@/api/account';
+import { Field, Form, FormikProvider, useFormik } from 'formik';
+import AppLayout from '@/components/layout/app-layout';
+import usePageTitle from '@/hooks/usePageTitle';
+import { Card, CardTitle } from '@/components/ui/card';
+import Dashboard from '@/pages/Dashboard';
 
 function parseScope(scope: string): { [key: string]: boolean } {
   const scopeArray = scope.split(',');
@@ -55,7 +53,7 @@ export const Route = createFileRoute('/')({
       throw redirect({ to: '/set-username' });
     }
   },
-  component: HomeComponent,
+  component: Dashboard,
 });
 
 function Clan() {
@@ -559,6 +557,7 @@ function UpdateCredentialsForm({
 function HomeComponent() {
   const { user } = useContext(AppContext);
   const navigate = useNavigate();
+  usePageTitle('Dashboard');
 
   const signOutMutation = useMutation({
     mutationKey: ['sign-out'],
@@ -571,14 +570,20 @@ function HomeComponent() {
   if (!user) return null;
 
   return (
-    <div>
-      <h1>Welcome, {user.username}!</h1>
-      <p>
-        <button onClick={() => signOutMutation.mutate()}>Sign out</button>
-      </p>
-      <Credentials />
-      <Clan />
-    </div>
+    <AppLayout>
+      <h1 className="mb-4 text-3xl font-bold">Dashboard</h1>
+      <Card className="b-none max-w-4xl bg-gradient-to-tr from-purple-400 to-blue-400 p-4 text-white">
+        <CardTitle>Welcome, {user.username}! 👋</CardTitle>
+      </Card>
+      <div>
+        <h1>Welcome, {user.username}!</h1>
+        <p>
+          <button onClick={() => signOutMutation.mutate()}>Sign out</button>
+        </p>
+        <Credentials />
+        <Clan />
+      </div>
+    </AppLayout>
   );
 }
 
