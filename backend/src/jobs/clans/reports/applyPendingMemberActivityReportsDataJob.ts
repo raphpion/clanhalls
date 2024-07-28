@@ -7,7 +7,7 @@ class ApplyPendingMemberActivityReportDataJob extends Job<undefined> {
   async execute() {
     const reports = await db
       .createQueryBuilder(MemberActivityReport, 'report')
-      .where('r.appliedAt IS NULL')
+      .where('report.appliedAt IS NULL')
       .getMany();
 
     for (const report of reports) {
