@@ -54,6 +54,7 @@ export const Route = createFileRoute('/')({
     }
   },
   component: Dashboard,
+  // component: HomeComponent,
 });
 
 function Clan() {
@@ -586,4 +587,3 @@ function HomeComponent() {
     </AppLayout>
   );
 }
-
