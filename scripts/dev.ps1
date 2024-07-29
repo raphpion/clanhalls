@@ -1,4 +1,4 @@
-$workDir = [System.IO.DirectoryInfo]::new($PSScriptRoot).Parent.Parent.FullName
+$workDir = [System.IO.DirectoryInfo]::new($PSScriptRoot).Parent.FullName
 
 # Commands
 $compose = "docker compose -f docker-compose.dev.yml up -d"
