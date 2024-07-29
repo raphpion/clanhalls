@@ -1,9 +1,15 @@
+import { cn } from '@/lib/utils';
 import { Link, useLocation } from '@tanstack/react-router';
+import { HomeIcon, UsersIcon } from 'lucide-react';
 import { useMemo } from 'react';
 
 const ITEMS = [
-  { to: '/', label: 'Dashboard' },
-  { to: '/clan', label: 'Clan' },
+  {
+    to: '/',
+    icon: HomeIcon,
+    label: 'Dashboard',
+  },
+  { to: '/clan', icon: UsersIcon, label: 'Clan' },
 ] as const;
 
 function MainNav() {
@@ -15,8 +21,11 @@ function MainNav() {
         <Link
           key={item.to}
           to={item.to}
-          className={item.to === location.pathname ? '' : 'text-blue-500'}
+          className={cn('flex items-center gap-2', {
+            'text-blue-500': item.to !== location.pathname,
+          })}
         >
+          <item.icon size="1rem" />
           {item.label}
         </Link>
       )),
@@ -24,7 +33,9 @@ function MainNav() {
   );
 
   return (
-    <nav className="flex items-center space-x-4 lg:space-x-6">{links}</nav>
+    <nav className="flex flex-col items-center gap-4 sm:flex-row lg:gap-6">
+      {links}
+    </nav>
   );
 }
 
