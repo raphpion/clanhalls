@@ -1,7 +1,7 @@
 $workDir = [System.IO.DirectoryInfo]::new($PSScriptRoot).Parent.Parent.FullName
 
 # Commands
-$compose = "docker compose -f docker-compose.local.yml up -d"
+$compose = "docker compose -f docker-compose.dev.yml up -d"
 $migrate = "npm run migrate -w backend"
 $startBackend = "npm run dev -w backend"
 $startFrontend = "npm run dev -w frontend"
