@@ -1,5 +1,5 @@
-import { Skeleton } from '@/components/ui/skeleton';
-import { TableCell, TableRow } from '@/components/ui/table';
+import { Skeleton } from '$ui/skeleton';
+import { TableCell, TableRow } from '$ui/table';
 
 const ROWS = 10;
 

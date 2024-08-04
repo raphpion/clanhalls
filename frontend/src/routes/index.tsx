@@ -4,15 +4,8 @@ import {
   useNavigate,
   useRouter,
 } from '@tanstack/react-router';
-import {
-  Fragment,
-  useContext,
-  useEffect,
-  useId,
-  useMemo,
-  useState,
-} from 'react';
-import AppContext from '@/context';
+import { Fragment, useEffect, useId, useMemo, useState } from 'react';
+import { useAppContext } from '$common';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import {
   createClan,
@@ -27,12 +20,12 @@ import {
   deleteCredentials,
   CredentialsData,
   updateCredentials,
-} from '@/api/account';
+} from '$api/account';
 import { Field, Form, FormikProvider, useFormik } from 'formik';
-import AppLayout from '@/components/layout/app-layout';
-import usePageTitle from '@/hooks/usePageTitle';
-import { Card, CardTitle } from '@/components/ui/card';
-import Dashboard from '@/pages/Dashboard';
+import { AppLayout } from '$common';
+import { usePageTitle } from '$hooks';
+import { Card, CardTitle } from '$ui/card';
+import Dashboard from '$pages/Dashboard';
 
 function parseScope(scope: string): { [key: string]: boolean } {
   const scopeArray = scope.split(',');
@@ -50,11 +43,14 @@ export const Route = createFileRoute('/')({
     }
 
     if (!context.user.username) {
-      throw redirect({ to: '/set-username' });
+      throw redirect({ to: '/onboarding/set-username' });
+    }
+
+    if (!context.clan) {
+      throw redirect({ to: '/onboarding/create-or-join-clan' });
     }
   },
   component: Dashboard,
-  // component: HomeComponent,
 });
 
 function Clan() {
@@ -81,7 +77,7 @@ type ClanInfoProps = {
 const CLAN_PLAYERS_IPP = 50;
 
 function ClanInfo({ clan }: ClanInfoProps) {
-  const { user } = useContext(AppContext);
+  const { user } = useAppContext();
 
   const [page, setPage] = useState(1);
   const [orderBy, setOrderBy] = useState<ClanPlayerQueryParams['orderBy']>({
@@ -556,7 +552,7 @@ function UpdateCredentialsForm({
 }
 
 function HomeComponent() {
-  const { user } = useContext(AppContext);
+  const { user } = useAppContext();
   const navigate = useNavigate();
   usePageTitle('Dashboard');
 

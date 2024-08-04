@@ -15,11 +15,7 @@ import SessionByUuidQuery from '../../sessions/queries/sessionByUuidQuery';
 
 const accountRoutes = express.Router();
 
-accountRoutes.get(
-  '/',
-  retrieveAuth(['clanUser', 'clanUser.clan']),
-  getCurrentUser,
-);
+accountRoutes.get('/', retrieveAuth(['clanUser', 'clanUser.clan']), getSession);
 
 accountRoutes.use(
   setUsername,
@@ -31,10 +27,10 @@ accountRoutes.use(
 accountRoutes.use('/clan', clanRoutes);
 accountRoutes.use('/credentials', credentialsRoutes);
 
-async function getCurrentUser(req: Request, res: Response, next: NextFunction) {
+async function getSession(req: Request, res: Response, next: NextFunction) {
   try {
     if (!req.userEntity) {
-      return res.json(null);
+      return res.json({ user: null, clan: null });
     }
 
     const {
@@ -46,13 +42,28 @@ async function getCurrentUser(req: Request, res: Response, next: NextFunction) {
       pictureUrl,
     } = req.userEntity;
 
+    const clanUser = await req.userEntity.clanUser;
+    const clan = (await clanUser?.clan) || null;
+
+    const clanData = clan
+      ? {
+          uuid: clan.uuid,
+          name: clan.name,
+          nameInGame: clan.nameInGame,
+        }
+      : null;
+
     res.json({
-      googleId,
-      username,
-      email,
-      emailNormalized,
-      emailVerified,
-      pictureUrl,
+      user: {
+        googleId,
+        username,
+        email,
+        emailNormalized,
+        emailVerified,
+        pictureUrl,
+        isClanAdmin: clanUser?.isAdmin || false,
+      },
+      clan: clanData,
     });
   } catch (error) {
     next(error);

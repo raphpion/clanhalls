@@ -5,13 +5,13 @@ export default function handleError(
   err: unknown,
   req: Request,
   res: Response,
-  _: NextFunction
+  _: NextFunction,
 ) {
   if (process.env.NODE_ENV === 'development') {
     console.error(
       `${new Date().toUTCString()} ${req.method} ${req.originalUrl}`,
       req.body,
-      err
+      err,
     );
   }
 

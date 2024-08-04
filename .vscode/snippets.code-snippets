@@ -1,4 +1,5 @@
 {
+  // Backend
   "Command": {
     "prefix": "cmd",
     "body": [
@@ -12,8 +13,8 @@
       "  }",
       "}",
       "",
-      "export default $3;"
-    ]
+      "export default $3;",
+    ],
   },
   "Command with QueryRunner": {
     "prefix": "cmdqr",
@@ -40,8 +41,8 @@
       "  }",
       "}",
       "",
-      "export default $3;"
-    ]
+      "export default $3;",
+    ],
   },
   "Query": {
     "prefix": "query",
@@ -56,7 +57,36 @@
       "  }",
       "}",
       "",
-      "export default $3;"
-    ]
-  }
+      "export default $3;",
+    ],
+  },
+
+  // Frontend
+  "Module index": {
+    "prefix": "index",
+    "body": [
+      "import ${TM_DIRECTORY/^.+[\\/\\\\]+(.*)$/$1/} from './${TM_DIRECTORY/^.+[\\/\\\\]+(.*)$/$1/}';",
+      "",
+      "export default ${TM_DIRECTORY/^.+[\\/\\\\]+(.*)$/$1/};",
+    ],
+  },
+
+  "Function component": {
+    "prefix": "reactfc",
+    "body": [
+      "type Props = {",
+      "  ${2:prop};",
+      "};",
+      "",
+      "function ${1:$TM_FILENAME_BASE}({ props }: Props) {",
+      "  return (",
+      "    <div>",
+      "      ${1:$TM_FILENAME_BASE}",
+      "    </div>",
+      "  );",
+      "}",
+      "",
+      "export default ${1:$TM_FILENAME_BASE};",
+    ],
+  },
 }

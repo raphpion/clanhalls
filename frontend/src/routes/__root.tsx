@@ -1,21 +1,18 @@
 import { Outlet, createRootRouteWithContext } from '@tanstack/react-router';
-import AppContext from '../context';
-import { AccountData, getCurrentUser } from '../api/account';
-import { ThemeProvider } from '../components/theme-provider';
+import { SessionData, getSession } from '../api/account';
+import { AppContext, ThemeProvider } from '$common';
 
-type Context = {
-  user: AccountData | null;
-};
+type Context = SessionData;
 
 export const Route = createRootRouteWithContext<Context>()({
   component: RootComponent,
   beforeLoad: async () => {
-    const user = await getCurrentUser();
-    return { user };
+    const data = await getSession();
+    return data;
   },
   loader: async ({ context }) => {
-    const { user } = context;
-    return { user };
+    const { user, clan } = context;
+    return { user, clan };
   },
 });
 

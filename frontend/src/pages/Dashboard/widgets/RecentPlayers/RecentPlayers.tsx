@@ -1,30 +1,18 @@
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@/components/ui/table';
-import AppContext from '@/context';
-import { useContext } from 'react';
+import { useAppContext } from '$common';
+import { useQuery } from '@tanstack/react-query';
 import {
   ColumnDef,
   flexRender,
   getCoreRowModel,
   useReactTable,
 } from '@tanstack/react-table';
-import { useQuery } from '@tanstack/react-query';
-import { queryClanPlayers } from '@/api/account';
-import TitleIcon from '@/components/title-icon';
-import { Button } from '@/components/ui/button';
+
+import { queryClanPlayers } from '$api/account';
+import { ClanTitleIcon } from '$common';
+import { Button } from '$ui/button';
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '$ui/card';
+import { Table, TableBody, TableHead, TableHeader, TableRow } from '$ui/table';
+
 import View from './View';
 
 export type ClanPlayer = {
@@ -58,7 +46,7 @@ const columns: ColumnDef<ClanPlayer>[] = [
 
       return (
         <div className="flex items-center space-x-2">
-          <TitleIcon title={title} />
+          <ClanTitleIcon title={title} />
           <span>{title}</span>
         </div>
       );
@@ -78,7 +66,7 @@ const columnVisibility = Object.fromEntries(
 );
 
 function RecentPlayers() {
-  const { user } = useContext(AppContext);
+  const { user } = useAppContext();
 
   const clanPlayersQuery = useQuery({
     queryKey: ['clan-players'],

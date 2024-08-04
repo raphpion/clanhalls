@@ -1,12 +1,10 @@
-import AppLayout from '@/components/layout/app-layout';
-import AppContext from '@/context';
-import { useContext } from 'react';
-import usePageTitle from '@/hooks/usePageTitle';
-import { Card, CardHeader, CardTitle } from '@/components/ui/card';
+import { AppLayout, useAppContext } from '$common';
+import { usePageTitle } from '$hooks';
+import { Card, CardHeader, CardTitle } from '$ui/card';
 import RecentPlayers from './widgets/RecentPlayers';
 
 function Dashboard() {
-  const { user } = useContext(AppContext);
+  const { user } = useAppContext();
   usePageTitle('Dashboard');
 
   if (!user) return null;

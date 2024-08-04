@@ -1,14 +1,23 @@
 import type { PaginatedQueryParams, PaginatedQueryResult } from '.';
 import { _delete, get, post, put } from '.';
 
-export type AccountData = {
-  googleId: string;
-  username?: string;
-  email: string;
-  emailNormalized: string;
-  emailVerified: boolean;
-  pictureUrl: string | null;
-} | null;
+export type SessionData = {
+  user: {
+    googleId: string;
+    username?: string;
+    email: string;
+    emailNormalized: string;
+    emailVerified: boolean;
+    pictureUrl: string | null;
+    isClanAdmin: boolean;
+  } | null;
+
+  clan: {
+    uuid: string;
+    name: string;
+    nameInGame: string | null;
+  } | null;
+};
 
 export type ClanPlayerQueryData = {
   uuid: string;
@@ -63,6 +72,10 @@ export type SetUsernamePayload = {
   username: string;
 };
 
+export type VerifyUsernameAvailabilityData = {
+  available: boolean;
+};
+
 export async function createClan(name: string): Promise<void> {
   await post<CreateClanPayload>('/account/clan', { name });
 }
@@ -107,8 +120,8 @@ export async function getCredentials(): Promise<CredentialsData[]> {
   return response.data;
 }
 
-export async function getCurrentUser(): Promise<AccountData> {
-  const response = await get<AccountData>('/account');
+export async function getSession(): Promise<SessionData> {
+  const response = await get<SessionData>('/account');
   return response.data;
 }
 
@@ -133,8 +146,8 @@ export async function updateCredentials(
 
 export async function verifyUsernameAvailability(
   username: string,
-): Promise<boolean> {
-  const response = await get<boolean>(
+): Promise<VerifyUsernameAvailabilityData> {
+  const response = await get<VerifyUsernameAvailabilityData>(
     `/account/verify-username-availability?username=${username}`,
   );
   return response.data;

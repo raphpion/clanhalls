@@ -26,7 +26,16 @@
     /* Paths */
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./src/*"]
+      "$api": ["./src/api/index.ts"],
+      "$api/*": ["./src/api/*"],
+      "$common": ["./src/common/index.ts"],
+      "$common/*": ["./src/common/*"],
+      "$hooks": ["./src/hooks/index.ts"],
+      "$hooks/*": ["./src/hooks/*"],
+      "$pages": ["./src/pages/index.ts"],
+      "$pages/*": ["./src/pages/*"],
+      "$ui": ["./src/ui/index.ts"],
+      "$ui/*": ["./src/ui/*"]
     }
   },
   "include": ["src"]

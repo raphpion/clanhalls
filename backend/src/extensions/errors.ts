@@ -33,7 +33,7 @@ class AppError extends Error {
 }
 
 export function isAppError(err: unknown): err is AppError {
-  return err instanceof AppError;
+  return err instanceof AppError || (err as AppError).name === 'AppError';
 }
 
 export default AppError;
