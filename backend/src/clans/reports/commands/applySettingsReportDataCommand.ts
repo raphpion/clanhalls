@@ -50,6 +50,9 @@ class ApplySettingsReportDataCommand extends Command<Params> {
       report.appliedAt = new Date();
       await queryRunner.manager.save(report);
 
+      clan.lastSyncedAt = new Date();
+      await queryRunner.manager.save(clan);
+
       await queryRunner.commitTransaction();
     } catch (error) {
       console.log(error);

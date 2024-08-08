@@ -12,10 +12,10 @@
 
 import { Route as rootRoute } from './routes/__root'
 import { Route as SignInImport } from './routes/sign-in'
-import { Route as MockImport } from './routes/mock'
 import { Route as IndexImport } from './routes/index'
+import { Route as OnboardingSyncClanImport } from './routes/onboarding/sync-clan'
 import { Route as OnboardingSetUsernameImport } from './routes/onboarding/set-username'
-import { Route as OnboardingCreateOrJoinClanImport } from './routes/onboarding/create-or-join-clan'
+import { Route as OnboardingCreateClanImport } from './routes/onboarding/create-clan'
 
 // Create/Update Routes
 
@@ -24,13 +24,13 @@ const SignInRoute = SignInImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
-const MockRoute = MockImport.update({
-  path: '/mock',
+const IndexRoute = IndexImport.update({
+  path: '/',
   getParentRoute: () => rootRoute,
 } as any)
 
-const IndexRoute = IndexImport.update({
-  path: '/',
+const OnboardingSyncClanRoute = OnboardingSyncClanImport.update({
+  path: '/onboarding/sync-clan',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -39,12 +39,10 @@ const OnboardingSetUsernameRoute = OnboardingSetUsernameImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
-const OnboardingCreateOrJoinClanRoute = OnboardingCreateOrJoinClanImport.update(
-  {
-    path: '/onboarding/create-or-join-clan',
-    getParentRoute: () => rootRoute,
-  } as any,
-)
+const OnboardingCreateClanRoute = OnboardingCreateClanImport.update({
+  path: '/onboarding/create-clan',
+  getParentRoute: () => rootRoute,
+} as any)
 
 // Populate the FileRoutesByPath interface
 
@@ -57,13 +55,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexImport
       parentRoute: typeof rootRoute
     }
-    '/mock': {
-      id: '/mock'
-      path: '/mock'
-      fullPath: '/mock'
-      preLoaderRoute: typeof MockImport
-      parentRoute: typeof rootRoute
-    }
     '/sign-in': {
       id: '/sign-in'
       path: '/sign-in'
@@ -71,11 +62,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SignInImport
       parentRoute: typeof rootRoute
     }
-    '/onboarding/create-or-join-clan': {
-      id: '/onboarding/create-or-join-clan'
-      path: '/onboarding/create-or-join-clan'
-      fullPath: '/onboarding/create-or-join-clan'
-      preLoaderRoute: typeof OnboardingCreateOrJoinClanImport
+    '/onboarding/create-clan': {
+      id: '/onboarding/create-clan'
+      path: '/onboarding/create-clan'
+      fullPath: '/onboarding/create-clan'
+      preLoaderRoute: typeof OnboardingCreateClanImport
       parentRoute: typeof rootRoute
     }
     '/onboarding/set-username': {
@@ -85,6 +76,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof OnboardingSetUsernameImport
       parentRoute: typeof rootRoute
     }
+    '/onboarding/sync-clan': {
+      id: '/onboarding/sync-clan'
+      path: '/onboarding/sync-clan'
+      fullPath: '/onboarding/sync-clan'
+      preLoaderRoute: typeof OnboardingSyncClanImport
+      parentRoute: typeof rootRoute
+    }
   }
 }
 
@@ -92,10 +90,10 @@ declare module '@tanstack/react-router' {
 
 export const routeTree = rootRoute.addChildren({
   IndexRoute,
-  MockRoute,
   SignInRoute,
-  OnboardingCreateOrJoinClanRoute,
+  OnboardingCreateClanRoute,
   OnboardingSetUsernameRoute,
+  OnboardingSyncClanRoute,
 })
 
 /* prettier-ignore-end */
@@ -107,26 +105,26 @@ export const routeTree = rootRoute.addChildren({
       "filePath": "__root.tsx",
       "children": [
         "/",
-        "/mock",
         "/sign-in",
-        "/onboarding/create-or-join-clan",
-        "/onboarding/set-username"
+        "/onboarding/create-clan",
+        "/onboarding/set-username",
+        "/onboarding/sync-clan"
       ]
     },
     "/": {
       "filePath": "index.tsx"
     },
-    "/mock": {
-      "filePath": "mock.tsx"
-    },
     "/sign-in": {
       "filePath": "sign-in.tsx"
     },
-    "/onboarding/create-or-join-clan": {
-      "filePath": "onboarding/create-or-join-clan.tsx"
+    "/onboarding/create-clan": {
+      "filePath": "onboarding/create-clan.tsx"
     },
     "/onboarding/set-username": {
       "filePath": "onboarding/set-username.tsx"
+    },
+    "/onboarding/sync-clan": {
+      "filePath": "onboarding/sync-clan.tsx"
     }
   }
 }

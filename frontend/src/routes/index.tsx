@@ -1,6 +1,5 @@
 import {
   createFileRoute,
-  redirect,
   useNavigate,
   useRouter,
 } from '@tanstack/react-router';
@@ -23,6 +22,7 @@ import {
 } from '$api/account';
 import { Field, Form, FormikProvider, useFormik } from 'formik';
 import { AppLayout } from '$common';
+import { handleOnboardingRedirection } from '$helpers/onboarding';
 import { usePageTitle } from '$hooks';
 import { Card, CardTitle } from '$ui/card';
 import Dashboard from '$pages/Dashboard';
@@ -37,18 +37,8 @@ function parseScope(scope: string): { [key: string]: boolean } {
 }
 
 export const Route = createFileRoute('/')({
-  beforeLoad: ({ context }) => {
-    if (context.user === null) {
-      throw redirect({ to: '/sign-in' });
-    }
-
-    if (!context.user.username) {
-      throw redirect({ to: '/onboarding/set-username' });
-    }
-
-    if (!context.clan) {
-      throw redirect({ to: '/onboarding/create-or-join-clan' });
-    }
+  beforeLoad: ({ context, location }) => {
+    handleOnboardingRedirection(context, location);
   },
   component: Dashboard,
 });

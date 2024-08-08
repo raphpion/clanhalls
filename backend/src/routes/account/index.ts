@@ -50,6 +50,7 @@ async function getSession(req: Request, res: Response, next: NextFunction) {
           uuid: clan.uuid,
           name: clan.name,
           nameInGame: clan.nameInGame,
+          lastSyncedAt: clan.lastSyncedAt,
         }
       : null;
 

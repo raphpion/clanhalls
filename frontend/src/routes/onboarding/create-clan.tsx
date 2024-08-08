@@ -1,17 +1,18 @@
 import { createFileRoute } from '@tanstack/react-router';
-import SetUsername from '$pages/Onboarding/SetUsername';
 import {
   handleOnboardingRedirection,
   ONBOARDING_STEPS,
 } from '$helpers/onboarding';
+import CreateClan from '$pages/Onboarding/CreateClan';
 
-export const Route = createFileRoute('/onboarding/set-username')({
+export const Route = createFileRoute('/onboarding/create-clan')({
   beforeLoad: ({ context, location }) => {
     handleOnboardingRedirection(
       context,
       location,
-      ONBOARDING_STEPS.SET_USERNAME,
+      ONBOARDING_STEPS.CREATE_CLAN,
     );
   },
-  component: SetUsername,
+  component: CreateClan,
 });
+

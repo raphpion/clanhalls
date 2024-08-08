@@ -115,11 +115,11 @@ function RecentPlayers() {
           </TableBody>
         </Table>
       </CardContent>
-      {clanPlayersQuery.data?.items.length && (
+      {clanPlayersQuery.data?.items.length ? (
         <CardFooter>
           <Button variant="outline">View all clan players</Button>
         </CardFooter>
-      )}
+      ) : null}
     </Card>
   );
 }

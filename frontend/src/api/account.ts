@@ -4,18 +4,18 @@ import { _delete, get, post, put } from '.';
 export type SessionData = {
   user: {
     googleId: string;
-    username?: string;
+    username: string | null;
     email: string;
     emailNormalized: string;
     emailVerified: boolean;
     pictureUrl: string | null;
-    isClanAdmin: boolean;
   } | null;
 
   clan: {
     uuid: string;
     name: string;
     nameInGame: string | null;
+    lastSyncedAt: string | null;
   } | null;
 };
 
@@ -65,6 +65,8 @@ export type CredentialsData = {
 export type ClanData = {
   uuid: string;
   name: string;
+  nameInGame: string | null;
+  lastSyncedAt: string | null;
   isAdmin: boolean;
 } | null;
 
@@ -73,6 +75,10 @@ export type SetUsernamePayload = {
 };
 
 export type VerifyUsernameAvailabilityData = {
+  available: boolean;
+};
+
+export type VerifyClanNameAvailabilityData = {
   available: boolean;
 };
 
@@ -142,6 +148,15 @@ export async function updateCredentials(
     `/account/credentials/${clientId}`,
     payloadWithoutClientId,
   );
+}
+
+export async function verifyClanNameAvailability(
+  name: string,
+): Promise<VerifyClanNameAvailabilityData> {
+  const response = await get<VerifyClanNameAvailabilityData>(
+    `/account/clan/verify-name-availability?name=${name}`,
+  );
+  return response.data;
 }
 
 export async function verifyUsernameAvailability(

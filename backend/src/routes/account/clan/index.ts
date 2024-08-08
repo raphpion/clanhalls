@@ -2,6 +2,7 @@ import express from 'express';
 import Joi from 'joi';
 
 import playersRoutes from './players';
+import verifyNameAvailabilityRoutes from './verify-name-availability';
 import CreateClanForUserCommand from '../../../clans/commands/createClanForUserCommand';
 import AppError, { AppErrorCodes } from '../../../extensions/errors';
 import type {
@@ -24,6 +25,7 @@ const createClanSchema = Joi.object<CreateClanPayload>({
 const clanRoutes = express.Router();
 
 clanRoutes.use('/players', playersRoutes);
+clanRoutes.use('/verify-name-availability', verifyNameAvailabilityRoutes);
 
 clanRoutes.get('/', requireAuth(['clanUser', 'clanUser.clan']), getClan);
 
@@ -74,8 +76,10 @@ async function getClan(req: Request, res: Response, next: NextFunction) {
     }
 
     res.json({
-      name: clan.name,
       uuid: clan.uuid,
+      name: clan.name,
+      nameInGame: clan.nameInGame,
+      lastSyncedAt: clan.lastSyncedAt,
       isAdmin: clanUser.isAdmin,
     });
   } catch (error) {

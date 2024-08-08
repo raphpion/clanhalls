@@ -23,27 +23,11 @@ function SetUsername() {
   const navigate = useNavigate();
   usePageTitle('Set Username');
 
-  const formik = useFormik<SetUsernameFormValues>({
-    initialValues: {
-      username: '',
-      usernameAvailable: undefined,
-    },
-    validationSchema: yup.object({
-      username: yup
-        .string()
-        .required('Please enter a username.')
-        .min(3, 'Username must be at least 3 characters.')
-        .max(25, 'Username must be at most 25 characters.'),
-      usernameAvailable: yup.boolean().required().nullable(),
-    }),
-    onSubmit: async ({ username }) => setUsernameMutation.mutateAsync(username),
-  });
-
   const setUsernameMutation = useMutation({
     mutationKey: ['set-username'],
     mutationFn: setUsername,
     onSuccess: () => {
-      navigate({ to: '/onboarding/create-or-join-clan' });
+      navigate({ to: '/onboarding/create-clan' });
     },
   });
 
@@ -58,6 +42,22 @@ function SetUsername() {
   const verifyUsernameAvailabilityMutation = useMutation({
     mutationKey: ['verify-username-availability'],
     mutationFn: (username: string) => verifyUsernameAvailability(username),
+  });
+
+  const formik = useFormik<SetUsernameFormValues>({
+    initialValues: {
+      username: '',
+      usernameAvailable: undefined,
+    },
+    validationSchema: yup.object({
+      username: yup
+        .string()
+        .required('Please enter a username.')
+        .min(3, 'Username must be at least 3 characters.')
+        .max(25, 'Username must be at most 25 characters.'),
+      usernameAvailable: yup.boolean().required().nullable(),
+    }),
+    onSubmit: async ({ username }) => setUsernameMutation.mutateAsync(username),
   });
 
   useEffect(() => {
@@ -122,7 +122,7 @@ function SetUsername() {
     <OnboardingLayout title="Set username">
       <div className="mb-6 flex flex-col items-center justify-center">
         <Avatar className="mb-2 h-16 w-16">
-          <AvatarImage src={user.pictureUrl || ''} alt={user.username} />
+          <AvatarImage src={user.pictureUrl || ''} alt={user.email} />
           <AvatarFallback>{user.email[0].toUpperCase()}</AvatarFallback>
         </Avatar>
         <p className="text-center">
@@ -142,7 +142,7 @@ function SetUsername() {
           Please set a username before you can access the application.
         </p>
         <FormikProvider value={formik}>
-          <Form className="mb-8 flex w-full max-w-sm flex-col space-y-2">
+          <Form className="flex w-full max-w-sm flex-col space-y-2">
             <Field
               name="username"
               type="text"
@@ -151,19 +151,16 @@ function SetUsername() {
             />
             {usernameHelpLabel}
             <div className="flex flex-row justify-center space-x-4 pt-4">
-              <Button type="submit" disabled={!formik.isValid}>
-                Set username
-              </Button>
-              <Button
-                variant="outline"
-                onClick={() => signOutMutation.mutate()}
-              >
-                Sign out
-              </Button>
+              {setUsernameMutation.isPending ? (
+                <Loading />
+              ) : (
+                <Button type="submit" disabled={!formik.isValid}>
+                  Set username
+                </Button>
+              )}
             </div>
           </Form>
         </FormikProvider>
-        <p></p>
       </div>
     </OnboardingLayout>
   );

@@ -1,20 +1,13 @@
-import { createFileRoute, redirect } from '@tanstack/react-router';
+import { createFileRoute } from '@tanstack/react-router';
 import SignIn from '$pages/SignIn';
+import {
+  handleOnboardingRedirection,
+  ONBOARDING_STEPS,
+} from '../helpers/onboarding';
 
 export const Route = createFileRoute('/sign-in')({
   beforeLoad: ({ context, location }) => {
-    if (context.user === null) {
-      return;
-    }
-
-    if (!context.user.username) {
-      throw redirect({
-        to: '/onboarding/set-username',
-        search: { next: location.pathname },
-      });
-    }
-
-    throw redirect({ to: '/' });
+    handleOnboardingRedirection(context, location, ONBOARDING_STEPS.SIGN_IN);
   },
   component: SignIn,
 });

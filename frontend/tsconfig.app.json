@@ -30,6 +30,8 @@
       "$api/*": ["./src/api/*"],
       "$common": ["./src/common/index.ts"],
       "$common/*": ["./src/common/*"],
+      "$helpers": ["./src/helpers/index.ts"],
+      "$helpers/*": ["./src/helpers/*"],
       "$hooks": ["./src/hooks/index.ts"],
       "$hooks/*": ["./src/hooks/*"],
       "$pages": ["./src/pages/index.ts"],

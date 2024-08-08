@@ -3,6 +3,7 @@ import AppLayout from './AppLayout';
 import AppLogo from './AppLogo';
 import AuthLayout from './AuthLayout';
 import ClanTitleIcon from './ClanTitleIcon';
+import CopyButton from './CopyButton';
 import Loading from './Loading';
 import Navbar from './Navbar';
 import OnboardingLayout from './OnboardingLayout';
@@ -14,6 +15,7 @@ export {
   AppLogo,
   AuthLayout,
   ClanTitleIcon,
+  CopyButton,
   Loading,
   Navbar,
   OnboardingLayout,

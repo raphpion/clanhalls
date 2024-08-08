@@ -33,6 +33,9 @@ class Clan {
   @Column({ length: 20, nullable: true })
   nameInGame: string | null = null;
 
+  @Column({ nullable: true })
+  lastSyncedAt: Date | null;
+
   @OneToMany(() => ClanUser, (clanUser: ClanUser) => clanUser.clan, {
     cascade: true,
   })
@@ -53,7 +56,7 @@ class Clan {
     (memberActivityReport: MemberActivityReport) => memberActivityReport.clan,
     {
       cascade: true,
-    }
+    },
   )
   memberActivityReports: Promise<MemberActivityReport[]>;
 
@@ -69,13 +72,13 @@ class Clan {
     const clanUsers = await this.clanUsers;
 
     const existingClanUser = clanUsers.find(
-      (clanUser) => clanUser.userId === user.id
+      (clanUser) => clanUser.userId === user.id,
     );
 
     if (existingClanUser) {
       throw new AppError(
         AppErrorCodes.BAD_REQUEST,
-        'User is already in this clan'
+        'User is already in this clan',
       );
     }
 
@@ -91,7 +94,7 @@ class Clan {
     const clanPlayers = await this.clanPlayers;
 
     const existingClanUser = clanPlayers.find(
-      (clanPlayer) => clanPlayer.playerId === player.id
+      (clanPlayer) => clanPlayer.playerId === player.id,
     );
 
     if (existingClanUser) {

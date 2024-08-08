@@ -14,6 +14,7 @@ const router = createRouter({
   routeTree,
   context: {
     user: null,
+    clan: null,
   },
 });
 
