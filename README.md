@@ -1,4 +1,4 @@
-# OSRS Clan Manager
+# Clan Halls
 
 This is a web application that helps you manage your clan in Old School RuneScape. Use it with the [Clan Members Activity Tracker RuneLite plugin](https://github.com/raphpion/clan-members-activity-tracker).
 
@@ -26,25 +26,8 @@ npm install
 
 Then, create a `.env` file in the root directory of the project with the following content. Do not use these passwords in production!
 
-```yaml
-BACKEND_PORT=5000
-
-POSTGRES_PORT=5001
-POSTGRES_USER=postgres
-POSTGRES_PASSWORD=some-secure-password-123
-POSTGRES_DB=clan-halls
-
-REDIS_PORT=5002
-REDIS_PASSWORD=some-secure-password-456
-```
-
-You can now run the following command to start the development environment:
-
-```bash
-docker-compose up -f docker-compose.dev.yml
-```
-
-Now, create a `.env` file in the backend directory with the following content.
+> [!TIP]
+> If you were to set the variables to build a production Docker image, you would need to set the postgres and redis URLs to `postgres` and `redis` respectively (the services names), as well as use the internal ports since the containers would run on the same Docker network.
 
 ```yaml
 PORT=5000
@@ -53,41 +36,65 @@ GOOGLE_CLIENT_ID=your-google-client-id
 
 POSTGRES_URL=localhost
 POSTGRES_PORT=5001
-POSTGRES_USER=root
+POSTGRES_USER=postgres
 POSTGRES_PASSWORD=some-secure-password-123
 POSTGRES_DB=clan-halls
+POSTGRES_TEST_DB=clan-halls_test
 
 REDIS_URL=localhost
 REDIS_PORT=5002
 REDIS_PASSWORD=some-secure-password-456
-```
 
-> [!TIP]
-> If you were to set the variables to build a production Docker image, you would need to set the postgres and redis URLs to `postgres` and `redis` respectively (the services names), as well as use the internal ports since the containers would run on the same Docker network.
-
-You can now run the following command to start the backend server:
-
-```bash
-npm run dev -w backend # or ignore the -w flag if you are running it from the /backend directory
-```
-
-And the following command to run the migrations:
-
-```bash
-npm run migrate -w backend # or ignore the -w flag if you are running it from the /backend directory
-```
-
-Finally, create a `.env` file in the frontend directory with the following content.
-
-```yaml
 VITE_GOOGLE_CLIENT_ID=your-google-client-id
 VITE_API_BASE_URL=http://localhost:5000
 ```
 
-You can now run the following command to start the frontend server:
+### Using the utility scripts
+
+To start the development environment, you can simply run the following command:
 
 ```bash
-npm run dev -w frontend # or ignore the -w flag if you are running it from the /frontend directory
+# Windows only
+/scripts/dev.ps1
+
+# Unix script (not yet implemented)
+/scripts/dev.sh
+```
+
+To start the production environment, you can simply run the following command:
+
+```bash
+# Windows only (not yet implemented)
+/scripts/prod.ps1
+
+# Unix script (not yet implemented)
+/scripts/prod.sh
+```
+
+### Entering the commands manually
+
+Alternatively, you can run the following command to start the development containers:
+
+```bash
+docker compose up -f docker-compose.dev.yml
+```
+
+And run the following command to start the backend server:
+
+```bash
+npm run dev -w backend
+```
+
+Then run the following command to apply migrations:
+
+```bash
+npm run migrate -w backend
+```
+
+Finally, run the following command to start the frontend server:
+
+```bash
+npm run dev -w frontend
 ```
 
 Please refer to the [backend's README](./backend/README.md) for more information on scripts.

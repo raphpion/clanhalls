@@ -8,6 +8,9 @@ In production, it runs on [pm2](https://pm2.keymetrics.io/) to benefit from load
 
 In [`package.json`](./package.json), you can see a few scripts that are used to interact with the database in development. This is because TypeORM needs transpiled JavaScript to run the migrations and seeders.
 
+> [!IMPORTANT]
+> Remember to run these commands from the current directory!
+
 - To drop the database, run the following command:
 
   ```bash
