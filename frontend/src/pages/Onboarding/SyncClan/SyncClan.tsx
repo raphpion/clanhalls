@@ -34,6 +34,8 @@ function SyncClan() {
   const getClanQuery = useQuery({
     queryKey: ['get-clan'],
     queryFn: getClan,
+    refetchInterval: 5000,
+    enabled: readyForSync,
   });
 
   const createCredentialsMutation = useMutation({
