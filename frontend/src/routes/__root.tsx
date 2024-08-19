@@ -1,6 +1,7 @@
 import { Outlet, createRootRouteWithContext } from '@tanstack/react-router';
 import { SessionData, getSession } from '../api/account';
-import { AppContext, ThemeProvider } from '$common';
+import { AppContext } from '$common/AppContext';
+import { ThemeProvider } from '$common/Theme';
 
 type Context = SessionData;
 

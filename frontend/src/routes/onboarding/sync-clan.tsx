@@ -1,5 +1,5 @@
 import { createFileRoute } from '@tanstack/react-router';
-import SyncClan from '$pages/Onboarding/SyncClan/SyncClan';
+import SyncClan from '$pages/Onboarding/SyncClan';
 import {
   handleOnboardingRedirection,
   ONBOARDING_STEPS,

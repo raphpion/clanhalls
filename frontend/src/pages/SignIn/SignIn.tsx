@@ -2,7 +2,9 @@ import { CredentialResponse, GoogleLogin } from '@react-oauth/google';
 import { useNavigate } from '@tanstack/react-router';
 import { signInWithGoogle } from '$api/account';
 import { useMutation } from '@tanstack/react-query';
-import { AuthLayout, Loading, useTheme } from '$common';
+import AuthLayout from '$common/AuthLayout';
+import Loading from '$common/Loading';
+import { useTheme } from '$common/Theme';
 import { usePageTitle } from '$hooks';
 
 function SignIn() {

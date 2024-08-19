@@ -6,7 +6,8 @@ import { useEffect, useMemo } from 'react';
 import * as yup from 'yup';
 
 import { createClan, verifyClanNameAvailability } from '$api/account';
-import { Loading, OnboardingLayout } from '$common';
+import Loading from '$common/Loading';
+import OnboardingLayout from '$common/OnboardingLayout';
 import { usePageTitle } from '$hooks';
 import { Button } from '$ui/button';
 import { Input } from '$ui/input';

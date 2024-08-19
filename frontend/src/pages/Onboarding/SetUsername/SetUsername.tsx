@@ -5,7 +5,9 @@ import { useEffect, useMemo } from 'react';
 import * as yup from 'yup';
 
 import { setUsername, signOut, verifyUsernameAvailability } from '$api/account';
-import { Loading, OnboardingLayout, useAppContext } from '$common';
+import useAppContext from '$common/AppContext';
+import Loading from '$common/Loading';
+import OnboardingLayout from '$common/OnboardingLayout';
 import { Input } from '$ui/input';
 import { Button } from '$ui/button';
 import { usePageTitle } from '$hooks';

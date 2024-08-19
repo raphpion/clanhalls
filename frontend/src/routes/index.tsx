@@ -4,7 +4,7 @@ import {
   useRouter,
 } from '@tanstack/react-router';
 import { Fragment, useEffect, useId, useMemo, useState } from 'react';
-import { useAppContext } from '$common';
+import useAppContext from '$common/AppContext';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import {
   createClan,
@@ -21,7 +21,7 @@ import {
   updateCredentials,
 } from '$api/account';
 import { Field, Form, FormikProvider, useFormik } from 'formik';
-import { AppLayout } from '$common';
+import AppLayout from '$common/AppLayout';
 import { handleOnboardingRedirection } from '$helpers/onboarding';
 import { usePageTitle } from '$hooks';
 import { Card, CardTitle } from '$ui/card';

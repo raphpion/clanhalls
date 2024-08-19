@@ -1,20 +1,22 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
+import { useNavigate } from '@tanstack/react-router';
+import { Fragment, useEffect, useState } from 'react';
 
-import { CopyButton, Loading, OnboardingLayout, useAppContext } from '$common';
 import {
   createCredentials,
   CreateCredentialsData,
   getClan,
   getCredentials,
 } from '$api/account';
-import { Fragment, useEffect, useState } from 'react';
+import CopyCredentials from '$common/CopyCredentials';
+import Loading from '$common/Loading';
+import OnboardingLayout from '$common/OnboardingLayout';
+import useAppContext from '$common/AppContext';
 import { CredentialScopes, Scopes, scopesToString } from '$helpers/credentials';
 import { usePageTitle } from '$hooks';
 import { Button } from '$ui/button';
 import { Checkbox } from '$ui/checkbox';
-import { Input } from '$ui/input';
 import { Label } from '$ui/label';
-import { useNavigate } from '@tanstack/react-router';
 
 function SyncClan() {
   usePageTitle('Sync your clan');
@@ -87,37 +89,15 @@ function SyncClan() {
       )}
       {credentials && !readyForSync && (
         <Fragment>
-          <p>
+          <p className="mb-6">
             You will need these credentials to sync your clan with Clan Halls.
             You can only view them once, so make sure to save them somewhere
             safe.
           </p>
-          <div className="mt-6 space-y-4">
-            <div>
-              <Label htmlFor="clientId">Client ID</Label>
-              <div className="flex items-center justify-center space-x-2">
-                <Input
-                  id="clientId"
-                  type="text"
-                  value={credentials.clientId}
-                  readOnly
-                />
-                <CopyButton value={credentials.clientId} />
-              </div>
-            </div>
-            <div>
-              <Label htmlFor="clientSecret">Client secret</Label>
-              <div className="flex items-center justify-center space-x-2">
-                <Input
-                  id="clientSecret"
-                  type="password"
-                  value={credentials.clientSecret}
-                  readOnly
-                />
-                <CopyButton value={credentials.clientSecret} />
-              </div>
-            </div>
-          </div>
+          <CopyCredentials
+            clientId={credentials.clientId}
+            clientSecret={credentials.clientSecret}
+          />
           <div className="mb-8 mt-4 flex items-center space-x-2">
             <Checkbox
               id="confirm"
@@ -140,15 +120,7 @@ function SyncClan() {
       )}
       {!loading && readyForSync && (
         <Fragment>
-          <p className="mb-4 text-center">
-            Awaiting synchronization...
-            <Button
-              variant="link"
-              onClick={() => getClanQuery.refetch({ cancelRefetch: true })}
-            >
-              Refresh
-            </Button>
-          </p>
+          <p className="mb-4 text-center">Awaiting synchronization...</p>
           <div className="mb-2 flex justify-center">
             <Loading />
           </div>

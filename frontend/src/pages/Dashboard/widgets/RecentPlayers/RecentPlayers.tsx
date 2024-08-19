@@ -1,4 +1,3 @@
-import { useAppContext } from '$common';
 import { useQuery } from '@tanstack/react-query';
 import {
   ColumnDef,
@@ -8,7 +7,8 @@ import {
 } from '@tanstack/react-table';
 
 import { queryClanPlayers } from '$api/account';
-import { ClanTitleIcon } from '$common';
+import useAppContext from '$common/AppContext';
+import ClanTitleIcon from '$common/ClanTitleIcon';
 import { Button } from '$ui/button';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '$ui/card';
 import { Table, TableBody, TableHead, TableHeader, TableRow } from '$ui/table';
