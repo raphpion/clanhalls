@@ -2,6 +2,7 @@ import { Outlet, createRootRouteWithContext } from '@tanstack/react-router';
 import { SessionData, getSession } from '../api/account';
 import { AppContext } from '$common/AppContext';
 import { ThemeProvider } from '$common/Theme';
+import { ConfirmationDialogProvider } from '$common/ConfirmationDialog/ConfirmationDialogContext';
 
 type Context = SessionData;
 
@@ -23,9 +24,10 @@ function RootComponent() {
   return (
     <AppContext.Provider value={data}>
       <ThemeProvider defaultTheme="system" storageKey="vite-ui-theme">
-        <Outlet />
+        <ConfirmationDialogProvider>
+          <Outlet />
+        </ConfirmationDialogProvider>
       </ThemeProvider>
     </AppContext.Provider>
   );
 }
-
