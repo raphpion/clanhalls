@@ -1,8 +1,4 @@
-import {
-  createFileRoute,
-  useNavigate,
-  useRouter,
-} from '@tanstack/react-router';
+import { createFileRoute, useRouter } from '@tanstack/react-router';
 import { Fragment, useEffect, useId, useMemo, useState } from 'react';
 import useAppContext from '$common/AppContext';
 import { useMutation, useQuery } from '@tanstack/react-query';
@@ -13,7 +9,6 @@ import {
   getClan,
   ClanData,
   getCredentials,
-  signOut,
   queryClanPlayers,
   ClanPlayerQueryParams,
   deleteCredentials,
@@ -21,10 +16,7 @@ import {
   updateCredentials,
 } from '$api/account';
 import { Field, Form, FormikProvider, useFormik } from 'formik';
-import AppLayout from '$common/AppLayout';
 import { handleOnboardingRedirection } from '$helpers/onboarding';
-import { usePageTitle } from '$hooks';
-import { Card, CardTitle } from '$ui/card';
 import Dashboard from '$pages/Dashboard';
 
 function parseScope(scope: string): { [key: string]: boolean } {
@@ -538,38 +530,5 @@ function UpdateCredentialsForm({
         </Form>
       </FormikProvider>
     </Fragment>
-  );
-}
-
-function HomeComponent() {
-  const { user } = useAppContext();
-  const navigate = useNavigate();
-  usePageTitle('Dashboard');
-
-  const signOutMutation = useMutation({
-    mutationKey: ['sign-out'],
-    mutationFn: signOut,
-    onSuccess: () => {
-      navigate({ to: '/sign-in' });
-    },
-  });
-
-  if (!user) return null;
-
-  return (
-    <AppLayout>
-      <h1 className="mb-4 text-3xl font-bold">Dashboard</h1>
-      <Card className="b-none max-w-4xl bg-gradient-to-tr from-purple-400 to-blue-400 p-4 text-white">
-        <CardTitle>Welcome, {user.username}! 👋</CardTitle>
-      </Card>
-      <div>
-        <h1>Welcome, {user.username}!</h1>
-        <p>
-          <button onClick={() => signOutMutation.mutate()}>Sign out</button>
-        </p>
-        <Credentials />
-        <Clan />
-      </div>
-    </AppLayout>
   );
 }

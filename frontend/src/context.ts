@@ -1,9 +1,9 @@
 import { createContext } from 'react';
 
-import type { AccountData } from './api/account';
+import type { SessionData } from './api/account';
 
 export type AppContext = {
-  user: AccountData | null;
+  user: SessionData | null;
 };
 
 const AppContext = createContext<AppContext>({
