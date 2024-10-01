@@ -21,7 +21,7 @@ const updateCredentialsPayloadSchema = Joi.object<UpdateCredentialsPayload>({
   // TODO: Add validation for name
   name: Joi.string().required(),
   // TODO: Add validation for scope
-  scope: Joi.string().required(),
+  scope: Joi.string().required().allow(''),
 });
 
 const credentialsClientIdRoutes = express.Router({ mergeParams: true });
@@ -31,13 +31,13 @@ credentialsClientIdRoutes.put(
   '/',
   requireAuth(),
   validate(updateCredentialsPayloadSchema),
-  updateCredentials
+  updateCredentials,
 );
 
 export async function deleteCredentials(
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) {
   try {
     if (!req.userEntity) {
@@ -59,7 +59,7 @@ export async function deleteCredentials(
 export async function updateCredentials(
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) {
   try {
     if (!req.userEntity) {

@@ -7,6 +7,7 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle } from '$ui/sheet';
 import { cn } from '$ui/utils';
 
 import Credentials from './Credentials';
+import { CredentialsContextProvider } from './Credentials/CredentialsContext';
 
 type Props = {
   open: boolean;
@@ -19,6 +20,7 @@ const TABS = [
     label: 'Credentials',
     icon: KeyRoundIcon,
     component: Credentials,
+    provider: CredentialsContextProvider,
   },
   // {
   //   key: 'sessions',
@@ -37,13 +39,13 @@ function Settings({ ...props }: Props) {
 
   return (
     <Sheet {...props}>
-      <SheetContent className="sm:max-w-screen w-full">
+      <SheetContent className="w-full sm:max-w-full xl:max-w-screen-xl">
         <SheetHeader>
           <SheetTitle className="text-2xl font-semibold md:text-4xl">
             Settings
           </SheetTitle>
         </SheetHeader>
-        <div className="mt-6 flex flex-col space-x-16 md:flex-row">
+        <div className="mt-6 flex flex-col space-y-8 md:flex-row md:space-x-16 md:space-y-0">
           <div className="w-full max-w-xs">
             {TABS.map((tab) => (
               <Button
@@ -64,7 +66,13 @@ function Settings({ ...props }: Props) {
             ))}
           </div>
           <div className="max-w-screen-md flex-1">
-            <currentTab.component />
+            {currentTab.provider ? (
+              <currentTab.provider>
+                <currentTab.component />
+              </currentTab.provider>
+            ) : (
+              <currentTab.component />
+            )}
           </div>
         </div>
       </SheetContent>

@@ -10,79 +10,79 @@
 
 // Import Routes
 
-import { Route as rootRoute } from './routes/__root';
-import { Route as SignInImport } from './routes/sign-in';
-import { Route as IndexImport } from './routes/index';
-import { Route as OnboardingSyncClanImport } from './routes/onboarding/sync-clan';
-import { Route as OnboardingSetUsernameImport } from './routes/onboarding/set-username';
-import { Route as OnboardingCreateClanImport } from './routes/onboarding/create-clan';
+import { Route as rootRoute } from './routes/__root'
+import { Route as SignInImport } from './routes/sign-in'
+import { Route as IndexImport } from './routes/index'
+import { Route as OnboardingSyncClanImport } from './routes/onboarding/sync-clan'
+import { Route as OnboardingSetUsernameImport } from './routes/onboarding/set-username'
+import { Route as OnboardingCreateClanImport } from './routes/onboarding/create-clan'
 
 // Create/Update Routes
 
 const SignInRoute = SignInImport.update({
   path: '/sign-in',
   getParentRoute: () => rootRoute,
-} as any);
+} as any)
 
 const IndexRoute = IndexImport.update({
   path: '/',
   getParentRoute: () => rootRoute,
-} as any);
+} as any)
 
 const OnboardingSyncClanRoute = OnboardingSyncClanImport.update({
   path: '/onboarding/sync-clan',
   getParentRoute: () => rootRoute,
-} as any);
+} as any)
 
 const OnboardingSetUsernameRoute = OnboardingSetUsernameImport.update({
   path: '/onboarding/set-username',
   getParentRoute: () => rootRoute,
-} as any);
+} as any)
 
 const OnboardingCreateClanRoute = OnboardingCreateClanImport.update({
   path: '/onboarding/create-clan',
   getParentRoute: () => rootRoute,
-} as any);
+} as any)
 
 // Populate the FileRoutesByPath interface
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
     '/': {
-      id: '/';
-      path: '/';
-      fullPath: '/';
-      preLoaderRoute: typeof IndexImport;
-      parentRoute: typeof rootRoute;
-    };
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexImport
+      parentRoute: typeof rootRoute
+    }
     '/sign-in': {
-      id: '/sign-in';
-      path: '/sign-in';
-      fullPath: '/sign-in';
-      preLoaderRoute: typeof SignInImport;
-      parentRoute: typeof rootRoute;
-    };
+      id: '/sign-in'
+      path: '/sign-in'
+      fullPath: '/sign-in'
+      preLoaderRoute: typeof SignInImport
+      parentRoute: typeof rootRoute
+    }
     '/onboarding/create-clan': {
-      id: '/onboarding/create-clan';
-      path: '/onboarding/create-clan';
-      fullPath: '/onboarding/create-clan';
-      preLoaderRoute: typeof OnboardingCreateClanImport;
-      parentRoute: typeof rootRoute;
-    };
+      id: '/onboarding/create-clan'
+      path: '/onboarding/create-clan'
+      fullPath: '/onboarding/create-clan'
+      preLoaderRoute: typeof OnboardingCreateClanImport
+      parentRoute: typeof rootRoute
+    }
     '/onboarding/set-username': {
-      id: '/onboarding/set-username';
-      path: '/onboarding/set-username';
-      fullPath: '/onboarding/set-username';
-      preLoaderRoute: typeof OnboardingSetUsernameImport;
-      parentRoute: typeof rootRoute;
-    };
+      id: '/onboarding/set-username'
+      path: '/onboarding/set-username'
+      fullPath: '/onboarding/set-username'
+      preLoaderRoute: typeof OnboardingSetUsernameImport
+      parentRoute: typeof rootRoute
+    }
     '/onboarding/sync-clan': {
-      id: '/onboarding/sync-clan';
-      path: '/onboarding/sync-clan';
-      fullPath: '/onboarding/sync-clan';
-      preLoaderRoute: typeof OnboardingSyncClanImport;
-      parentRoute: typeof rootRoute;
-    };
+      id: '/onboarding/sync-clan'
+      path: '/onboarding/sync-clan'
+      fullPath: '/onboarding/sync-clan'
+      preLoaderRoute: typeof OnboardingSyncClanImport
+      parentRoute: typeof rootRoute
+    }
   }
 }
 
@@ -94,7 +94,7 @@ export const routeTree = rootRoute.addChildren({
   OnboardingCreateClanRoute,
   OnboardingSetUsernameRoute,
   OnboardingSyncClanRoute,
-});
+})
 
 /* prettier-ignore-end */
 
@@ -129,4 +129,3 @@ export const routeTree = rootRoute.addChildren({
   }
 }
 ROUTE_MANIFEST_END */
-

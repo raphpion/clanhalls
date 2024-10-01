@@ -21,7 +21,7 @@ const createCredentialsSchema = Joi.object<CreateCredentialsPayload>({
   // TODO: add name restrictions
   name: Joi.string().required(),
   // TODO: add scope restrictions
-  scope: Joi.string().required(),
+  scope: Joi.string().required().allow(''),
 });
 
 const credentialsRoutes = express.Router();
@@ -34,7 +34,7 @@ credentialsRoutes.post(
   '/',
   requireAuth(),
   validate(createCredentialsSchema),
-  createCredentials
+  createCredentials,
 );
 
 async function getCredentials(req: Request, res: Response, next: NextFunction) {
@@ -60,7 +60,7 @@ async function getCredentials(req: Request, res: Response, next: NextFunction) {
 async function createCredentials(
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) {
   try {
     const { name, scope } = req.body as CreateCredentialsPayload;

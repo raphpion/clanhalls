@@ -1,14 +1,20 @@
 import { Fragment } from 'react';
 
+import { CheckCircle2 } from 'lucide-react';
+
+import { Alert, AlertDescription, AlertTitle } from '$ui/alert';
+
 import Credential from './Credential';
 import useCredentialsContext from './CredentialsContext';
+import CopyCredentials from '../../Credentials/CopyCredentials';
 import Loading from '../../Loading';
 
 function View() {
-  const { loading, credentials } = useCredentialsContext();
+  const { loading, credentials, createdCredential, dismissCreatedCredential } =
+    useCredentialsContext();
 
   if (loading) {
-    return <Loading />;
+    return <Loading className="mx-auto" />;
   }
 
   if (!credentials || !credentials.length) {
@@ -19,6 +25,20 @@ function View() {
 
   return (
     <Fragment>
+      {createdCredential && (
+        <Alert className="mb-4">
+          <CheckCircle2 className="h4 w-4" />
+          <AlertTitle className="mb-4">
+            Credential created successfully!
+          </AlertTitle>
+          <AlertDescription>
+            <CopyCredentials
+              clientId={createdCredential.clientId}
+              clientSecret={createdCredential.clientSecret}
+            />
+          </AlertDescription>
+        </Alert>
+      )}
       <p className="mb-4">
         This is a list of credentials associated with your account that can be
         used to access the Clan Halls API. Remove any credentials that you do

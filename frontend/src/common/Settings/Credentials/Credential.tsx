@@ -1,8 +1,9 @@
 import { Fragment } from 'react';
 
+import { useMutation } from '@tanstack/react-query';
 import { EditIcon, EllipsisIcon, KeyRoundIcon, Trash2Icon } from 'lucide-react';
 
-import type { CredentialsData } from '$api/account';
+import { deleteCredentials, type CredentialsData } from '$api/account';
 import { Button } from '$ui/button';
 import { Card } from '$ui/card';
 import {
@@ -24,7 +25,13 @@ type Props = {
 
 function Credential({ credential, isFirst, isLast }: Props) {
   const { askConfirmation } = useConfirmationDialog();
-  const { openEditSlideOut } = useCredentialsContext();
+  const { openEditSlideOut, refetch } = useCredentialsContext();
+
+  // TODO: move all mutations to context
+  const deleteCredentialMutation = useMutation({
+    mutationKey: ['delete-credential'],
+    mutationFn: deleteCredentials,
+  });
 
   const handleClickDelete = async () => {
     const confirmed = await askConfirmation({
@@ -35,7 +42,10 @@ function Credential({ credential, isFirst, isLast }: Props) {
       confirmVariant: 'destructive',
     });
 
-    console.log(confirmed);
+    if (!confirmed) return;
+
+    await deleteCredentialMutation.mutateAsync(credential.clientId);
+    refetch();
   };
 
   const handleClickEdit = () => openEditSlideOut(credential);
@@ -62,9 +72,11 @@ function Credential({ credential, isFirst, isLast }: Props) {
                 ? `Last used on ${new Date(credential.lastUsedAt).toLocaleString()}`
                 : 'Never used'}
             </p>
-            <p className="text-sm text-slate-500">
-              — {credential.scope.replace(/,/g, ', ')}
-            </p>
+            {credential.scope && (
+              <p className="text-sm text-slate-500">
+                — {credential.scope.replace(/,/g, ', ')}
+              </p>
+            )}
           </div>
           <div className="self-start">
             <DropdownMenu>

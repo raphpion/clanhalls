@@ -19,12 +19,11 @@ import {
   DropdownMenuTrigger,
 } from '$ui/dropdown-menu';
 
-
 function UserMenu() {
   const { user } = useAppContext();
   const navigate = useNavigate();
 
-  const [settingsOpen, setSettingsOpen] = useState(true);
+  const [settingsOpen, setSettingsOpen] = useState(false);
 
   const signOutMutation = useMutation({
     mutationKey: ['sign-out'],

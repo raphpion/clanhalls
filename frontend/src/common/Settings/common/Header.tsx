@@ -7,7 +7,9 @@ type Props = PropsWithChildren;
 function Header({ children }: Props) {
   return (
     <Fragment>
-      {children}
+      <div className="flex w-full flex-row items-center justify-between">
+        {children}
+      </div>
       <Separator className="mb-3 mt-2" />
     </Fragment>
   );

@@ -8,13 +8,20 @@ module.exports = {
   ],
   ignorePatterns: ['dist', '.eslintrc.cjs'],
   parser: '@typescript-eslint/parser',
-  plugins: ['react-refresh', '@typescript-eslint', 'import', 'unused-imports'],
+  plugins: [
+    'react',
+    'react-refresh',
+    '@typescript-eslint',
+    'import',
+    'unused-imports',
+  ],
   rules: {
     'react-refresh/only-export-components': [
       'warn',
       { allowConstantExport: true },
     ],
     'no-unused-vars': 'off',
+    'react/jsx-fragments': ['error', 'element'],
     '@typescript-eslint/no-unused-vars': 'off',
     '@typescript-eslint/consistent-type-imports': [
       'error',

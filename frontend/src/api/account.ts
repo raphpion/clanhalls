@@ -1,5 +1,11 @@
-import type { PaginatedQueryParams, PaginatedQueryResult } from '.';
-import { _delete, get, post, put } from '.';
+import {
+  _delete,
+  get,
+  post,
+  put,
+  type PaginatedQueryParams,
+  type PaginatedQueryResult,
+} from '.';
 
 export type SessionData = {
   user: {

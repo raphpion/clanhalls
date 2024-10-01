@@ -3,6 +3,7 @@ import {
   Dialog,
   DialogContent,
   DialogDescription,
+  DialogFooter,
   DialogHeader,
   DialogTitle,
 } from '$ui/dialog';
@@ -39,14 +40,14 @@ function ConfirmationDialog({
           <DialogTitle>{title}</DialogTitle>
         </DialogHeader>
         <DialogDescription>{description}</DialogDescription>
-        <div className="flex space-x-4">
+        <DialogFooter>
           <Button variant={confirmVariant || 'default'} onClick={onConfirm}>
             {confirmLabel || 'Confirm'}
           </Button>
           <Button variant="outline" onClick={onCancel}>
             {cancelLabel || 'Cancel'}
           </Button>
-        </div>
+        </DialogFooter>
       </DialogContent>
     </Dialog>
   );
