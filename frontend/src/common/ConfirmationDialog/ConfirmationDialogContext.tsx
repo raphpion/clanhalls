@@ -6,8 +6,7 @@ import {
   type PropsWithChildren,
 } from 'react';
 
-import type { Props } from './ConfirmationDialog';
-import ConfirmationDialog from './ConfirmationDialog';
+import ConfirmationDialog, { type Props } from './ConfirmationDialog';
 
 type AskConfirmationArgs = Omit<PropsState, 'open'>;
 

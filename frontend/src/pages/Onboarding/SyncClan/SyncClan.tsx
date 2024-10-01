@@ -10,7 +10,7 @@ import {
   getCredentials,
 } from '$api/account';
 import useAppContext from '$common/AppContext';
-import CopyCredentials from '$common/CopyCredentials';
+import CopyCredentials from '$common/Credentials/CopyCredentials';
 import Loading from '$common/Loading';
 import OnboardingLayout from '$common/OnboardingLayout';
 import { CredentialScopes, type Scopes, scopesToString } from '$helpers/credentials';

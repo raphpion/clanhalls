@@ -13,6 +13,7 @@ import {
 } from '$ui/dropdown-menu';
 import { cn } from '$ui/utils';
 
+import useCredentialsContext from './CredentialsContext';
 import useConfirmationDialog from '../../ConfirmationDialog/ConfirmationDialogContext';
 
 type Props = {
@@ -23,6 +24,7 @@ type Props = {
 
 function Credential({ credential, isFirst, isLast }: Props) {
   const { askConfirmation } = useConfirmationDialog();
+  const { openEditSlideOut } = useCredentialsContext();
 
   const handleClickDelete = async () => {
     const confirmed = await askConfirmation({
@@ -35,6 +37,8 @@ function Credential({ credential, isFirst, isLast }: Props) {
 
     console.log(confirmed);
   };
+
+  const handleClickEdit = () => openEditSlideOut(credential);
 
   return (
     <Fragment>
@@ -70,7 +74,7 @@ function Credential({ credential, isFirst, isLast }: Props) {
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent>
-                <DropdownMenuItem>
+                <DropdownMenuItem onClick={handleClickEdit}>
                   <EditIcon size={16} className="mr-2" />
                   Edit
                 </DropdownMenuItem>

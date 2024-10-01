@@ -1,5 +1,11 @@
 import { Button, type ButtonProps } from '$ui/button';
-import { Dialog, DialogContent } from '$ui/dialog';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from '$ui/dialog';
 
 export type Props = {
   open: boolean;
@@ -29,17 +35,17 @@ function ConfirmationDialog({
   return (
     <Dialog {...dialogProps} onOpenChange={handleOpenChange}>
       <DialogContent>
-        <div>
-          <h2 className="mb-4 text-2xl font-semibold">{title}</h2>
-          <p className="mb-6">{description}</p>
-          <div className="flex space-x-4">
-            <Button variant={confirmVariant || 'default'} onClick={onConfirm}>
-              {confirmLabel || 'Confirm'}
-            </Button>
-            <Button variant="outline" onClick={onCancel}>
-              {cancelLabel || 'Cancel'}
-            </Button>
-          </div>
+        <DialogHeader>
+          <DialogTitle>{title}</DialogTitle>
+        </DialogHeader>
+        <DialogDescription>{description}</DialogDescription>
+        <div className="flex space-x-4">
+          <Button variant={confirmVariant || 'default'} onClick={onConfirm}>
+            {confirmLabel || 'Confirm'}
+          </Button>
+          <Button variant="outline" onClick={onCancel}>
+            {cancelLabel || 'Cancel'}
+          </Button>
         </div>
       </DialogContent>
     </Dialog>

@@ -1,7 +1,7 @@
 import { Input } from '$ui/input';
 import { Label } from '$ui/label';
 
-import CopyButton from '../CopyButton';
+import CopyButton from '../../CopyButton';
 
 type Props = {
   clientId: string;

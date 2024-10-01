@@ -4,6 +4,10 @@ export enum CredentialScopes {
 
 export type Scopes = Record<CredentialScopes, boolean>;
 
+export const emptyScopes: Scopes = {
+  'clan:reporting': false,
+};
+
 /** Converts a Scopes object to a comma-separated string of scopes. */
 export function scopesToString(scopes: Scopes) {
   return Object.entries(scopes)
@@ -16,7 +20,9 @@ export function scopesToString(scopes: Scopes) {
 export function scopesFromString(scopes: string): Scopes {
   const scopesArray = scopes
     .split(',')
-    .filter((scope) => scope in CredentialScopes);
+    .filter((scope) =>
+      Object.values(CredentialScopes).includes(scope as CredentialScopes),
+    );
 
   const result = {} as Scopes;
   for (const scope of scopesArray) {
