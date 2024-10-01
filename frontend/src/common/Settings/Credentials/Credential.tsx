@@ -12,6 +12,8 @@ import {
 import { Button } from '$ui/button';
 import { cn } from '$ui/utils';
 
+import useConfirmationDialog from '../../ConfirmationDialog/ConfirmationDialogContext';
+
 type Props = {
   credential: CredentialsData;
   isFirst?: boolean;
@@ -19,6 +21,20 @@ type Props = {
 };
 
 function Credential({ credential, isFirst, isLast }: Props) {
+  const { askConfirmation } = useConfirmationDialog();
+
+  const handleClickDelete = async () => {
+    const confirmed = await askConfirmation({
+      title: `Delete credential '${credential.name}'?`,
+      description:
+        'Are you sure you want to delete this credential? This action cannot be undone.',
+      confirmLabel: 'Delete',
+      confirmVariant: 'destructive',
+    });
+
+    console.log(confirmed);
+  };
+
   return (
     <Fragment>
       <Card
@@ -57,7 +73,10 @@ function Credential({ credential, isFirst, isLast }: Props) {
                   <EditIcon size={16} className="mr-2" />
                   Edit
                 </DropdownMenuItem>
-                <DropdownMenuItem className="!text-red-500">
+                <DropdownMenuItem
+                  className="!text-red-500"
+                  onClick={handleClickDelete}
+                >
                   <Trash2Icon size={16} className="mr-2" />
                   Delete
                 </DropdownMenuItem>

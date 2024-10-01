@@ -7,12 +7,9 @@ import {
 } from 'react';
 import ConfirmationDialog, { Props } from './ConfirmationDialog';
 
-type AskConfirmationArgs = Pick<Props, 'title' | 'description'>;
+type AskConfirmationArgs = Omit<PropsState, 'open'>;
 
-type PropsState = Pick<
-  Props,
-  'open' | 'title' | 'description' | 'onOpenChange'
->;
+type PropsState = Omit<Props, 'onConfirm' | 'onCancel'>;
 
 type ConfirmationDialogContextType = {
   askConfirmation(args: AskConfirmationArgs): Promise<boolean>;
@@ -27,18 +24,29 @@ export function ConfirmationDialogProvider({ children }: PropsWithChildren) {
     open: false,
     title: '',
     description: '',
-    onOpenChange: () => {},
+    confirmLabel: undefined,
+    cancelLabel: undefined,
+    confirmVariant: undefined,
   });
 
   const [resolve, setResolve] = useState<(value: boolean) => void>(() => {});
 
   const askConfirmation = useCallback(
-    ({ title, description }: AskConfirmationArgs) => {
+    ({
+      title,
+      description,
+      confirmLabel,
+      confirmVariant,
+      cancelLabel,
+    }: AskConfirmationArgs) => {
       setProps((prev) => ({
         ...prev,
         open: true,
         title,
         description,
+        confirmLabel,
+        cancelLabel,
+        confirmVariant,
       }));
 
       return new Promise<boolean>((resolve) => {

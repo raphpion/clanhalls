@@ -18,12 +18,12 @@ const TABS = [
     icon: KeyRoundIcon,
     component: Credentials,
   },
-  {
-    key: 'sessions',
-    label: 'Sessions',
-    icon: RouterIcon,
-    component: Sessions,
-  },
+  // {
+  //   key: 'sessions',
+  //   label: 'Sessions',
+  //   icon: RouterIcon,
+  //   component: Sessions,
+  // },
 ] as const;
 
 type Tab = (typeof TABS)[number];
