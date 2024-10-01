@@ -1,8 +1,10 @@
 import { Outlet, createRootRouteWithContext } from '@tanstack/react-router';
-import { SessionData, getSession } from '../api/account';
+
 import { AppContext } from '$common/AppContext';
-import { ThemeProvider } from '$common/Theme';
 import { ConfirmationDialogProvider } from '$common/ConfirmationDialog/ConfirmationDialogContext';
+import { ThemeProvider } from '$common/Theme';
+
+import { type SessionData, getSession } from '../api/account';
 
 type Context = SessionData;
 

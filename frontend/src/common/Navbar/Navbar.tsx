@@ -1,8 +1,7 @@
-import { AlignLeftIcon, HomeIcon } from 'lucide-react';
 import { Fragment } from 'react';
 
-import AppLogo from '../AppLogo';
-import { ThemeToggle } from '../Theme';
+import { AlignLeftIcon, HomeIcon } from 'lucide-react';
+
 import {
   Sheet,
   SheetContent,
@@ -10,9 +9,13 @@ import {
   SheetTitle,
   SheetTrigger,
 } from '$ui/sheet';
-import UserMenu from './UserMenu';
-import NavLink from './NavLink';
 import { Skeleton } from '$ui/skeleton';
+
+import NavLink from './NavLink';
+import UserMenu from './UserMenu';
+import AppLogo from '../AppLogo';
+import { ThemeToggle } from '../Theme';
+
 
 type Props = {
   mockNav?: boolean;

@@ -1,5 +1,7 @@
 import { createFileRoute } from '@tanstack/react-router';
+
 import SignIn from '$pages/SignIn';
+
 import {
   handleOnboardingRedirection,
   ONBOARDING_STEPS,

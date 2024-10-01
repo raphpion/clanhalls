@@ -1,7 +1,8 @@
-import { Fragment, PropsWithChildren } from 'react';
+import { Fragment, type PropsWithChildren } from 'react';
+
 import { Separator } from '$ui/separator';
 
-type Props = PropsWithChildren<{}>;
+type Props = PropsWithChildren;
 
 function Header({ children }: Props) {
   return (

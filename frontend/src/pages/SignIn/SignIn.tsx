@@ -1,7 +1,8 @@
-import { CredentialResponse, GoogleLogin } from '@react-oauth/google';
-import { useNavigate } from '@tanstack/react-router';
-import { signInWithGoogle } from '$api/account';
+import { type CredentialResponse, GoogleLogin } from '@react-oauth/google';
 import { useMutation } from '@tanstack/react-query';
+import { useNavigate } from '@tanstack/react-router';
+
+import { signInWithGoogle } from '$api/account';
 import AuthLayout from '$common/AuthLayout';
 import Loading from '$common/Loading';
 import { useTheme } from '$common/Theme';

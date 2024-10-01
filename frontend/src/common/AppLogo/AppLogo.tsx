@@ -1,6 +1,8 @@
-import { HTMLAttributes } from 'react';
-import { cn } from '$ui/utils';
+import type { HTMLAttributes } from 'react';
+
 import { Link } from '@tanstack/react-router';
+
+import { cn } from '$ui/utils';
 
 type Props = HTMLAttributes<'a'> & {
   size?: number;

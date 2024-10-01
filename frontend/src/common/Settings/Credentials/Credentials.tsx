@@ -1,5 +1,5 @@
-import View from './View';
 import { CredentialsContextProvider } from './CredentialsContext';
+import View from './View';
 import Header from '../common/Header';
 
 function Credentials() {

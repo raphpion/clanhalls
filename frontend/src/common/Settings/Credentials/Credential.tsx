@@ -1,7 +1,9 @@
-import { EditIcon, EllipsisIcon, KeyRoundIcon, Trash2Icon } from 'lucide-react';
 import { Fragment } from 'react';
 
-import { CredentialsData } from '$api/account';
+import { EditIcon, EllipsisIcon, KeyRoundIcon, Trash2Icon } from 'lucide-react';
+
+import type { CredentialsData } from '$api/account';
+import { Button } from '$ui/button';
 import { Card } from '$ui/card';
 import {
   DropdownMenu,
@@ -9,7 +11,6 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '$ui/dropdown-menu';
-import { Button } from '$ui/button';
 import { cn } from '$ui/utils';
 
 import useConfirmationDialog from '../../ConfirmationDialog/ConfirmationDialogContext';

@@ -1,9 +1,10 @@
 import { createFileRoute } from '@tanstack/react-router';
-import SyncClan from '$pages/Onboarding/SyncClan';
+
 import {
   handleOnboardingRedirection,
   ONBOARDING_STEPS,
 } from '$helpers/onboarding';
+import SyncClan from '$pages/Onboarding/SyncClan';
 
 export const Route = createFileRoute('/onboarding/sync-clan')({
   beforeLoad: ({ context, location }) => {
@@ -11,4 +12,3 @@ export const Route = createFileRoute('/onboarding/sync-clan')({
   },
   component: SyncClan,
 });
-

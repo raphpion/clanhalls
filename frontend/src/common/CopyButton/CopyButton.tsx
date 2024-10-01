@@ -1,12 +1,14 @@
 import { useEffect, useState } from 'react';
+
+import { ClipboardCheckIcon, ClipboardCopyIcon } from 'lucide-react';
+
+import { Button } from '$ui/button';
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
 } from '$ui/tooltip';
-import { ClipboardCheckIcon, ClipboardCopyIcon } from 'lucide-react';
-import { Button } from '$ui/button';
 
 type Props = {
   value: string;

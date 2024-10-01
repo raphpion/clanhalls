@@ -1,8 +1,11 @@
-import { flexRender, Table } from '@tanstack/react-table';
-import { ClanPlayer } from './RecentPlayers';
+import { flexRender, type Table } from '@tanstack/react-table';
+
+import { TableRow, TableCell } from '$ui/table';
+
 import Loading from './Loading';
 import NoContent from './NoContent';
-import { TableRow, TableCell } from '$ui/table';
+import { type ClanPlayer } from './RecentPlayers';
+
 
 type Props = {
   table: Table<ClanPlayer>;

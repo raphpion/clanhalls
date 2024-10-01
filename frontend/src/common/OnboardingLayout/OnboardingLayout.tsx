@@ -1,3 +1,5 @@
+import { type PropsWithChildren } from 'react';
+
 import { Card, CardContent, CardHeader, CardTitle } from '$ui/card';
 import { Skeleton } from '$ui/skeleton';
 import {
@@ -8,9 +10,9 @@ import {
   TableHeader,
   TableRow,
 } from '$ui/table';
-import { PropsWithChildren } from 'react';
-import Navbar from '../Navbar';
+
 import useAppContext from '../AppContext';
+import Navbar from '../Navbar';
 
 const ROWS = 10;
 const COLUMNS = 3;

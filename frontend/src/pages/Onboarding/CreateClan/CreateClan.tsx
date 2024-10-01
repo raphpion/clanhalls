@@ -1,8 +1,9 @@
+import { useEffect, useMemo } from 'react';
+
 import { useMutation } from '@tanstack/react-query';
 import { useNavigate } from '@tanstack/react-router';
 import { Field, Form, FormikProvider, useFormik } from 'formik';
 import { CheckIcon, XIcon } from 'lucide-react';
-import { useEffect, useMemo } from 'react';
 import * as yup from 'yup';
 
 import { createClan, verifyClanNameAvailability } from '$api/account';

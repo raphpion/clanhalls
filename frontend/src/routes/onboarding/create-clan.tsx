@@ -1,4 +1,5 @@
 import { createFileRoute } from '@tanstack/react-router';
+
 import {
   handleOnboardingRedirection,
   ONBOARDING_STEPS,
@@ -15,4 +16,3 @@ export const Route = createFileRoute('/onboarding/create-clan')({
   },
   component: CreateClan,
 });
-

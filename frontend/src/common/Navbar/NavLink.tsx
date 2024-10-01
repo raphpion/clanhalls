@@ -1,5 +1,6 @@
-import { Link, LinkProps, useLocation } from '@tanstack/react-router';
-import { LucideIcon } from 'lucide-react';
+import { Link, type LinkProps, useLocation } from '@tanstack/react-router';
+import { type LucideIcon } from 'lucide-react';
+
 import { cn } from '$ui/utils';
 
 type ToPathOption = LinkProps['to'];

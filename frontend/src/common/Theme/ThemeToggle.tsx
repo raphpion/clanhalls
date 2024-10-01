@@ -7,6 +7,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '$ui/dropdown-menu';
+
 import { useTheme } from './ThemeProvider';
 
 function ThemeToggle() {

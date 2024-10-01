@@ -1,18 +1,19 @@
+import { Fragment, useEffect, useState } from 'react';
+
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { useNavigate } from '@tanstack/react-router';
-import { Fragment, useEffect, useState } from 'react';
 
 import {
   createCredentials,
-  CreateCredentialsData,
+  type CreateCredentialsData,
   getClan,
   getCredentials,
 } from '$api/account';
+import useAppContext from '$common/AppContext';
 import CopyCredentials from '$common/CopyCredentials';
 import Loading from '$common/Loading';
 import OnboardingLayout from '$common/OnboardingLayout';
-import useAppContext from '$common/AppContext';
-import { CredentialScopes, Scopes, scopesToString } from '$helpers/credentials';
+import { CredentialScopes, type Scopes, scopesToString } from '$helpers/credentials';
 import { usePageTitle } from '$hooks';
 import { Button } from '$ui/button';
 import { Checkbox } from '$ui/checkbox';

@@ -1,7 +1,6 @@
-import type { ParsedLocation } from '@tanstack/react-router';
-import { redirect } from '@tanstack/react-router';
+import { redirect, type ParsedLocation } from '@tanstack/react-router';
 
-import type { SessionData } from '../api/account';
+import { type SessionData } from '../api/account';
 
 export const ONBOARDING_STEPS = {
   SIGN_IN: '/sign-in',

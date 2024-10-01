@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import {
-  ColumnDef,
+  type ColumnDef,
   flexRender,
   getCoreRowModel,
   useReactTable,

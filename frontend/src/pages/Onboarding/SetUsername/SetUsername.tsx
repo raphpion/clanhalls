@@ -1,19 +1,20 @@
+import { useEffect, useMemo } from 'react';
+
 import { useMutation } from '@tanstack/react-query';
 import { useNavigate } from '@tanstack/react-router';
 import { Field, Form, FormikProvider, useFormik } from 'formik';
-import { useEffect, useMemo } from 'react';
+import { CheckIcon, XIcon } from 'lucide-react';
 import * as yup from 'yup';
 
 import { setUsername, signOut, verifyUsernameAvailability } from '$api/account';
 import useAppContext from '$common/AppContext';
 import Loading from '$common/Loading';
 import OnboardingLayout from '$common/OnboardingLayout';
-import { Input } from '$ui/input';
-import { Button } from '$ui/button';
 import { usePageTitle } from '$hooks';
-import { Label } from '$ui/label';
-import { CheckIcon, XIcon } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '$ui/avatar';
+import { Button } from '$ui/button';
+import { Input } from '$ui/input';
+import { Label } from '$ui/label';
 
 export type SetUsernameFormValues = {
   username: string;
@@ -77,8 +78,6 @@ function SetUsername() {
     })();
   }, [formik.values.username]);
 
-  if (!user) return null;
-
   const usernameHelpLabel = useMemo(() => {
     if (formik.touched.username && formik.errors.username)
       return (
@@ -119,6 +118,8 @@ function SetUsername() {
     formik.errors.username,
     verifyUsernameAvailabilityMutation.isPending,
   ]);
+
+  if (!user) return null;
 
   return (
     <OnboardingLayout title="Set username">

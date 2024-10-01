@@ -1,6 +1,13 @@
-import { getCredentials, type CredentialsData } from '$api/account';
+import {
+  createContext,
+  type PropsWithChildren,
+  useContext,
+  useMemo,
+} from 'react';
+
 import { useQuery } from '@tanstack/react-query';
-import { createContext, PropsWithChildren, useContext, useMemo } from 'react';
+
+import { getCredentials, type CredentialsData } from '$api/account';
 
 type CredentialsContextType = {
   loading: boolean;

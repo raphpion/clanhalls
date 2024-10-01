@@ -1,8 +1,14 @@
+import { Fragment, useState } from 'react';
+
 import { useMutation } from '@tanstack/react-query';
 import { useNavigate } from '@tanstack/react-router';
-import Settings from '$common/Settings';
-import useAppContext from '$common/AppContext';
+import { LogOutIcon, SettingsIcon } from 'lucide-react';
+
 import { signOut } from '$api/account';
+import useAppContext from '$common/AppContext';
+import Settings from '$common/Settings';
+import { Avatar, AvatarImage, AvatarFallback } from '$ui/avatar';
+import { Button } from '$ui/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -12,10 +18,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '$ui/dropdown-menu';
-import { Avatar, AvatarImage, AvatarFallback } from '$ui/avatar';
-import { Button } from '$ui/button';
-import { LogOutIcon, SettingsIcon } from 'lucide-react';
-import { Fragment, useState } from 'react';
+
 
 function UserMenu() {
   const { user } = useAppContext();

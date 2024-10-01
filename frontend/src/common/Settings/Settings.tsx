@@ -1,9 +1,11 @@
-import { Sheet, SheetContent, SheetHeader, SheetTitle } from '$ui/sheet';
-import { KeyRoundIcon, RouterIcon } from 'lucide-react';
 import { useState } from 'react';
+
+import { KeyRoundIcon } from 'lucide-react';
+
 import { Button } from '$ui/button';
+import { Sheet, SheetContent, SheetHeader, SheetTitle } from '$ui/sheet';
 import { cn } from '$ui/utils';
-import Sessions from './Sessions';
+
 import Credentials from './Credentials';
 
 type Props = {

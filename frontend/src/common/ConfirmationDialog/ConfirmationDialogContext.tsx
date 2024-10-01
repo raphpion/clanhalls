@@ -1,11 +1,13 @@
 import {
   createContext,
-  PropsWithChildren,
   useCallback,
   useContext,
   useState,
+  type PropsWithChildren,
 } from 'react';
-import ConfirmationDialog, { Props } from './ConfirmationDialog';
+
+import type { Props } from './ConfirmationDialog';
+import ConfirmationDialog from './ConfirmationDialog';
 
 type AskConfirmationArgs = Omit<PropsState, 'open'>;
 

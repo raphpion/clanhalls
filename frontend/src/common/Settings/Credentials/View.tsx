@@ -1,8 +1,8 @@
 import { Fragment } from 'react';
 
-import Loading from '../../Loading';
 import Credential from './Credential';
 import useCredentialsContext from './CredentialsContext';
+import Loading from '../../Loading';
 
 function View() {
   const { loading, credentials } = useCredentialsContext();
