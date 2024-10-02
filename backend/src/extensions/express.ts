@@ -8,6 +8,7 @@ import type { Session as ExpressSession } from 'express-session';
 import type SessionEntity from '../sessions/session';
 import type Credentials from '../users/credentials/credentials';
 import type User from '../users/user';
+
 export interface Session extends ExpressSession {
   uuid?: string;
 }

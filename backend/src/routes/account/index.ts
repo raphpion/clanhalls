@@ -2,6 +2,7 @@ import express from 'express';
 
 import clanRoutes from './clan';
 import credentialsRoutes from './credentials';
+import sessionsRoutes from './sessions';
 import setUsername from './set-username';
 import signInWithGoogle from './sign-in-with-google';
 import signOut from './sign-out';
@@ -26,6 +27,7 @@ accountRoutes.use(
 
 accountRoutes.use('/clan', clanRoutes);
 accountRoutes.use('/credentials', credentialsRoutes);
+accountRoutes.use('/sessions', sessionsRoutes);
 
 async function getSession(req: Request, res: Response, next: NextFunction) {
   try {
