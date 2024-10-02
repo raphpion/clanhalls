@@ -26,7 +26,11 @@ function View() {
   return (
     <Fragment>
       {createdCredential && (
-        <Alert variant="success" className="mb-4">
+        <Alert
+          variant="success"
+          className="mb-4"
+          onDismiss={dismissCreatedCredential}
+        >
           <AlertTitle className="mb-4 flex items-center">
             <CheckCircle2 className="h4 mr-2 inline-flex w-4" />
             Credential created successfully!
