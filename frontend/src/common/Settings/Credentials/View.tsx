@@ -26,12 +26,12 @@ function View() {
   return (
     <Fragment>
       {createdCredential && (
-        <Alert className="mb-4">
-          <CheckCircle2 className="h4 w-4" />
-          <AlertTitle className="mb-4">
+        <Alert variant="success" className="mb-4">
+          <AlertTitle className="mb-4 flex items-center">
+            <CheckCircle2 className="h4 mr-2 inline-flex w-4" />
             Credential created successfully!
           </AlertTitle>
-          <AlertDescription>
+          <AlertDescription className="text-foreground">
             <CopyCredentials
               clientId={createdCredential.clientId}
               clientSecret={createdCredential.clientSecret}
