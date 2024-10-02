@@ -9,7 +9,6 @@ import type {
 } from '../../../extensions/express';
 import { requireAuth } from '../../../middleware/authMiddleware';
 
-
 const sessionsRoutes = express.Router();
 
 sessionsRoutes.use('/:uuid', sessionsUuidRoutes);
@@ -32,9 +31,14 @@ async function getActiveSessions(
         uuid: s.uuid,
         method: s.method,
         ipAddress: s.ipAddress,
-        userAgent: s.userAgent,
+        deviceType: s.deviceType,
+        os: s.os,
+        browser: s.browser,
+        location: s.location,
+        lastSeenAt: s.lastSeenAt,
         isCurrent: s.sessionID === req.sessionID,
-      }));
+      }))
+      .sort((s) => (s.isCurrent ? -1 : 1));
 
     res.json(sessions);
   } catch (error) {

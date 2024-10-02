@@ -2,6 +2,7 @@ import Joi from 'joi';
 
 import AppError, { AppErrorCodes } from '../extensions/errors';
 import type { NextFunction, Request, Response } from '../extensions/express';
+import UpdateSessionLastSeenAtCommand from '../sessions/commands/updateSessionLastSeenAtCommand';
 import SessionByUuidQuery from '../sessions/queries/sessionByUuidQuery';
 import type { Scopes } from '../users/credentials/credentials';
 import CredentialsByClientIdQuery from '../users/credentials/queries/credentialsByClientIdQuery';
@@ -38,6 +39,8 @@ export function requireAuth(relations: string[] = []) {
       req.sessionEntity = session;
       req.userEntity = await session.user;
 
+      new UpdateSessionLastSeenAtCommand({ uuid: session.uuid }).execute();
+
       next();
     } catch (error) {
       next(error);
@@ -66,6 +69,8 @@ export function retrieveAuth(relations: string[] = []) {
       req.sessionEntity = session;
       req.userEntity = await session.user;
 
+      new UpdateSessionLastSeenAtCommand({ uuid: session.uuid }).execute();
+
       next();
     } catch (error) {
       next(error);
@@ -89,9 +94,8 @@ export function requireCredentials(scope: Scopes[], relations: string[] = []) {
         return res.sendStatus(401);
       }
 
-      const credentialsValid = await credentials.validateClientSecret(
-        clientSecret
-      );
+      const credentialsValid =
+        await credentials.validateClientSecret(clientSecret);
       if (!credentialsValid) {
         return res.sendStatus(401);
       }

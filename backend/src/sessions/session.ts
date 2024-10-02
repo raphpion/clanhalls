@@ -1,5 +1,6 @@
 import {
   Column,
+  CreateDateColumn,
   Entity,
   Generated,
   JoinColumn,
@@ -30,8 +31,29 @@ class Session {
   @Column({ length: 255 })
   userAgent: string;
 
+  @Column({ length: 255 })
+  deviceType: string;
+
+  @Column({ length: 255 })
+  os: string;
+
+  @Column({ length: 255 })
+  browser: string;
+
+  @Column({ length: 255 })
+  location: string;
+
+  @CreateDateColumn()
+  readonly createdAt: Date;
+
   @Column({ nullable: true })
   signedOutAt: Date | null = null;
+
+  @Column()
+  expiresAt: Date;
+
+  @Column()
+  lastSeenAt: Date;
 
   @ManyToOne(() => User, (user: User) => user.sessions)
   user: Promise<User>;
@@ -40,7 +62,10 @@ class Session {
   userId: number;
 
   get isSignedOut() {
-    return this.signedOutAt !== null;
+    return (
+      this.signedOutAt !== null ||
+      (this.expiresAt !== null && this.expiresAt < new Date())
+    );
   }
 
   signOut() {
