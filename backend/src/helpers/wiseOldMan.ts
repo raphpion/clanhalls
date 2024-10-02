@@ -13,9 +13,6 @@ export async function withSafeWiseOldMan<T>(
       if (error.name === 'RateLimitError') {
         // Retry in 60 seconds if the request fails because of rate limiting
         // See https://docs.wiseoldman.net/#rate-limits--api-keys
-        console.log(
-          'WiseOldMan has rate limited us, retrying in 60 seconds...',
-        );
         await new Promise((r) => setTimeout(r, 60000));
         continue;
       }
