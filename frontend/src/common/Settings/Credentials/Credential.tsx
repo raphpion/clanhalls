@@ -57,6 +57,7 @@ function Credential({ credential, isFirst, isLast }: Props) {
         className={cn('rounded-none p-4', {
           'rounded-t-lg': isFirst,
           'rounded-b-lg': isLast,
+          'border-t-0': !isFirst,
         })}
       >
         <div className="flex flex-row items-center space-x-4">

@@ -76,6 +76,13 @@ export type ClanData = {
   isAdmin: boolean;
 } | null;
 
+export type ActiveSessionData = {
+  uuid: string;
+  ipAddress: string;
+  userAgent: string;
+  isCurrent: boolean;
+};
+
 export type SetUsernamePayload = {
   username: string;
 };
@@ -135,6 +142,15 @@ export async function getCredentials(): Promise<CredentialsData[]> {
 export async function getSession(): Promise<SessionData> {
   const response = await get<SessionData>('/account');
   return response.data;
+}
+
+export async function getActiveSessions(): Promise<ActiveSessionData[]> {
+  const response = await get<ActiveSessionData[]>('/account/sessions');
+  return response.data;
+}
+
+export async function revokeSession(uuid: string): Promise<void> {
+  await _delete(`/account/sessions/${uuid}`);
 }
 
 export async function signInWithGoogle(token: string): Promise<void> {

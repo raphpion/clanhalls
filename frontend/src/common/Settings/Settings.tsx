@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import { KeyRoundIcon } from 'lucide-react';
+import { KeyRoundIcon, RouterIcon } from 'lucide-react';
 
 import { Button } from '$ui/button';
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from '$ui/sheet';
@@ -8,6 +8,8 @@ import { cn } from '$ui/utils';
 
 import Credentials from './Credentials';
 import { CredentialsContextProvider } from './Credentials/CredentialsContext';
+import Sessions from './Sessions';
+import { SessionsContextProvider } from './Sessions/SessionsContext';
 
 type Props = {
   open: boolean;
@@ -22,12 +24,13 @@ const TABS = [
     component: Credentials,
     provider: CredentialsContextProvider,
   },
-  // {
-  //   key: 'sessions',
-  //   label: 'Sessions',
-  //   icon: RouterIcon,
-  //   component: Sessions,
-  // },
+  {
+    key: 'sessions',
+    label: 'Sessions',
+    icon: RouterIcon,
+    component: Sessions,
+    provider: SessionsContextProvider,
+  },
 ] as const;
 
 type Tab = (typeof TABS)[number];

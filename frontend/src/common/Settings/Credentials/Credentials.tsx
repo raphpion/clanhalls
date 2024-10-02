@@ -2,13 +2,11 @@ import { Fragment } from 'react/jsx-runtime';
 
 import { Button } from '$ui/button';
 
-import useCredentialsContext, {
-  CredentialsContextProvider,
-} from './CredentialsContext';
+import useCredentialsContext from './CredentialsContext';
 import View from './View';
 import Header from '../common/Header';
 
-function CredentialsContent() {
+function Credentials() {
   const { openCreateSlideOut } = useCredentialsContext();
 
   return (
@@ -21,14 +19,6 @@ function CredentialsContent() {
       </Header>
       <View />
     </Fragment>
-  );
-}
-
-function Credentials() {
-  return (
-    <CredentialsContextProvider>
-      <CredentialsContent />
-    </CredentialsContextProvider>
   );
 }
 
