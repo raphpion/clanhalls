@@ -1,4 +1,11 @@
-import { LaptopMinimalIcon } from 'lucide-react';
+import {
+  Computer,
+  Gamepad2,
+  Smartphone,
+  Tablet,
+  Tv,
+  Watch,
+} from 'lucide-react';
 
 import { Button } from '$ui/button';
 import { Card } from '$ui/card';
@@ -40,6 +47,23 @@ function Session({ session, isFirst, isLast }: Props) {
     refetch();
   };
 
+  const Icon = (() => {
+    switch (session.deviceType) {
+      case 'console':
+        return Gamepad2;
+      case 'mobile':
+        return Smartphone;
+      case 'tablet':
+        return Tablet;
+      case 'smarttv':
+        return Tv;
+      case 'wearable':
+        return Watch;
+      default:
+        return Computer;
+    }
+  })();
+
   return (
     <Card
       className={cn('rounded-none p-4', {
@@ -49,15 +73,19 @@ function Session({ session, isFirst, isLast }: Props) {
       })}
     >
       <div className="flex flex-row items-center space-x-4">
-        <LaptopMinimalIcon size={32} absoluteStrokeWidth />
+        <Icon size={32} absoluteStrokeWidth />
         <div className="flex-1">
-          <p className="text-lg font-semibold">{session.ipAddress}</p>
-          <p>{session.userAgent}</p>
-          {session.isCurrent && (
-            <p className="text-sm text-muted-foreground">
-              Your current session
-            </p>
-          )}
+          <p className="text-lg font-semibold">
+            {session.location}, {session.ipAddress}
+          </p>
+          <p>
+            {session.browser} on {session.os}
+          </p>
+          <p className="text-sm text-muted-foreground">
+            {session.isCurrent
+              ? 'Your current session'
+              : `Last seen at ${new Date(session.lastSeenAt).toLocaleString()}`}
+          </p>
         </div>
         <div>
           <Button variant="outline" onClick={handleClickRevoke}>

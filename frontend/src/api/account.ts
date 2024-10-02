@@ -78,8 +78,13 @@ export type ClanData = {
 
 export type ActiveSessionData = {
   uuid: string;
+  method: string;
   ipAddress: string;
-  userAgent: string;
+  deviceType: string;
+  os: string;
+  browser: string;
+  location: string;
+  lastSeenAt: string;
   isCurrent: boolean;
 };
 
