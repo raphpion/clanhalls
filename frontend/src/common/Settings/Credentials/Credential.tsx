@@ -1,9 +1,8 @@
 import { Fragment } from 'react';
 
-import { useMutation } from '@tanstack/react-query';
 import { EditIcon, EllipsisIcon, KeyRoundIcon, Trash2Icon } from 'lucide-react';
 
-import { deleteCredentials, type CredentialsData } from '$api/account';
+import { type CredentialsData } from '$api/account';
 import { Button } from '$ui/button';
 import { Card } from '$ui/card';
 import {
@@ -25,13 +24,8 @@ type Props = {
 
 function Credential({ credential, isFirst, isLast }: Props) {
   const { askConfirmation } = useConfirmationDialog();
-  const { openEditSlideOut, refetch } = useCredentialsContext();
-
-  // TODO: move all mutations to context
-  const deleteCredentialMutation = useMutation({
-    mutationKey: ['delete-credential'],
-    mutationFn: deleteCredentials,
-  });
+  const { deleteCredentials, openEditSlideOut, refetch } =
+    useCredentialsContext();
 
   const handleClickDelete = async () => {
     const confirmed = await askConfirmation({
@@ -44,7 +38,7 @@ function Credential({ credential, isFirst, isLast }: Props) {
 
     if (!confirmed) return;
 
-    await deleteCredentialMutation.mutateAsync(credential.clientId);
+    await deleteCredentials(credential.clientId);
     refetch();
   };
 

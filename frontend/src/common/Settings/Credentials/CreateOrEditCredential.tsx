@@ -1,14 +1,8 @@
 import { Fragment, useEffect, useMemo } from 'react';
 
-import { useMutation } from '@tanstack/react-query';
 import { Field, Form, FormikContext, useFormik } from 'formik';
 
-import {
-  createCredentials,
-  type CreateCredentialsData,
-  updateCredentials,
-  type CredentialsData,
-} from '$api/account';
+import { type CreateCredentialsData, type CredentialsData } from '$api/account';
 import {
   emptyScopes,
   type Scopes,
@@ -27,6 +21,7 @@ import {
   SheetTitle,
 } from '$ui/sheet';
 
+import useCredentialsContext from './CredentialsContext';
 import SelectScope from '../../Credentials/SelectScope';
 import Loading from '../../Loading';
 
@@ -49,15 +44,8 @@ function CreateOrEditCredential({
   onEditSuccess,
   ...props
 }: Props) {
-  const createCredentialsMutation = useMutation({
-    mutationKey: ['create-credentials'],
-    mutationFn: createCredentials,
-  });
-
-  const updateCredentialsMutation = useMutation({
-    mutationKey: ['update-credentials'],
-    mutationFn: updateCredentials,
-  });
+  const { createPending, editPending, createCredentials, editCredentials } =
+    useCredentialsContext();
 
   const initialValues = useMemo(
     () => ({
@@ -75,7 +63,7 @@ function CreateOrEditCredential({
       const scope = scopesToString(values.scope);
 
       if (editingCredential) {
-        await updateCredentialsMutation.mutateAsync({
+        await editCredentials({
           clientId: editingCredential.clientId,
           name: values.name,
           scope,
@@ -83,7 +71,7 @@ function CreateOrEditCredential({
 
         onEditSuccess?.(values.name, scope);
       } else {
-        const createdCredential = await createCredentialsMutation.mutateAsync({
+        const createdCredential = await createCredentials({
           name: values.name,
           scope,
         });
@@ -101,11 +89,8 @@ function CreateOrEditCredential({
 
   const handleClose = () => props.onOpenChange(false);
 
-  const loading =
-    createCredentialsMutation.isPending || updateCredentialsMutation.isPending;
-
   const submitContent = (() => {
-    if (loading) {
+    if (createPending || editPending) {
       return (
         <Fragment>
           <Loading size={20} className="mr-1 inline" />

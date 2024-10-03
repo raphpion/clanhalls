@@ -56,8 +56,12 @@ export type UpdateCredentialsPayload = {
 };
 
 export type CreateCredentialsData = {
+  name: string;
+  scope: string;
   clientId: string;
   clientSecret: string;
+  createdAt: string;
+  lastUsedAt: string | null;
 };
 
 export type CredentialsData = {

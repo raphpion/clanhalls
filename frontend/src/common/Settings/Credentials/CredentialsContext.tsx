@@ -7,12 +7,17 @@ import {
   useState,
 } from 'react';
 
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 
 import {
   type CreateCredentialsData,
   getCredentials,
   type CredentialsData,
+  createCredentials,
+  updateCredentials,
+  type CreateCredentialsPayload,
+  type UpdateCredentialsPayload,
+  deleteCredentials,
 } from '$api/account';
 
 import CreateOrEditCredential, {
@@ -21,17 +26,30 @@ import CreateOrEditCredential, {
 
 type CredentialsContextType = {
   loading: boolean;
+  editPending: boolean;
+  deletePending: boolean;
+  createPending: boolean;
   credentials: CredentialsData[] | undefined;
   createdCredential: CreateCredentialsData | undefined;
   createOrEditSlideOutProps: CreateOrEditCrendentialProps;
   dismissCreatedCredential: () => void;
   openCreateSlideOut: () => void;
   openEditSlideOut: (credential: CredentialsData) => void;
+  createCredentials: (
+    payload: CreateCredentialsPayload,
+  ) => Promise<CreateCredentialsData>;
+  deleteCredentials: (clientId: string) => Promise<void>;
+  editCredentials: (
+    payload: UpdateCredentialsPayload & { clientId: string },
+  ) => Promise<void>;
   refetch: () => Promise<unknown>;
 };
 
 const CredentialsContext = createContext<CredentialsContextType>({
   loading: false,
+  editPending: false,
+  createPending: false,
+  deletePending: false,
   credentials: undefined,
   createdCredential: undefined,
   createOrEditSlideOutProps: {
@@ -43,6 +61,16 @@ const CredentialsContext = createContext<CredentialsContextType>({
   },
   dismissCreatedCredential: () => {},
   openCreateSlideOut: () => {},
+  createCredentials: async () => ({
+    name: '',
+    scope: '',
+    clientId: '',
+    clientSecret: '',
+    createdAt: '',
+    lastUsedAt: null,
+  }),
+  deleteCredentials: async () => {},
+  editCredentials: async () => {},
   openEditSlideOut: () => {},
   refetch: async () => {},
 });
@@ -59,6 +87,21 @@ export function CredentialsContextProvider({ children }: PropsWithChildren) {
   const credentialsQuery = useQuery({
     queryKey: ['credentials'],
     queryFn: getCredentials,
+  });
+
+  const createCredentialsMutation = useMutation({
+    mutationKey: ['create-credentials'],
+    mutationFn: createCredentials,
+  });
+
+  const updateCredentialsMutation = useMutation({
+    mutationKey: ['update-credentials'],
+    mutationFn: updateCredentials,
+  });
+
+  const deleteCredentialMutation = useMutation({
+    mutationKey: ['delete-credential'],
+    mutationFn: deleteCredentials,
   });
 
   const handleCloseCreateOrEditSlideOut = useCallback((_: boolean) => {
@@ -78,7 +121,14 @@ export function CredentialsContextProvider({ children }: PropsWithChildren) {
 
   const handleCreateSuccess = useCallback(
     (createdCredential: CreateCredentialsData) => {
-      // TODO: optimistic update
+      credentialsQuery.data?.push({
+        name: createdCredential.name,
+        scope: createdCredential.scope,
+        clientId: createdCredential.clientId,
+        createdAt: createdCredential.createdAt,
+        lastUsedAt: null,
+      });
+
       setCreatedCredential(createdCredential);
       setCreateOrEditSlideOutOpen(false);
       setTimeout(() => setEditingCredential(undefined), 300);
@@ -88,18 +138,29 @@ export function CredentialsContextProvider({ children }: PropsWithChildren) {
   );
 
   const handleEditSuccess = useCallback(
-    (_: string, __: string) => {
-      // TODO: optimistic update
+    (name: string, scope: string) => {
+      const updatedCredential = credentialsQuery.data?.find(
+        (c) => c.clientId === editingCredential?.clientId,
+      );
+
+      if (updatedCredential) {
+        updatedCredential.name = name;
+        updatedCredential.scope = scope;
+      }
+
       setCreateOrEditSlideOutOpen(false);
       setTimeout(() => setEditingCredential(undefined), 300);
       credentialsQuery.refetch();
     },
-    [credentialsQuery],
+    [credentialsQuery, editingCredential?.clientId],
   );
 
   const value = useMemo(
     () => ({
       loading: credentialsQuery.isLoading,
+      editPending: updateCredentialsMutation.isPending,
+      createPending: createCredentialsMutation.isPending,
+      deletePending: deleteCredentialMutation.isPending,
       credentials: credentialsQuery.data,
       createdCredential,
       createOrEditSlideOutProps: {
@@ -112,20 +173,29 @@ export function CredentialsContextProvider({ children }: PropsWithChildren) {
       dismissCreatedCredential: () => setCreatedCredential(undefined),
       openCreateSlideOut: handleOpenCreateSlideOut,
       openEditSlideOut: handleOpenEditSlideOut,
+      createCredentials: createCredentialsMutation.mutateAsync,
+      deleteCredentials: deleteCredentialMutation.mutateAsync,
+      editCredentials: updateCredentialsMutation.mutateAsync,
       refetch: credentialsQuery.refetch,
     }),
     [
+      createCredentialsMutation.isPending,
+      createCredentialsMutation.mutateAsync,
       createOrEditSlideOutOpen,
       createdCredential,
       credentialsQuery.data,
       credentialsQuery.isLoading,
       credentialsQuery.refetch,
+      deleteCredentialMutation.isPending,
+      deleteCredentialMutation.mutateAsync,
       editingCredential,
       handleCloseCreateOrEditSlideOut,
       handleCreateSuccess,
       handleEditSuccess,
       handleOpenCreateSlideOut,
       handleOpenEditSlideOut,
+      updateCredentialsMutation.isPending,
+      updateCredentialsMutation.mutateAsync,
     ],
   );
 

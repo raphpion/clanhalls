@@ -75,7 +75,16 @@ async function createCredentials(
       scope,
     }).execute();
 
-    res.json({ clientId: credentials.clientId, clientSecret });
+    const parsedCredentials = {
+      name: credentials.name,
+      scope: credentials.scope,
+      clientId: credentials.clientId,
+      clientSecret: clientSecret,
+      createdAt: credentials.createdAt,
+      lastUsedAt: credentials.lastUsedAt,
+    };
+
+    res.json(parsedCredentials);
   } catch (error) {
     next(error);
   }
