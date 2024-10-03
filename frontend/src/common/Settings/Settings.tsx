@@ -7,9 +7,9 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle } from '$ui/sheet';
 import { cn } from '$ui/utils';
 
 import Credentials from './Credentials';
-import { CredentialsContextProvider } from './Credentials/CredentialsContext';
+import CredentialsProvider from './Credentials/Provider';
 import Sessions from './Sessions';
-import { SessionsContextProvider } from './Sessions/SessionsContext';
+import SessionsProvider from './Sessions/Provider';
 
 type Props = {
   open: boolean;
@@ -22,14 +22,14 @@ const TABS = [
     label: 'Credentials',
     icon: KeyRoundIcon,
     component: Credentials,
-    provider: CredentialsContextProvider,
+    provider: CredentialsProvider,
   },
   {
     key: 'sessions',
     label: 'Sessions',
     icon: RouterIcon,
     component: Sessions,
-    provider: SessionsContextProvider,
+    provider: SessionsProvider,
   },
 ] as const;
 

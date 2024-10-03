@@ -21,7 +21,7 @@ import {
   SheetTitle,
 } from '$ui/sheet';
 
-import useCredentialsContext from './CredentialsContext';
+import useCredentialsContext from './context';
 import SelectScope from '../../Credentials/SelectScope';
 import Loading from '../../Loading';
 
@@ -80,6 +80,7 @@ function CreateOrEditCredential({
       }
 
       props.onOpenChange(false);
+      formik.resetForm({ values: initialValues });
     },
   });
 

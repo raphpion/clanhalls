@@ -13,6 +13,7 @@ import OnboardingLayout from '$common/OnboardingLayout';
 import { usePageTitle } from '$hooks';
 import { Avatar, AvatarFallback, AvatarImage } from '$ui/avatar';
 import { Button } from '$ui/button';
+import { useToast } from '$ui/hooks/use-toast';
 import { Input } from '$ui/input';
 import { Label } from '$ui/label';
 
@@ -24,14 +25,22 @@ export type SetUsernameFormValues = {
 function SetUsername() {
   const { user } = useAppContext();
   const navigate = useNavigate();
+  const { toast, genericErrorToast } = useToast();
   usePageTitle('Set Username');
 
   const setUsernameMutation = useMutation({
     mutationKey: ['set-username'],
     mutationFn: setUsername,
+    onMutate: () => {
+      toast({
+        title: 'Setting username...',
+        variant: 'loading',
+      });
+    },
     onSuccess: () => {
       navigate({ to: '/onboarding/create-clan' });
     },
+    onError: genericErrorToast,
   });
 
   const signOutMutation = useMutation({

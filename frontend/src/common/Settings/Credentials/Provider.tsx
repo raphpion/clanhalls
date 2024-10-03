@@ -1,11 +1,4 @@
-import {
-  createContext,
-  type PropsWithChildren,
-  useCallback,
-  useContext,
-  useMemo,
-  useState,
-} from 'react';
+import { type PropsWithChildren, useCallback, useMemo, useState } from 'react';
 
 import { useMutation, useQuery } from '@tanstack/react-query';
 
@@ -15,67 +8,16 @@ import {
   type CredentialsData,
   createCredentials,
   updateCredentials,
-  type CreateCredentialsPayload,
-  type UpdateCredentialsPayload,
   deleteCredentials,
 } from '$api/account';
+import { useToast } from '$ui/hooks/use-toast';
 
-import CreateOrEditCredential, {
-  type Props as CreateOrEditCrendentialProps,
-} from './CreateOrEditCredential';
+import { CredentialsContext } from './context';
+import CreateOrEditCredential from './CreateOrEditCredential';
 
-type CredentialsContextType = {
-  loading: boolean;
-  editPending: boolean;
-  deletePending: boolean;
-  createPending: boolean;
-  credentials: CredentialsData[] | undefined;
-  createdCredential: CreateCredentialsData | undefined;
-  createOrEditSlideOutProps: CreateOrEditCrendentialProps;
-  dismissCreatedCredential: () => void;
-  openCreateSlideOut: () => void;
-  openEditSlideOut: (credential: CredentialsData) => void;
-  createCredentials: (
-    payload: CreateCredentialsPayload,
-  ) => Promise<CreateCredentialsData>;
-  deleteCredentials: (clientId: string) => Promise<void>;
-  editCredentials: (
-    payload: UpdateCredentialsPayload & { clientId: string },
-  ) => Promise<void>;
-  refetch: () => Promise<unknown>;
-};
+function Provider({ children }: PropsWithChildren) {
+  const { toast, genericErrorToast } = useToast();
 
-const CredentialsContext = createContext<CredentialsContextType>({
-  loading: false,
-  editPending: false,
-  createPending: false,
-  deletePending: false,
-  credentials: undefined,
-  createdCredential: undefined,
-  createOrEditSlideOutProps: {
-    open: false,
-    editingCredential: undefined,
-    onOpenChange: () => {},
-    onCreateSuccess: async () => {},
-    onEditSuccess: async () => {},
-  },
-  dismissCreatedCredential: () => {},
-  openCreateSlideOut: () => {},
-  createCredentials: async () => ({
-    name: '',
-    scope: '',
-    clientId: '',
-    clientSecret: '',
-    createdAt: '',
-    lastUsedAt: null,
-  }),
-  deleteCredentials: async () => {},
-  editCredentials: async () => {},
-  openEditSlideOut: () => {},
-  refetch: async () => {},
-});
-
-export function CredentialsContextProvider({ children }: PropsWithChildren) {
   const [createOrEditSlideOutOpen, setCreateOrEditSlideOutOpen] =
     useState(false);
   const [editingCredential, setEditingCredential] = useState<
@@ -92,16 +34,67 @@ export function CredentialsContextProvider({ children }: PropsWithChildren) {
   const createCredentialsMutation = useMutation({
     mutationKey: ['create-credentials'],
     mutationFn: createCredentials,
+    onMutate: () => {
+      toast({
+        title: 'Creating credential...',
+        variant: 'loading',
+      });
+    },
+    onSuccess: () => {
+      toast({
+        title: 'Credential created successfully!',
+        variant: 'success',
+      });
+    },
+    onError: genericErrorToast,
   });
 
   const updateCredentialsMutation = useMutation({
     mutationKey: ['update-credentials'],
     mutationFn: updateCredentials,
+    onMutate: () => {
+      toast({
+        title: 'Updating credential...',
+        variant: 'loading',
+      });
+    },
+    onSuccess: () => {
+      toast({
+        title: 'Credential updated successfully!',
+        variant: 'success',
+      });
+    },
+    onError: () => {
+      toast({
+        title: 'An unexpected error occurred',
+        description: 'Please try again later.',
+        variant: 'destructive',
+      });
+    },
   });
 
   const deleteCredentialMutation = useMutation({
     mutationKey: ['delete-credential'],
     mutationFn: deleteCredentials,
+    onMutate: () => {
+      toast({
+        title: 'Deleting credential...',
+        variant: 'loading',
+      });
+    },
+    onSuccess: () => {
+      toast({
+        title: 'Credential deleted successfully!',
+        variant: 'success',
+      });
+    },
+    onError: () => {
+      toast({
+        title: 'An unexpected error occurred',
+        description: 'Please try again later.',
+        variant: 'destructive',
+      });
+    },
   });
 
   const handleCloseCreateOrEditSlideOut = useCallback((_: boolean) => {
@@ -207,16 +200,4 @@ export function CredentialsContextProvider({ children }: PropsWithChildren) {
   );
 }
 
-function useCredentialsContext() {
-  const context = useContext(CredentialsContext);
-
-  if (context === undefined) {
-    throw new Error(
-      'useCredentials must be used within a CredentialsContextProvider',
-    );
-  }
-
-  return context;
-}
-
-export default useCredentialsContext;
+export default Provider;

@@ -11,7 +11,7 @@ import { Button } from '$ui/button';
 import { Card } from '$ui/card';
 import { cn } from '$ui/utils';
 
-import useSessionsContext from './SessionsContext';
+import useSessionsContext from './context';
 import { type ActiveSessionData } from '../../../api/account';
 import useConfirmationDialog from '../../ConfirmationDialog/ConfirmationDialogContext';
 

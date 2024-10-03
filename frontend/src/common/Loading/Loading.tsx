@@ -1,5 +1,6 @@
+import { type LucideProps, Loader2 } from 'lucide-react';
+
 import { cn } from '$ui/utils';
-import { LucideProps, Loader2 } from 'lucide-react';
 
 type Props = Pick<LucideProps, 'size' | 'className'>;
 

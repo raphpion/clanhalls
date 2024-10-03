@@ -2,7 +2,7 @@ import { Fragment } from 'react/jsx-runtime';
 
 import { Button } from '$ui/button';
 
-import useCredentialsContext from './CredentialsContext';
+import useCredentialsContext from './context';
 import View from './View';
 import Header from '../common/Header';
 

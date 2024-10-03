@@ -1,7 +1,7 @@
 import { Fragment } from 'react';
 
+import useSessionsContext from './context';
 import Session from './Session';
-import useSessionsContext from './SessionsContext';
 import Loading from '../../Loading';
 
 function View() {

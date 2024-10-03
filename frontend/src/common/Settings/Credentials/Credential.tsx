@@ -13,7 +13,7 @@ import {
 } from '$ui/dropdown-menu';
 import { cn } from '$ui/utils';
 
-import useCredentialsContext from './CredentialsContext';
+import useCredentialsContext from './context';
 import useConfirmationDialog from '../../ConfirmationDialog/ConfirmationDialogContext';
 
 type Props = {

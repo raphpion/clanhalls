@@ -4,8 +4,8 @@ import { CheckCircle2 } from 'lucide-react';
 
 import { Alert, AlertDescription, AlertTitle } from '$ui/alert';
 
+import useCredentialsContext from './context';
 import Credential from './Credential';
-import useCredentialsContext from './CredentialsContext';
 import CopyCredentials from '../../Credentials/CopyCredentials';
 import Loading from '../../Loading';
 
