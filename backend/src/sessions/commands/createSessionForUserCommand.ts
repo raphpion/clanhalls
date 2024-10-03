@@ -41,8 +41,6 @@ class CreateSessionForUserCommand extends Command<Params, Result> {
     session.lastSeenAt = new Date();
     session.expiresAt = new Date(Date.now() + 1000 * 60 * 60 * 24 * 14); // 14 days
 
-    console.log(session);
-
     return repository.save(session);
   }
 
