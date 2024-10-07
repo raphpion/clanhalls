@@ -5,6 +5,7 @@ import { type ActiveSessionData } from '$api/account';
 export type SessionsContextType = {
   loading: boolean;
   sessions: ActiveSessionData[] | undefined;
+  revokeAllSessions: () => Promise<void>;
   revokeSession: (uuid: string) => Promise<void>;
   refetch: () => Promise<unknown>;
 };
@@ -12,6 +13,7 @@ export type SessionsContextType = {
 export const SessionsContext = createContext<SessionsContextType>({
   loading: false,
   sessions: undefined,
+  revokeAllSessions: async () => {},
   revokeSession: async () => {},
   refetch: async () => {},
 });

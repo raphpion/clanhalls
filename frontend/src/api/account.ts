@@ -162,6 +162,10 @@ export async function revokeSession(uuid: string): Promise<void> {
   await _delete(`/account/sessions/${uuid}`);
 }
 
+export async function revokeAllSessions(): Promise<void> {
+  await _delete('/account/sessions');
+}
+
 export async function signInWithGoogle(token: string): Promise<void> {
   await post<{ token: string }>('/account/sign-in-with-google', { token });
 }

@@ -32,7 +32,7 @@ function Credential({ credential, isFirst, isLast }: Props) {
       title: `Delete credential '${credential.name}'?`,
       description:
         'Are you sure you want to delete this credential? This action cannot be undone.',
-      confirmLabel: 'Delete',
+      confirmLabel: 'Yes, delete credential',
       confirmVariant: 'destructive',
     });
 

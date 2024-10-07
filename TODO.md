@@ -9,17 +9,17 @@
 
 ## MVP 🚀
 
-- 🟨 Settings slide-out menu
-  - 🟨 Accessible from user nav in navbar
-  - 🟨 Two navigation tabs :
-    - 🟨 Credentials
-      - 🟨 View my credentials
-      - 🟥 Create new credentials
-      - 🟥 Update name and scope of existing credentials
-    - 🟥 Sessions
-      - 🟥 View my active sessions
-      - 🟥 Revoke a session
-      - 🟥 Revoke all sessions
+- 🟩 Settings slide-out menu
+  - 🟩 Accessible from user nav in navbar
+  - 🟩 Two navigation tabs :
+    - 🟩 Credentials
+      - 🟩 View my credentials
+      - 🟩 Create new credentials
+      - 🟩 Update name and scope of existing credentials
+    - 🟩 Sessions
+      - 🟩 View my active sessions
+      - 🟩 Revoke a session
+      - 🟩 Revoke all sessions
 - 🟥 Clan page
   - 🟥 Show clan members
 

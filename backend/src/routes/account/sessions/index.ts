@@ -8,12 +8,14 @@ import type {
   Response,
 } from '../../../extensions/express';
 import { requireAuth } from '../../../middleware/authMiddleware';
+import RevokeAllSessionsCommand from '../../../sessions/commands/revokeAllSessionsCommand';
 
 const sessionsRoutes = express.Router();
 
 sessionsRoutes.use('/:uuid', sessionsUuidRoutes);
 
 sessionsRoutes.get('/', requireAuth(['sessions']), getActiveSessions);
+sessionsRoutes.delete('/', requireAuth(['sessions']), revokeAllSessions);
 
 async function getActiveSessions(
   req: Request,
@@ -41,6 +43,26 @@ async function getActiveSessions(
       .sort((s) => (s.isCurrent ? -1 : 1));
 
     res.json(sessions);
+  } catch (error) {
+    next(error);
+  }
+}
+
+async function revokeAllSessions(
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) {
+  try {
+    if (!req.userEntity) {
+      throw new AppError(AppErrorCodes.UNAUTHORIZED, 'Unauthorized');
+    }
+
+    await new RevokeAllSessionsCommand({
+      user: req.userEntity,
+    }).execute();
+
+    res.sendStatus(204);
   } catch (error) {
     next(error);
   }
