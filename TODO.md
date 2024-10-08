@@ -22,7 +22,10 @@
       - 🟩 Revoke all sessions
 - 🟨 Clan page
   - 🟩 Show clan information with actions
-  - 🟥 Show clan members
+  - 🟨 Show clan players
+    - 🟩 Recent players
+    - 🟩 Inactive players (with pagination)
+    - 🟥 All players (with pagination)
 
 ## Polishing ✨
 

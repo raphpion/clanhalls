@@ -18,13 +18,13 @@ const playersRoutes = express.Router();
 playersRoutes.get(
   '/',
   requireAuth(['clanUser', 'clanUser.clan']),
-  getClanPlayers
+  getClanPlayers,
 );
 
 export async function getClanPlayers(
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) {
   try {
     if (!req.userEntity) {
@@ -40,7 +40,7 @@ export async function getClanPlayers(
 
     const clan = await clanUser.clan;
 
-    const { ipp, page, sort, order, search } = req.query;
+    const { ipp, page, sort, order, search, inactiveFor } = req.query;
 
     const data = await new ClanPlayersQuery({
       clan,
@@ -51,6 +51,9 @@ export async function getClanPlayers(
         field: (sort || 'rank') as ClanPlayersQueryParams['orderBy']['field'],
         order: (order || 'ASC') as ClanPlayersQueryParams['orderBy']['order'],
       },
+      inactiveFor: inactiveFor as
+        | ClanPlayersQueryParams['inactiveFor']
+        | undefined,
       withTotalCount: true,
     }).execute();
 

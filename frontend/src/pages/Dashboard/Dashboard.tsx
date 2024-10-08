@@ -4,7 +4,7 @@ import { usePageTitle } from '$hooks';
 import { Card, CardHeader, CardTitle } from '$ui/card';
 
 import ClanInformation from './widgets/ClanInformation';
-import RecentPlayers from './widgets/RecentPlayers';
+import ClanPlayers from './widgets/ClanPlayers';
 
 function Dashboard() {
   const { user } = useAppContext();
@@ -21,7 +21,7 @@ function Dashboard() {
         </CardHeader>
       </Card>
       <ClanInformation />
-      <RecentPlayers />
+      <ClanPlayers />
     </AppLayout>
   );
 }

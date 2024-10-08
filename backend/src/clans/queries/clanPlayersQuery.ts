@@ -16,6 +16,7 @@ export type Params = PaginatedQueryParams<{
     field: 'username' | 'rank' | 'lastSeenAt';
     order: 'ASC' | 'DESC';
   };
+  inactiveFor?: '1week' | '1month' | '3months' | '6months' | '1year';
 }>;
 
 export type ClanPlayerData = {
@@ -37,7 +38,7 @@ class ClanPlayersQuery extends Query<Params, Result> {
     const sort = (() => {
       if (params.orderBy.field === 'rank') {
         return `CASE clanPlayer.rank ${CLAN_RANKS.map(
-          (rank, index) => `WHEN '${rank}' THEN ${index}`
+          (rank, index) => `WHEN '${rank}' THEN ${index}`,
         ).join(' ')} ELSE ${CLAN_RANKS.length} END`;
       }
 
@@ -56,6 +57,12 @@ class ClanPlayersQuery extends Query<Params, Result> {
         search: `%${params.search}%`,
       });
 
+    if (params.inactiveFor) {
+      query.andWhere(
+        `clanPlayer.lastSeenAt <= NOW() - INTERVAL '${params.inactiveFor}'`,
+      );
+    }
+
     if (params.orderBy.field === 'rank') {
       query
         .addSelect(sort, 'rank_order')
@@ -66,7 +73,7 @@ class ClanPlayersQuery extends Query<Params, Result> {
 
     const { items, ...queryResult } = await resolvePaginatedQuery(
       query,
-      params
+      params,
     );
 
     const clanRanks = await clan.clanRanks;
@@ -84,7 +91,7 @@ class ClanPlayersQuery extends Query<Params, Result> {
           title,
           lastSeenAt,
         };
-      })
+      }),
     );
 
     return { ...queryResult, items: clanPlayers };

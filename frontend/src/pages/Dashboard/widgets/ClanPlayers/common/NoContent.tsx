@@ -1,10 +1,14 @@
 import { TableCell, TableRow } from '$ui/table';
 
-function NoContent() {
+type Props = {
+  text: string;
+};
+
+function NoContent({ text }: Props) {
   return (
     <TableRow>
       <TableCell colSpan={3} className="h-24 text-center">
-        No recent members.
+        {text}
       </TableCell>
     </TableRow>
   );

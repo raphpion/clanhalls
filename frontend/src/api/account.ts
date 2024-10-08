@@ -39,6 +39,7 @@ export type ClanPlayerQueryParams = PaginatedQueryParams<{
     field: 'username' | 'rank' | 'lastSeenAt';
     order: 'ASC' | 'DESC';
   };
+  inactiveFor?: '1week' | '1month' | '3months' | '6months' | '1year';
 }>;
 
 export type CreateClanPayload = {
@@ -126,6 +127,9 @@ export async function queryClanPlayers(
   searchParams.append('order', params.orderBy.order);
   searchParams.append('ipp', String(params.ipp));
   searchParams.append('page', String(params.page));
+  if (params.inactiveFor) {
+    searchParams.append('inactiveFor', params.inactiveFor);
+  }
 
   const response = await get<PaginatedQueryResult<ClanPlayerQueryData>>(
     `/account/clan/players?${searchParams.toString()}`,
