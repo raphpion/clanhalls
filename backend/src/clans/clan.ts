@@ -11,6 +11,7 @@ import ClanPlayer from './clanPlayer';
 import ClanRank from './clanRank';
 import ClanUser from './clanUser';
 import MemberActivityReport from './reports/memberActivityReport';
+import SettingsReport from './reports/settingsReport';
 import AppError, { AppErrorCodes } from '../extensions/errors';
 import type Player from '../players/player';
 import type User from '../users/user';
@@ -59,6 +60,15 @@ class Clan {
     },
   )
   memberActivityReports: Promise<MemberActivityReport[]>;
+
+  @OneToMany(
+    () => SettingsReport,
+    (settingsReport: SettingsReport) => settingsReport.clan,
+    {
+      cascade: true,
+    },
+  )
+  settingsReports: Promise<SettingsReport[]>;
 
   static normalizeName(name: string) {
     return slugify(name, {

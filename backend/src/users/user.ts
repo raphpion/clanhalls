@@ -10,6 +10,7 @@ import {
 import Credentials from './credentials/credentials';
 import ClanUser from '../clans/clanUser';
 import MemberActivityReport from '../clans/reports/memberActivityReport';
+import SettingsReport from '../clans/reports/settingsReport';
 import AppError, { AppErrorCodes } from '../extensions/errors';
 import Session from '../sessions/session';
 
@@ -50,6 +51,12 @@ class User {
     (memberActivityReport: MemberActivityReport) => memberActivityReport.user,
   )
   memberActivityReports: Promise<MemberActivityReport[]>;
+
+  @OneToMany(
+    () => SettingsReport,
+    (settingsReport: SettingsReport) => settingsReport.user,
+  )
+  settingsReports: Promise<SettingsReport[]>;
 
   @OneToMany(() => Session, (session: Session) => session.user)
   sessions: Promise<Session[]>;

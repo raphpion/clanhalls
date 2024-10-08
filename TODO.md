@@ -20,7 +20,8 @@
       - 🟩 View my active sessions
       - 🟩 Revoke a session
       - 🟩 Revoke all sessions
-- 🟥 Clan page
+- 🟨 Clan page
+  - 🟩 Show clan information with actions
   - 🟥 Show clan members
 
 ## Polishing ✨

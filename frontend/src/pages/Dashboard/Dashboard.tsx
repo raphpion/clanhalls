@@ -3,6 +3,7 @@ import AppLayout from '$common/AppLayout';
 import { usePageTitle } from '$hooks';
 import { Card, CardHeader, CardTitle } from '$ui/card';
 
+import ClanInformation from './widgets/ClanInformation';
 import RecentPlayers from './widgets/RecentPlayers';
 
 function Dashboard() {
@@ -19,6 +20,7 @@ function Dashboard() {
           <CardTitle>Welcome, {user.username}! 👋</CardTitle>
         </CardHeader>
       </Card>
+      <ClanInformation />
       <RecentPlayers />
     </AppLayout>
   );

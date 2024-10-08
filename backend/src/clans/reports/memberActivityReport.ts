@@ -35,7 +35,9 @@ class MemberActivityReport {
   @Column('jsonb')
   data: MemberActivity[];
 
-  @ManyToOne('Clan', (clan: Clan) => clan.memberActivityReports)
+  @ManyToOne('Clan', (clan: Clan) => clan.memberActivityReports, {
+    onDelete: 'CASCADE',
+  })
   @JoinColumn({ name: 'clanId' })
   clan: Promise<Clan>;
 

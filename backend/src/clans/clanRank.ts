@@ -24,7 +24,9 @@ class ClanRank {
   @Column()
   title: string;
 
-  @ManyToOne(() => Clan, (clan: Clan) => clan.clanRanks)
+  @ManyToOne(() => Clan, (clan: Clan) => clan.clanRanks, {
+    onDelete: 'CASCADE',
+  })
   @JoinColumn({ name: 'clanId' })
   clan: Promise<Clan>;
 }

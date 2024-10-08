@@ -36,11 +36,13 @@ class SettingsReport {
   @Column('jsonb')
   data: Settings;
 
-  @ManyToOne('Clan', (clan: Clan) => clan.memberActivityReports)
+  @ManyToOne('Clan', (clan: Clan) => clan.settingsReports, {
+    onDelete: 'CASCADE',
+  })
   @JoinColumn({ name: 'clanId' })
   clan: Promise<Clan>;
 
-  @ManyToOne('User', (user: User) => user.memberActivityReports)
+  @ManyToOne('User', (user: User) => user.settingsReports)
   @JoinColumn({ name: 'userId' })
   user: Promise<User>;
 }

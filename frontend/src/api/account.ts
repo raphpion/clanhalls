@@ -108,6 +108,10 @@ export async function createClan(name: string): Promise<void> {
   await post<CreateClanPayload>('/account/clan', { name });
 }
 
+export async function deleteMyClan(): Promise<void> {
+  await _delete('/account/clan');
+}
+
 export async function getClan(): Promise<ClanData> {
   const response = await get<ClanData>('/account/clan');
   return response.data;

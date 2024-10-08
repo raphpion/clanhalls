@@ -34,43 +34,54 @@ function OnboardingLayout({ title, children }: Props) {
           <CardContent>{children}</CardContent>
         </Card>
       </div>
-      <Navbar mockNav mockUserMenu={!user?.username} />
-      <div className="p-4 md:px-8 md:py-6">
-        <Skeleton className="mb-8 h-9 w-[160px]" />
-        <Card className="b-none mb-8 max-w-4xl bg-gradient-to-tr from-purple-400 to-blue-400 text-white">
-          <CardHeader>
-            <Skeleton className="h-8 w-[190px]" />
-          </CardHeader>
-        </Card>
-        <Card className="w-full max-w-2xl">
-          <CardHeader>
-            <Skeleton className="h-8 w-[160px]" />
-          </CardHeader>
-          <CardContent>
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  {Array.from({ length: COLUMNS }).map((_, j) => (
-                    <TableHead key={j}>
-                      <Skeleton className="h-[14px] w-full" />
-                    </TableHead>
-                  ))}
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {Array.from({ length: ROWS }).map((_, i) => (
-                  <TableRow key={i}>
+      <div className="absolute inset-x-0 h-full overflow-hidden">
+        <Navbar mockNav mockUserMenu={!user?.username} />
+        <div className="p-4 md:px-8 md:py-6">
+          <Skeleton className="mb-8 h-9 w-[160px]" />
+          <Card className="b-none mb-8 max-w-4xl bg-gradient-to-tr from-purple-400 to-blue-400 text-white">
+            <CardHeader>
+              <Skeleton className="h-8 w-[190px]" />
+            </CardHeader>
+          </Card>
+          <Card className="mb-8 w-full max-w-2xl">
+            <CardHeader>
+              <Skeleton className="h-8 w-[160px]" />
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <Skeleton className="h-8 w-full" />
+              <Skeleton className="h-8 w-[120px]" />
+            </CardContent>
+          </Card>
+          <Card className="w-full max-w-2xl">
+            <CardHeader>
+              <Skeleton className="h-8 w-[160px]" />
+            </CardHeader>
+            <CardContent>
+              <Table>
+                <TableHeader>
+                  <TableRow>
                     {Array.from({ length: COLUMNS }).map((_, j) => (
-                      <TableCell key={j}>
+                      <TableHead key={j}>
                         <Skeleton className="h-[14px] w-full" />
-                      </TableCell>
+                      </TableHead>
                     ))}
                   </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </CardContent>
-        </Card>
+                </TableHeader>
+                <TableBody>
+                  {Array.from({ length: ROWS }).map((_, i) => (
+                    <TableRow key={i}>
+                      {Array.from({ length: COLUMNS }).map((_, j) => (
+                        <TableCell key={j}>
+                          <Skeleton className="h-[14px] w-full" />
+                        </TableCell>
+                      ))}
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </CardContent>
+          </Card>
+        </div>
       </div>
     </div>
   );

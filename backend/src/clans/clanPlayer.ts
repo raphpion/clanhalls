@@ -24,11 +24,15 @@ class ClanPlayer {
   @Column()
   rank: string;
 
-  @OneToOne(() => Clan, (clan: Clan) => clan.clanPlayers)
+  @OneToOne(() => Clan, (clan: Clan) => clan.clanPlayers, {
+    onDelete: 'CASCADE',
+  })
   @JoinColumn({ name: 'clanId' })
   clan: Promise<Clan>;
 
-  @ManyToOne(() => Player, (player: Player) => player.clanPlayers)
+  @ManyToOne(() => Player, (player: Player) => player.clanPlayers, {
+    onDelete: 'CASCADE',
+  })
   @JoinColumn({ name: 'playerId' })
   player: Promise<Player>;
 }

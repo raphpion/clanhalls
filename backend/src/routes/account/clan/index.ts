@@ -4,6 +4,7 @@ import Joi from 'joi';
 import playersRoutes from './players';
 import verifyNameAvailabilityRoutes from './verify-name-availability';
 import CreateClanForUserCommand from '../../../clans/commands/createClanForUserCommand';
+import DeleteUsersClanCommand from '../../../clans/commands/deleteUsersClanCommand';
 import AppError, { AppErrorCodes } from '../../../extensions/errors';
 import type {
   NextFunction,
@@ -28,6 +29,7 @@ clanRoutes.use('/players', playersRoutes);
 clanRoutes.use('/verify-name-availability', verifyNameAvailabilityRoutes);
 
 clanRoutes.get('/', requireAuth(['clanUser', 'clanUser.clan']), getClan);
+clanRoutes.delete('/', requireAuth(['clanUser', 'clanUser.clan']), deleteClan);
 
 clanRoutes.post(
   '/',
@@ -54,6 +56,22 @@ async function createClan(req: Request, res: Response, next: NextFunction) {
     await new CreateClanForUserCommand({
       user: req.userEntity,
       name,
+    }).execute();
+
+    res.sendStatus(204);
+  } catch (error) {
+    next(error);
+  }
+}
+
+async function deleteClan(req: Request, res: Response, next: NextFunction) {
+  try {
+    if (!req.userEntity) {
+      throw new AppError(AppErrorCodes.UNAUTHORIZED, 'Unauthorized');
+    }
+
+    await new DeleteUsersClanCommand({
+      user: req.userEntity,
     }).execute();
 
     res.sendStatus(204);
