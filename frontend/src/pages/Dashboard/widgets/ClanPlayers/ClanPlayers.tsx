@@ -2,8 +2,9 @@ import useAppContext from '$common/AppContext';
 import { Card, CardContent, CardHeader, CardTitle } from '$ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '$ui/tabs';
 
-import InactivePlayers from './InactivePlayers';
-import RecentPlayers from './RecentPlayers';
+import AllPlayers from './tabs/AllPlayers';
+import InactivePlayers from './tabs/InactivePlayers';
+import RecentPlayers from './tabs/RecentPlayers';
 
 const TABS = [
   {
@@ -16,11 +17,11 @@ const TABS = [
     label: 'Inactive Players',
     content: InactivePlayers,
   },
-  // {
-  //   key: 'all-players',
-  //   label: 'All Players',
-  //   content: AllPlayers,
-  // },
+  {
+    key: 'all-players',
+    label: 'All Players',
+    content: AllPlayers,
+  },
 ] as const;
 
 function ClanPlayers() {

@@ -20,15 +20,34 @@
       - 🟩 View my active sessions
       - 🟩 Revoke a session
       - 🟩 Revoke all sessions
-- 🟨 Clan page
+- 🟩 Clan Players widget
   - 🟩 Show clan information with actions
-  - 🟨 Show clan players
+  - 🟩 Show clan players
     - 🟩 Recent players
     - 🟩 Inactive players (with pagination)
-    - 🟥 All players (with pagination)
+    - 🟩 All players (with pagination)
+      - 🟩 Search by name
+      - 🟩 Order by: username, title, last seen
+- 🟥 Recent reports widget
+  - 🟥 Show 10 most recent reports (1 tab per report type)
+- 🟥 MembersListReport
+  - 🟥 Payload: list of members and ranks
+  - 🟥 Webhook: POST /webhooks/clans/members-list-report
+  - 🟥 Apply: remove clan members that are not currently members of the clan
 
-## Polishing ✨
+## Then, important DX features 🚧
 
+- 🟥 Unit tests for the backend models and commands
+  - 🟥 Use repository pattern to abstract db calls in test suites
+  - 🟥 Validate if DDD is (mostly) respected
+- 🟥 Fix ESLint errors in the frontend
+- 🟥 CI workflow with lint and tests
+- 🟥 Production Dockerfile and docker-compose files
+- 🟥 CD workflow to deploy on my local server (or Droplet/AWS ECS)
+
+## Exciting new features ✨
+
+- ⬛ Add GraphQL!
 - ⬛ Implement websocket
   - ⬛ Onboarding channel
     - ⬛ Listen for when clan is Synced for the first time (`/onboarding/sync-clan`)
