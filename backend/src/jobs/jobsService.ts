@@ -2,7 +2,8 @@ import { type Job as BullMQJob, Queue, Worker } from 'bullmq';
 import { inject, singleton } from 'tsyringe';
 
 import ApplyMemberActivityReportDataJob from './clans/reports/applyMemberActivityReportDataJob';
-import ApplyPendingMemberActivityReportDataJob from './clans/reports/applyPendingMemberActivityReportsDataJob';
+import ApplyMembersListReportDataJob from './clans/reports/applyMembersListReportDataJob';
+import ApplyPendingClanReportsDataJob from './clans/reports/applyPendingClanReportsDataJob';
 import ApplySettingsReportDataJob from './clans/reports/applySettingsReportDataJob';
 import type { JobClass } from './job';
 import type Job from './job';
@@ -24,14 +25,15 @@ const PREFIX = 'jobs';
 
 const JOBS = [
   ApplyMemberActivityReportDataJob,
-  ApplyPendingMemberActivityReportDataJob,
+  ApplyMembersListReportDataJob,
+  ApplyPendingClanReportsDataJob,
   ApplySettingsReportDataJob,
   AssociatePlayerToWiseOldManJob,
 ] as JobClass<unknown>[];
 
 const CRON_JOBS: CronJob[] = [
   // every day at 00:00
-  { job: ApplyPendingMemberActivityReportDataJob, interval: '0 0 * * *' },
+  { job: ApplyPendingClanReportsDataJob, interval: '0 0 * * *' },
 ];
 
 const STARTUP_JOBS: JobClass<unknown>[] = [];

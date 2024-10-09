@@ -8,6 +8,7 @@ import ClanPlayer from '../clans/clanPlayer';
 import ClanRank from '../clans/clanRank';
 import ClanUser from '../clans/clanUser';
 import MemberActivityReport from '../clans/reports/memberActivityReport';
+import MembersListReport from '../clans/reports/membersListReport';
 import SettingsReport from '../clans/reports/settingsReport';
 import Player from '../players/player';
 import Session from '../sessions/session';
@@ -33,6 +34,7 @@ const db = new DataSource({
     ClanUser,
     Credentials,
     MemberActivityReport,
+    MembersListReport,
     Player,
     SettingsReport,
     Session,

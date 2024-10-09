@@ -30,15 +30,20 @@
       - 🟩 Order by: username, title, last seen
 - 🟥 Recent reports widget
   - 🟥 Show 10 most recent reports (1 tab per report type)
-- 🟥 MembersListReport
-  - 🟥 Payload: list of members and ranks
-  - 🟥 Webhook: POST /webhooks/clans/members-list-report
-  - 🟥 Apply: remove clan members that are not currently members of the clan
+- 🟨 MembersListReport
+  - 🟩 Payload: list of members and ranks
+  - 🟩 Webhook: POST /webhooks/clans/members-list-report
+  - 🟩 Apply: remove clan members that are not currently members of the clan
+  - 🟥 Test report
+- 🟨 Change ApplyPendingMemberActivityReportsDataJob to ApplyPeningClanReportsJob
+  - 🟩 Change the job to apply all pending reports for a clan
+  - 🟥 Test new job
 
 ## Then, important DX features 🚧
 
 - 🟥 Unit tests for the backend models and commands
   - 🟥 Use repository pattern to abstract db calls in test suites
+  - 🟥 Abstract WiseOldMan Client to mockable service
   - 🟥 Validate if DDD is (mostly) respected
 - 🟥 Fix ESLint errors in the frontend
 - 🟥 CI workflow with lint and tests
