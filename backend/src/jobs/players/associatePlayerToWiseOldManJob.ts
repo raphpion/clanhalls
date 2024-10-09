@@ -1,9 +1,10 @@
 import AssociatePlayerToWiseOldManCommand from '../../players/commands/associatePlayerToWiseOldManCommand';
+import type Player from '../../players/player';
 import Job from '../job';
 
-class AssociatePlayerToWiseOldManJob extends Job<number> {
-  async execute(playerId: number) {
-    return new AssociatePlayerToWiseOldManCommand({ playerId }).execute();
+class AssociatePlayerToWiseOldManJob extends Job<Player> {
+  async execute(player: Player) {
+    return new AssociatePlayerToWiseOldManCommand({ player }).execute();
   }
 }
 

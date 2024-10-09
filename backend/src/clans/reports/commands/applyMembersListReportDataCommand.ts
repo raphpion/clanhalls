@@ -33,9 +33,7 @@ class ApplyMembersListReportDataCommand extends Command<Params> {
 
       for (const clanPlayer of clanPlayers) {
         const player = await clanPlayer.player;
-        const member = report.data.find((m) => m.name === player.username);
-
-        let touched = false;
+        let member = report.data.find((m) => m.name === player.username);
 
         if (!member) {
           const newNameResult = await this.searchForPlayerNewName(
@@ -49,17 +47,19 @@ class ApplyMembersListReportDataCommand extends Command<Params> {
             continue;
           }
 
+          member = report.data.find((m) => m.name === newNameResult.newName);
+          if (!member) {
+            clanPlayersToRemove.push(clanPlayer);
+            continue;
+          }
+
           player.username = newNameResult.newName;
           player.wiseOldManId = newNameResult.wiseOldManId;
-          touched = true;
+          await queryRunner.manager.save(player);
         }
 
-        if (clanPlayer.rank === member.rank) {
+        if (clanPlayer.rank !== member.rank) {
           clanPlayer.rank = member.rank;
-          touched = true;
-        }
-
-        if (touched) {
           clanPlayersToUpdate.push(clanPlayer);
         }
       }
@@ -132,7 +132,7 @@ class ApplyMembersListReportDataCommand extends Command<Params> {
       return undefined;
     }
 
-    return wiseOldManPlayer.username;
+    return wiseOldManPlayer.displayName;
   }
 }
 

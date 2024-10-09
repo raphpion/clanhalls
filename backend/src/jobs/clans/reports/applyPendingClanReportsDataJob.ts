@@ -18,12 +18,14 @@ class ApplyPendinyPendingClanReportsJob extends Job<undefined> {
     const memberActivityReports = await db
       .createQueryBuilder(MemberActivityReport, 'report')
       .where('report.appliedAt IS NULL')
+      .orderBy('report.receivedAt', 'ASC')
       .getMany();
 
-    const membersListReports = await db
+    const latestMembersListReport = await db
       .createQueryBuilder(MembersListReport, 'report')
       .where('report.appliedAt IS NULL')
-      .getMany();
+      .orderBy('report.receivedAt', 'DESC')
+      .getOne();
 
     const latestSettingsReport = await db
       .createQueryBuilder(SettingsReport, 'report')
@@ -37,11 +39,13 @@ class ApplyPendinyPendingClanReportsJob extends Job<undefined> {
         type: 'memberActivity' as ReportEntry['type'],
         receivedAt: report.receivedAt,
       })),
-      ...membersListReports.map((report) => ({
-        report,
-        type: 'membersList' as ReportEntry['type'],
-        receivedAt: report.receivedAt,
-      })),
+      ...(latestMembersListReport && [
+        {
+          report: latestMembersListReport,
+          type: 'membersList' as ReportEntry['type'],
+          receivedAt: latestMembersListReport.receivedAt,
+        },
+      ]),
       ...(latestSettingsReport && [
         {
           report: latestSettingsReport,

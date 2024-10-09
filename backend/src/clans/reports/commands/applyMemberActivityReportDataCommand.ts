@@ -47,6 +47,18 @@ class ApplyMemberActivityReportDataCommand extends Command<Params> {
           if (!player) {
             player = new Player();
             player.username = member.name;
+
+            const wiseOldMan = new WOMClient();
+            const wiseOldManPlayer = await withSafeWiseOldMan(() =>
+              wiseOldMan.players.getPlayerDetails(
+                player.username.toLowerCase(),
+              ),
+            );
+
+            if (wiseOldManPlayer) {
+              player.wiseOldManId = wiseOldManPlayer.id;
+            }
+
             player = await queryRunner.manager.save(player);
           }
         }

@@ -6,30 +6,42 @@ import { withSafeWiseOldMan } from '../../helpers/wiseOldMan';
 import Player from '../player';
 
 type Params = {
-  playerId: number;
+  player: Player;
 };
 
 class AssociatePlayerToWiseOldManCommand extends Command<Params> {
   async execute() {
-    const repository = db.getRepository(Player);
-    const player = await repository.findOne({
-      where: { id: this.params.playerId },
-    });
-    if (!player || player.wiseOldManId) {
-      return;
+    const queryRunner = db.createQueryRunner();
+
+    try {
+      await queryRunner.connect();
+      await queryRunner.startTransaction();
+
+      const { player } = this.params;
+      console.log(player.username);
+
+      if (player.wiseOldManId) {
+        return;
+      }
+
+      const wiseOldMan = new WOMClient();
+      const wiseOldManPlayer = await withSafeWiseOldMan(() =>
+        wiseOldMan.players.getPlayerDetails(player.username.toLowerCase()),
+      );
+
+      if (!wiseOldManPlayer) {
+        return;
+      }
+
+      player.wiseOldManId = wiseOldManPlayer.id;
+      await queryRunner.manager.save(Player, player);
+      await queryRunner.commitTransaction();
+    } catch (error) {
+      console.log(error);
+      await queryRunner.rollbackTransaction();
+    } finally {
+      await queryRunner.release();
     }
-
-    const wiseOldMan = new WOMClient();
-    const wiseOldManPlayer = await withSafeWiseOldMan(() =>
-      wiseOldMan.players.getPlayerDetails(player.username)
-    );
-
-    if (!wiseOldManPlayer) {
-      return;
-    }
-
-    player.wiseOldManId = wiseOldManPlayer.id;
-    await repository.save(player);
   }
 }
 
