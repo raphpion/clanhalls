@@ -2,6 +2,7 @@ import { Fragment, useState } from 'react';
 
 import { useQuery } from '@tanstack/react-query';
 import { Search } from 'lucide-react';
+import { useDebounce } from 'use-debounce';
 
 import { type ClanPlayerQueryParams, queryClanPlayers } from '$api/account';
 import { Input } from '$ui/input';
@@ -18,12 +19,13 @@ function AllPlayers() {
     order: 'DESC',
   });
   const [search, setSearch] = useState('');
+  const [debouncedSearch] = useDebounce(search, 500);
 
   const allPlayersQuery = useQuery({
-    queryKey: ['all-players', page, orderBy, search],
+    queryKey: ['all-players', page, orderBy, debouncedSearch],
     queryFn: () =>
       queryClanPlayers({
-        search,
+        search: debouncedSearch,
         orderBy,
         ipp: IPP,
         page,

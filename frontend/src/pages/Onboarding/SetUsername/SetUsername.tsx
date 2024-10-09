@@ -1,9 +1,10 @@
-import { useEffect, useMemo } from 'react';
+import { useMemo } from 'react';
 
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import { useNavigate } from '@tanstack/react-router';
 import { Field, Form, FormikProvider, useFormik } from 'formik';
 import { CheckIcon, XIcon } from 'lucide-react';
+import { useDebounce } from 'use-debounce';
 import * as yup from 'yup';
 
 import { setUsername, signOut, verifyUsernameAvailability } from '$api/account';
@@ -19,7 +20,6 @@ import { Label } from '$ui/label';
 
 export type SetUsernameFormValues = {
   username: string;
-  usernameAvailable: boolean | undefined;
 };
 
 function SetUsername() {
@@ -38,6 +38,10 @@ function SetUsername() {
       });
     },
     onSuccess: () => {
+      toast({
+        title: 'Username set!',
+        variant: 'success',
+      });
       navigate({ to: '/onboarding/create-clan' });
     },
     onError: genericErrorToast,
@@ -51,15 +55,9 @@ function SetUsername() {
     },
   });
 
-  const verifyUsernameAvailabilityMutation = useMutation({
-    mutationKey: ['verify-username-availability'],
-    mutationFn: (username: string) => verifyUsernameAvailability(username),
-  });
-
   const formik = useFormik<SetUsernameFormValues>({
     initialValues: {
       username: '',
-      usernameAvailable: undefined,
     },
     validationSchema: yup.object({
       username: yup
@@ -67,25 +65,21 @@ function SetUsername() {
         .required('Please enter a username.')
         .min(3, 'Username must be at least 3 characters.')
         .max(25, 'Username must be at most 25 characters.'),
-      usernameAvailable: yup.boolean().required().nullable(),
     }),
     onSubmit: async ({ username }) => setUsernameMutation.mutateAsync(username),
   });
 
-  useEffect(() => {
-    (async () => {
-      formik.setFieldValue('usernameAvailable', null);
-      const errors = await formik.validateForm();
-      if (Object.keys(errors).length > 0) {
-        return;
+  const [debouncedUsername] = useDebounce(formik.values.username, 500);
+  const verifyUsernameAvailabilityQuery = useQuery({
+    queryKey: ['verify-username-availability', debouncedUsername],
+    queryFn: async () => {
+      if (debouncedUsername.length < 3 || debouncedUsername.length > 25) {
+        return { available: undefined };
       }
 
-      const data = await verifyUsernameAvailabilityMutation.mutateAsync(
-        formik.values.username,
-      );
-      formik.setFieldValue('usernameAvailable', data.available);
-    })();
-  }, [formik.values.username]);
+      return verifyUsernameAvailability(debouncedUsername);
+    },
+  });
 
   const usernameHelpLabel = useMemo(() => {
     if (formik.touched.username && formik.errors.username)
@@ -96,15 +90,7 @@ function SetUsername() {
         </Label>
       );
 
-    if (formik.values.usernameAvailable === false)
-      return (
-        <Label className="px-3 text-left text-red-500">
-          <XIcon size={16} className="mr-1 inline" />
-          Username not available!
-        </Label>
-      );
-
-    if (verifyUsernameAvailabilityMutation.isPending)
+    if (verifyUsernameAvailabilityQuery.isFetching)
       return (
         <Label className="px-3 text-left text-yellow-500">
           <Loading size={16} className="mr-1 inline" />
@@ -112,7 +98,15 @@ function SetUsername() {
         </Label>
       );
 
-    if (formik.values.usernameAvailable)
+    if (verifyUsernameAvailabilityQuery.data?.available === false)
+      return (
+        <Label className="px-3 text-left text-red-500">
+          <XIcon size={16} className="mr-1 inline" />
+          Username not available!
+        </Label>
+      );
+
+    if (verifyUsernameAvailabilityQuery.data?.available)
       return (
         <Label className="px-3 text-left text-green-500">
           <CheckIcon size={16} className="mr-1 inline" />
@@ -123,9 +117,9 @@ function SetUsername() {
     return <div className="h-[22px]" />;
   }, [
     formik.touched.username,
-    formik.values.usernameAvailable,
     formik.errors.username,
-    verifyUsernameAvailabilityMutation.isPending,
+    verifyUsernameAvailabilityQuery.data?.available,
+    verifyUsernameAvailabilityQuery.isFetching,
   ]);
 
   if (!user) return null;
@@ -166,7 +160,14 @@ function SetUsername() {
               {setUsernameMutation.isPending ? (
                 <Loading />
               ) : (
-                <Button type="submit" disabled={!formik.isValid}>
+                <Button
+                  type="submit"
+                  disabled={
+                    !formik.isValid ||
+                    !verifyUsernameAvailabilityQuery.data?.available ||
+                    verifyUsernameAvailabilityQuery.isFetching
+                  }
+                >
                   Set username
                 </Button>
               )}

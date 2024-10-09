@@ -30,14 +30,14 @@
       - 🟩 Order by: username, title, last seen
 - 🟥 Recent reports widget
   - 🟥 Show 10 most recent reports (1 tab per report type)
-- 🟨 MembersListReport
+- 🟩 MembersListReport
   - 🟩 Payload: list of members and ranks
   - 🟩 Webhook: POST /webhooks/clans/members-list-report
   - 🟩 Apply: remove clan members that are not currently members of the clan
-  - 🟥 Test report
-- 🟨 Change ApplyPendingMemberActivityReportsDataJob to ApplyPeningClanReportsJob
+  - 🟩 Test report
+- 🟩 Change ApplyPendingMemberActivityReportsDataJob to ApplyPeningClanReportsJob
   - 🟩 Change the job to apply all pending reports for a clan
-  - 🟥 Test new job
+  - 🟩 Test new job
 
 ## Then, important DX features 🚧
 

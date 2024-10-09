@@ -1,9 +1,10 @@
-import { useEffect, useMemo } from 'react';
+import { useMemo } from 'react';
 
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import { useNavigate } from '@tanstack/react-router';
 import { Field, Form, FormikProvider, useFormik } from 'formik';
 import { CheckIcon, XIcon } from 'lucide-react';
+import { useDebounce } from 'use-debounce';
 import * as yup from 'yup';
 
 import { createClan, verifyClanNameAvailability } from '$api/account';
@@ -11,27 +12,32 @@ import Loading from '$common/Loading';
 import OnboardingLayout from '$common/OnboardingLayout';
 import { usePageTitle } from '$hooks';
 import { Button } from '$ui/button';
+import { toast } from '$ui/hooks/use-toast';
 import { Input } from '$ui/input';
 import { Label } from '$ui/label';
 
 type CreateClanFormValues = {
   name: string;
-  nameAvailable: boolean | undefined;
 };
 
 function CreateClan() {
   const navigate = useNavigate();
   usePageTitle('Create a clan');
 
-  const verifyClanNameAvailabilityMutation = useMutation({
-    mutationKey: ['verify-clan-name-availability'],
-    mutationFn: (name: string) => verifyClanNameAvailability(name),
-  });
-
   const createClanMutation = useMutation({
     mutationKey: ['create-clan'],
     mutationFn: (name: string) => createClan(name),
+    onMutate: () => {
+      toast({
+        title: 'Creating clan...',
+        variant: 'loading',
+      });
+    },
     onSuccess: () => {
+      toast({
+        title: 'Clan created!',
+        variant: 'success',
+      });
       navigate({ to: '/onboarding/sync-clan' });
     },
   });
@@ -39,7 +45,6 @@ function CreateClan() {
   const formik = useFormik<CreateClanFormValues>({
     initialValues: {
       name: '',
-      nameAvailable: undefined,
     },
     validationSchema: yup.object({
       name: yup
@@ -47,25 +52,21 @@ function CreateClan() {
         .required('Please enter a name.')
         .min(3, 'Name must be at least 3 characters.')
         .max(25, 'Name must be at most 25 characters.'),
-      nameAvailable: yup.boolean().required().nullable(),
     }),
     onSubmit: async ({ name }) => createClanMutation.mutateAsync(name),
   });
 
-  useEffect(() => {
-    (async () => {
-      formik.setFieldValue('nameAvailable', null);
-      const errors = await formik.validateForm();
-      if (Object.keys(errors).length > 0) {
-        return;
+  const [debouncedName] = useDebounce(formik.values.name, 500);
+  const verifyClanNameAvailabilityQuery = useQuery({
+    queryKey: ['verify-username-availability', debouncedName],
+    queryFn: async () => {
+      if (debouncedName.length < 3 || debouncedName.length > 25) {
+        return { available: undefined };
       }
 
-      const data = await verifyClanNameAvailabilityMutation.mutateAsync(
-        formik.values.name,
-      );
-      formik.setFieldValue('nameAvailable', data.available);
-    })();
-  }, [formik.values.name]);
+      return verifyClanNameAvailability(debouncedName);
+    },
+  });
 
   const nameHelpLabel = useMemo(() => {
     if (formik.touched.name && formik.errors.name)
@@ -76,7 +77,7 @@ function CreateClan() {
         </Label>
       );
 
-    if (formik.values.nameAvailable === false)
+    if (verifyClanNameAvailabilityQuery.data?.available === false)
       return (
         <Label className="px-3 text-left text-red-500">
           <XIcon size={16} className="mr-1 inline" />
@@ -84,7 +85,7 @@ function CreateClan() {
         </Label>
       );
 
-    if (verifyClanNameAvailabilityMutation.isPending)
+    if (verifyClanNameAvailabilityQuery.isFetching)
       return (
         <Label className="px-3 text-left text-yellow-500">
           <Loading size={16} className="mr-1 inline" />
@@ -92,7 +93,7 @@ function CreateClan() {
         </Label>
       );
 
-    if (formik.values.nameAvailable)
+    if (verifyClanNameAvailabilityQuery.data?.available)
       return (
         <Label className="px-3 text-left text-green-500">
           <CheckIcon size={16} className="mr-1 inline" />
@@ -101,9 +102,9 @@ function CreateClan() {
       );
   }, [
     formik.touched.name,
-    formik.values.nameAvailable,
     formik.errors.name,
-    verifyClanNameAvailabilityMutation.isPending,
+    verifyClanNameAvailabilityQuery.data?.available,
+    verifyClanNameAvailabilityQuery.isFetching,
   ]);
 
   return (
@@ -120,7 +121,14 @@ function CreateClan() {
             {createClanMutation.isPending ? (
               <Loading />
             ) : (
-              <Button type="submit" disabled={!formik.isValid}>
+              <Button
+                type="submit"
+                disabled={
+                  !formik.isValid ||
+                  !verifyClanNameAvailabilityQuery.data?.available ||
+                  verifyClanNameAvailabilityQuery.isFetching
+                }
+              >
                 Create clan
               </Button>
             )}
