@@ -28,8 +28,6 @@
     - 🟩 All players (with pagination)
       - 🟩 Search by name
       - 🟩 Order by: username, title, last seen
-- 🟥 Recent reports widget
-  - 🟥 Show 10 most recent reports (1 tab per report type)
 - 🟩 MembersListReport
   - 🟩 Payload: list of members and ranks
   - 🟩 Webhook: POST /webhooks/clans/members-list-report
@@ -63,3 +61,11 @@
 - ⬛ Multiple users per clan / clans per user
   - ⬛ Invitations
   - ⬛ Promotion / demotion (only original admin may demote other admins or demote themselves)
+- ⬛ Incident reports
+  - ⬛ Submit incident report with chat history
+  - ⬛ Browse incident reports
+    - ⬛ Filter by status, search by player
+    - ⬛ View chat history / screenshots?
+  - ⬛ Manage incident report status
+- ⬛ Export data to CSV
+  - ⬛ n least recently active members (helper for recurring purges)

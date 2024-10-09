@@ -3,7 +3,6 @@ import express from 'express';
 import ClanPlayersQuery, {
   type Params as ClanPlayersQueryParams,
 } from '../../../../clans/queries/clanPlayersQuery';
-import db from '../../../../db';
 import AppError, { AppErrorCodes } from '../../../../extensions/errors';
 import type {
   Request,
@@ -11,7 +10,6 @@ import type {
   NextFunction,
 } from '../../../../extensions/express';
 import { requireAuth } from '../../../../middleware/authMiddleware';
-import User from '../../../../users/user';
 
 const playersRoutes = express.Router();
 
@@ -30,8 +28,6 @@ export async function getClanPlayers(
     if (!req.userEntity) {
       throw new AppError(AppErrorCodes.UNAUTHORIZED, 'Unauthorized');
     }
-
-    req.userEntity = await db.getRepository(User).findOne({ where: { id: 1 } });
 
     const clanUser = await req.userEntity.clanUser;
     if (!clanUser) {
