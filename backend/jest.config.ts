@@ -1,9 +1,9 @@
-import type { JestConfigWithTsJest } from "ts-jest";
+import type { JestConfigWithTsJest } from 'ts-jest';
 
 const config: JestConfigWithTsJest = {
   // ts-jest generated config
-  preset: "ts-jest",
-  testEnvironment: "node",
+  preset: 'ts-jest',
+  testEnvironment: 'node',
 
   // All imported modules in your tests should be mocked automatically
   // automock: false,
