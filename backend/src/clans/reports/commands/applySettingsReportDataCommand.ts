@@ -1,5 +1,5 @@
+
 import Command from '../../../command';
-import db from '../../../db';
 import ClanRank from '../../clanRank';
 import SettingsReport from '../settingsReport';
 
@@ -9,7 +9,7 @@ type Params = {
 
 class ApplySettingsReportDataCommand extends Command<Params> {
   async execute() {
-    const queryRunner = db.createQueryRunner();
+    const queryRunner = this.db.createQueryRunner();
 
     try {
       await queryRunner.connect();

@@ -94,7 +94,7 @@ class JobsService implements IJobsService {
     }
 
     // Only schedule startup and repeatable jobs on the main thread
-    if (!this.configService.isMainThread()) {
+    if (!this.configService.isMainThread) {
       return;
     }
 

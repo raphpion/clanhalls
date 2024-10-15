@@ -39,7 +39,6 @@ POSTGRES_PORT=5001
 POSTGRES_USER=postgres
 POSTGRES_PASSWORD=some-secure-password-123
 POSTGRES_DB=clan-halls
-POSTGRES_TEST_DB=clan-halls_test
 
 REDIS_URL=localhost
 REDIS_PORT=5002

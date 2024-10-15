@@ -1,4 +1,3 @@
-import db from '../../db';
 import Query from '../../query';
 import User from '../user';
 
@@ -10,7 +9,7 @@ type Result = boolean;
 
 class UsernameAvailabilityQuery extends Query<Params, Result> {
   async execute() {
-    const repository = db.getRepository(User);
+    const repository = this.db.getRepository(User);
     const { username } = this.params;
 
     const usernameNormalized = User.normalizeUsername(username);

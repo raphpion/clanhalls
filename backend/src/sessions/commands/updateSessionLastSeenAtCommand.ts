@@ -1,5 +1,5 @@
+
 import Command from '../../command';
-import db from '../../db';
 import AppError, { AppErrorCodes } from '../../extensions/errors';
 import Session from '../session';
 
@@ -9,8 +9,9 @@ type Params = {
 
 class UpdateSessionLastSeenAtCommand extends Command<Params> {
   async execute() {
+    const repository = this.db.getRepository(Session);
+
     const { uuid } = this.params;
-    const repository = db.getRepository(Session);
 
     const session = await repository.findOneBy({ uuid });
     if (!session) {

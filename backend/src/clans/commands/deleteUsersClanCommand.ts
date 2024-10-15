@@ -1,5 +1,5 @@
+
 import Command from '../../command';
-import db from '../../db';
 import AppError, { AppErrorCodes } from '../../extensions/errors';
 import type User from '../../users/user';
 import Clan from '../clan';
@@ -10,7 +10,7 @@ type Params = {
 
 class DeleteUsersClanCommand extends Command<Params> {
   async execute() {
-    const repository = db.getRepository(Clan);
+    const repository = this.db.getRepository(Clan);
 
     const { user } = this.params;
 

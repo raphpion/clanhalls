@@ -1,5 +1,4 @@
 import Command from '../../../command';
-import db from '../../../db';
 import type User from '../../user';
 import Credentials from '../credentials';
 
@@ -13,7 +12,7 @@ type Result = [Credentials, string];
 
 class CreateCredentialsCommand extends Command<Params, Result> {
   async execute() {
-    const repository = db.getRepository(Credentials);
+    const repository = this.db.getRepository(Credentials);
 
     const { name, scope, user } = this.params;
     const credentials = new Credentials();

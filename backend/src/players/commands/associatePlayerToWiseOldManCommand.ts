@@ -1,7 +1,6 @@
 import { WOMClient } from '@wise-old-man/utils';
 
 import Command from '../../command';
-import db from '../../db';
 import { withSafeWiseOldMan } from '../../helpers/wiseOldMan';
 import Player from '../player';
 
@@ -11,7 +10,7 @@ type Params = {
 
 class AssociatePlayerToWiseOldManCommand extends Command<Params> {
   async execute() {
-    const queryRunner = db.createQueryRunner();
+    const queryRunner = this.db.createQueryRunner();
 
     try {
       await queryRunner.connect();

@@ -4,7 +4,6 @@ import ApplySettingsReportDataCommand from '../../../clans/reports/commands/appl
 import MemberActivityReport from '../../../clans/reports/memberActivityReport';
 import MembersListReport from '../../../clans/reports/membersListReport';
 import SettingsReport from '../../../clans/reports/settingsReport';
-import db from '../../../db';
 import Job from '../../job';
 
 type ReportEntry = {
@@ -15,19 +14,19 @@ type ReportEntry = {
 
 class ApplyPendinyPendingClanReportsJob extends Job<undefined> {
   async execute() {
-    const memberActivityReports = await db
+    const memberActivityReports = await this.db
       .createQueryBuilder(MemberActivityReport, 'report')
       .where('report.appliedAt IS NULL')
       .orderBy('report.receivedAt', 'ASC')
       .getMany();
 
-    const latestMembersListReport = await db
+    const latestMembersListReport = await this.db
       .createQueryBuilder(MembersListReport, 'report')
       .where('report.appliedAt IS NULL')
       .orderBy('report.receivedAt', 'DESC')
       .getOne();
 
-    const latestSettingsReport = await db
+    const latestSettingsReport = await this.db
       .createQueryBuilder(SettingsReport, 'report')
       .where('report.appliedAt IS NULL')
       .orderBy('report.receivedAt', 'DESC')
@@ -39,20 +38,24 @@ class ApplyPendinyPendingClanReportsJob extends Job<undefined> {
         type: 'memberActivity' as ReportEntry['type'],
         receivedAt: report.receivedAt,
       })),
-      ...(latestMembersListReport && [
-        {
-          report: latestMembersListReport,
-          type: 'membersList' as ReportEntry['type'],
-          receivedAt: latestMembersListReport.receivedAt,
-        },
-      ]),
-      ...(latestSettingsReport && [
-        {
-          report: latestSettingsReport,
-          type: 'settings' as ReportEntry['type'],
-          receivedAt: latestSettingsReport.receivedAt,
-        },
-      ]),
+      ...(latestMembersListReport
+        ? [
+            {
+              report: latestMembersListReport,
+              type: 'membersList' as ReportEntry['type'],
+              receivedAt: latestMembersListReport.receivedAt,
+            },
+          ]
+        : []),
+      ...(latestSettingsReport
+        ? [
+            {
+              report: latestSettingsReport,
+              type: 'settings' as ReportEntry['type'],
+              receivedAt: latestSettingsReport.receivedAt,
+            },
+          ]
+        : []),
     ].sort((a, b) => a.receivedAt.getTime() - b.receivedAt.getTime());
 
     for (const entry of reports) {

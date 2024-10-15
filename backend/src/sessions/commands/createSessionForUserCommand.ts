@@ -1,7 +1,6 @@
 import UAParser from 'ua-parser-js';
 
 import Command from '../../command';
-import db from '../../db';
 import type User from '../../users/user';
 import Session from '../session';
 
@@ -17,7 +16,7 @@ type Result = Session;
 
 class CreateSessionForUserCommand extends Command<Params, Result> {
   async execute() {
-    const repository = db.getRepository(Session);
+    const repository = this.db.getRepository(Session);
 
     const { user, sessionId, userAgent, method, ip } = this.params;
 

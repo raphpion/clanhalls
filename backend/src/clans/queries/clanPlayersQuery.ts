@@ -1,4 +1,4 @@
-import db from '../../db';
+
 import type {
   PaginatedQueryParams,
   PaginatedQueryResult,
@@ -31,9 +31,9 @@ type Result = PaginatedQueryResult<ClanPlayerData>;
 
 class ClanPlayersQuery extends Query<Params, Result> {
   async execute() {
-    const { clan, ...params } = this.params;
+    const repository = this.db.getRepository(ClanPlayer);
 
-    const repository = db.getRepository(ClanPlayer);
+    const { clan, ...params } = this.params;
 
     const sort = (() => {
       if (params.orderBy.field === 'rank') {

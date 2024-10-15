@@ -1,5 +1,5 @@
+
 import Command from '../../command';
-import db from '../../db';
 import User from '../user';
 
 type Params = {
@@ -11,7 +11,8 @@ type Result = User;
 
 class UpdateUserCommand extends Command<Params, Result> {
   async execute() {
-    const repository = db.getRepository(User);
+    const repository = this.db.getRepository(User);
+
     const { user, updates } = this.params;
 
     if (updates.username) {

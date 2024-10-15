@@ -1,5 +1,5 @@
+
 import Command from '../../command';
-import db from '../../db';
 import type User from '../../users/user';
 import Session from '../session';
 
@@ -9,8 +9,9 @@ type Params = {
 
 class RevokeAllSessionsCommand extends Command<Params> {
   async execute() {
+    const repository = this.db.getRepository(Session);
+
     const { user } = this.params;
-    const repository = db.getRepository(Session);
 
     const sessions = await user.sessions;
     for (const session of sessions) {

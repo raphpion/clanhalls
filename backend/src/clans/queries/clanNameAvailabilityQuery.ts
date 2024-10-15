@@ -1,4 +1,4 @@
-import db from '../../db';
+
 import Query from '../../query';
 import Clan from '../clan';
 
@@ -10,7 +10,8 @@ type Result = boolean;
 
 class ClanNameAvailabilityQuery extends Query<Params, Result> {
   async execute() {
-    const repository = db.getRepository(Clan);
+    const repository = this.db.getRepository(Clan);
+
     const { name } = this.params;
 
     const nameNormalized = Clan.normalizeName(name);

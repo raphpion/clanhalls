@@ -17,7 +17,6 @@ export type Config = {
     user: string;
     password: string;
     dbName: string;
-    testDbName: string;
   };
   redis: {
     url: string;
@@ -29,7 +28,9 @@ export type Config = {
 @injectable()
 class ConfigService {
   private readonly configSchema = Joi.object<Config>({
-    env: Joi.string().valid('development', 'production', 'test').required(),
+    env: Joi.string()
+      .valid('development', 'production', 'test')
+      .default('development'),
     port: Joi.number().integer().min(1).max(65535).required(),
     sessionSecret: Joi.string().required(),
     googleClientId: Joi.string().required(),
@@ -40,7 +41,6 @@ class ConfigService {
       user: Joi.string().required(),
       password: Joi.string().required(),
       dbName: Joi.string().required(),
-      testDbName: Joi.string().required(),
     }),
 
     redis: Joi.object({
@@ -65,7 +65,6 @@ class ConfigService {
         user: process.env.POSTGRES_USER,
         password: process.env.POSTGRES_PASSWORD,
         dbName: process.env.POSTGRES_DB,
-        testDbName: process.env.POSTGRES_TEST_DB,
       },
 
       redis: {
@@ -85,10 +84,14 @@ class ConfigService {
     return selector(this.config);
   }
 
-  isMainThread(): boolean {
+  get isMainThread(): boolean {
     return (
       process.env.NODE_ENV === 'development' || process.env.THREAD_INDEX === '0'
     );
+  }
+
+  get isTest(): boolean {
+    return process.env.NODE_ENV === 'test';
   }
 }
 

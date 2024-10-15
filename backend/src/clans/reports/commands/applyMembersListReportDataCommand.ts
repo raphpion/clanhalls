@@ -2,7 +2,6 @@ import { WOMClient } from '@wise-old-man/utils';
 import { type QueryRunner } from 'typeorm';
 
 import Command from '../../../command';
-import db from '../../../db';
 import { withSafeWiseOldMan } from '../../../helpers/wiseOldMan';
 import Player from '../../../players/player';
 import type ClanPlayer from '../../clanPlayer';
@@ -14,7 +13,7 @@ type Params = {
 
 class ApplyMembersListReportDataCommand extends Command<Params> {
   async execute() {
-    const queryRunner = db.createQueryRunner();
+    const queryRunner = this.db.createQueryRunner();
 
     try {
       await queryRunner.connect();

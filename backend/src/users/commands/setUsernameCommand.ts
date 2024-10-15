@@ -1,5 +1,5 @@
+
 import Command from '../../command';
-import db from '../../db';
 import AppError, { AppErrorCodes } from '../../extensions/errors';
 import User from '../user';
 
@@ -12,7 +12,7 @@ type Result = User;
 
 class SetUsernameCommand extends Command<Params, Result> {
   async execute() {
-    const repository = db.getRepository(User);
+    const repository = this.db.getRepository(User);
     const { user, username } = this.params;
 
     const usernameNormalized = User.normalizeUsername(username);
@@ -22,7 +22,7 @@ class SetUsernameCommand extends Command<Params, Result> {
     if (existingUser) {
       throw new AppError(
         AppErrorCodes.ALREADY_EXISTS,
-        'Username is already taken'
+        'Username is already taken',
       );
     }
 

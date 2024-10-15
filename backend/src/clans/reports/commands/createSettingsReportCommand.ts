@@ -1,5 +1,5 @@
+
 import Command from '../../../command';
-import db from '../../../db';
 import type User from '../../../users/user';
 import type Clan from '../../clan';
 import type { Settings } from '../settingsReport';
@@ -15,7 +15,7 @@ type Result = SettingsReport;
 
 class CreateSettingsReportCommand extends Command<Params, Result> {
   async execute() {
-    const repository = db.getRepository(SettingsReport);
+    const repository = this.db.getRepository(SettingsReport);
 
     const { clan, settings, user } = this.params;
     const settingsReport = new SettingsReport();

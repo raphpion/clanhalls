@@ -1,5 +1,4 @@
 import Command from '../../../command';
-import db from '../../../db';
 import AppError, { AppErrorCodes } from '../../../extensions/errors';
 import Credentials from '../credentials';
 
@@ -9,7 +8,7 @@ type Params = {
 
 class DeleteCredentialsCommand extends Command<Params> {
   async execute() {
-    const repository = db.getRepository(Credentials);
+    const repository = this.db.getRepository(Credentials);
 
     const { clientId } = this.params;
     const credentials = await repository.findOne({

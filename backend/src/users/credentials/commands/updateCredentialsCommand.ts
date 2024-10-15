@@ -1,5 +1,4 @@
 import Command from '../../../command';
-import db from '../../../db';
 import AppError, { AppErrorCodes } from '../../../extensions/errors';
 import Credentials from '../credentials';
 
@@ -13,7 +12,7 @@ type Result = Credentials;
 // TODO: Add permission checks
 class UpdateCredentialsCommand extends Command<Params, Result> {
   async execute() {
-    const repository = db.getRepository(Credentials);
+    const repository = this.db.getRepository(Credentials);
 
     const { clientId, updates } = this.params;
     const credentials = await repository.findOne({

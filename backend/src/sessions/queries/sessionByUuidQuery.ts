@@ -1,4 +1,4 @@
-import db from '../../db';
+
 import Query from '../../query';
 import Session from '../session';
 
@@ -11,7 +11,8 @@ type Result = Session | null;
 
 class SessionByUuidQuery extends Query<Params, Result> {
   async execute() {
-    const repository = db.getRepository(Session);
+    const repository = this.db.getRepository(Session);
+
     const { uuid, relations } = this.params;
 
     const session = await repository.findOne({

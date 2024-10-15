@@ -1,5 +1,5 @@
+
 import Command from '../../../command';
-import db from '../../../db';
 import type User from '../../../users/user';
 import type Clan from '../../clan';
 import type { MemberActivity } from '../memberActivityReport';
@@ -15,7 +15,7 @@ type Result = MemberActivityReport;
 
 class CreateMemberActivityReportCommand extends Command<Params, Result> {
   async execute() {
-    const repository = db.getRepository(MemberActivityReport);
+    const repository = this.db.getRepository(MemberActivityReport);
     const { user, clan, members } = this.params;
 
     const memberActivityReport = new MemberActivityReport();

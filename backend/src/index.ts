@@ -8,10 +8,10 @@ import cors from 'cors';
 import express from 'express';
 import session from 'express-session';
 import { createClient } from 'redis';
+import type { DataSource } from 'typeorm';
 
 import type ConfigService from './config';
 import container from './container';
-import db from './db';
 import type { IJobsService } from './jobs/jobsService';
 import errorMiddleware from './middleware/errorMiddleware';
 import routes from './routes';
@@ -20,6 +20,7 @@ startup();
 
 async function startup() {
   const app = express();
+  const db = container.resolve<DataSource>('DataSource');
 
   await Promise.all([initializeSession(app), db.initialize()]);
   await container.resolve<IJobsService>('JobsService').initialize();

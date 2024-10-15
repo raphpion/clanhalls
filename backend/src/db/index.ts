@@ -17,6 +17,23 @@ import User from '../users/user';
 
 config({ path: path.join(__dirname, '../../../.env') });
 
+export const entities = [
+  Clan,
+  ClanPlayer,
+  ClanRank,
+  ClanUser,
+  Credentials,
+  MemberActivityReport,
+  MembersListReport,
+  Player,
+  SettingsReport,
+  Session,
+  User,
+];
+
+export const migrations = [__dirname + '/migrations/**/*.ts'];
+export const subscribers = [__dirname + '/subscribers/**/*.ts'];
+
 const db = new DataSource({
   type: 'postgres',
   host: process.env.POSTGRES_URL,
@@ -27,21 +44,9 @@ const db = new DataSource({
   synchronize: false,
   logging: process.env.NODE_ENV === 'development',
   logger: 'file',
-  entities: [
-    Clan,
-    ClanPlayer,
-    ClanRank,
-    ClanUser,
-    Credentials,
-    MemberActivityReport,
-    MembersListReport,
-    Player,
-    SettingsReport,
-    Session,
-    User,
-  ],
-  subscribers: [__dirname + '/subscribers/**/*.ts'],
-  migrations: [__dirname + '/migrations/**/*.ts'],
+  entities,
+  subscribers,
+  migrations,
 });
 
 export default db;

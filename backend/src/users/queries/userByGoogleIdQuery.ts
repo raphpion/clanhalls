@@ -1,4 +1,3 @@
-import db from '../../db';
 import Query from '../../query';
 import User from '../user';
 
@@ -11,7 +10,7 @@ type Result = User | null;
 
 class UserByGoogleIdQuery extends Query<Params, Result> {
   async execute() {
-    const repository = db.getRepository(User);
+    const repository = this.db.getRepository(User);
     const { googleId, relations } = this.params;
 
     return repository.findOne({

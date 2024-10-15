@@ -1,5 +1,5 @@
+
 import Command from '../../command';
-import db from '../../db';
 import AppError, { AppErrorCodes } from '../../extensions/errors';
 import type User from '../../users/user';
 import Clan from '../clan';
@@ -11,7 +11,8 @@ type Params = {
 
 class CreateClanForUserCommand extends Command<Params> {
   async execute() {
-    const repository = db.getRepository(Clan);
+    const repository = this.db.getRepository(Clan);
+
     const { name, user } = this.params;
 
     const existingClan = await repository.findOne({
@@ -20,7 +21,7 @@ class CreateClanForUserCommand extends Command<Params> {
     if (existingClan) {
       throw new AppError(
         AppErrorCodes.ALREADY_EXISTS,
-        'A clan with this name already exists'
+        'A clan with this name already exists',
       );
     }
 
