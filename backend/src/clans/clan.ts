@@ -13,7 +13,6 @@ import ClanUser from './clanUser';
 import MemberActivityReport from './reports/memberActivityReport';
 import SettingsReport from './reports/settingsReport';
 import AppError, { AppErrorCodes } from '../extensions/errors';
-import type Player from '../players/player';
 import type User from '../users/user';
 
 @Entity()
@@ -98,29 +97,6 @@ class Clan {
     clanUser.isAdmin = isAdmin;
 
     clanUsers.push(clanUser);
-  }
-
-  async addOrUpdatePlayer(player: Player, rank: string, lastSeenAt: Date) {
-    const clanPlayers = await this.clanPlayers;
-
-    const existingClanUser = clanPlayers.find(
-      (clanPlayer) => clanPlayer.playerId === player.id,
-    );
-
-    if (existingClanUser) {
-      existingClanUser.rank = rank;
-      existingClanUser.lastSeenAt = lastSeenAt;
-
-      return;
-    }
-
-    const clanPlayer = new ClanPlayer();
-    clanPlayer.player = Promise.resolve(player);
-    clanPlayer.clan = Promise.resolve(this);
-    clanPlayer.rank = rank;
-    clanPlayer.lastSeenAt = lastSeenAt;
-
-    clanPlayers.push(clanPlayer);
   }
 }
 
