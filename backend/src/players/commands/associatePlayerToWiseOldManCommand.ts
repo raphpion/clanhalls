@@ -1,7 +1,7 @@
-import { WOMClient } from '@wise-old-man/utils';
 
 import Command from '../../command';
-import { withSafeWiseOldMan } from '../../helpers/wiseOldMan';
+import container from '../../container';
+import type { IWiseOldManService } from '../../services/wiseOldManService';
 import Player from '../player';
 
 type Params = {
@@ -9,6 +9,9 @@ type Params = {
 };
 
 class AssociatePlayerToWiseOldManCommand extends Command<Params> {
+  private readonly wiseOldMan =
+    container.resolve<IWiseOldManService>('WiseOldManService');
+
   async execute() {
     const queryRunner = this.db.createQueryRunner();
 
@@ -23,9 +26,8 @@ class AssociatePlayerToWiseOldManCommand extends Command<Params> {
         return;
       }
 
-      const wiseOldMan = new WOMClient();
-      const wiseOldManPlayer = await withSafeWiseOldMan(() =>
-        wiseOldMan.players.getPlayerDetails(player.username.toLowerCase()),
+      const wiseOldManPlayer = await this.wiseOldMan.getPlayerDetails(
+        player.username.toLowerCase(),
       );
 
       if (!wiseOldManPlayer) {

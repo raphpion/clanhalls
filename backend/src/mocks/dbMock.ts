@@ -1,8 +1,8 @@
 import { DataSource } from 'typeorm';
 
-import { entities, migrations } from '.';
+import { entities, migrations } from '../db';
 
-const testDb = new DataSource({
+const dbMock = new DataSource({
   type: 'sqlite',
   database: ':memory:',
   synchronize: true,
@@ -11,4 +11,4 @@ const testDb = new DataSource({
   migrations,
 });
 
-export default testDb;
+export default dbMock;

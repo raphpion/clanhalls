@@ -1,9 +1,9 @@
-import { WOMClient } from '@wise-old-man/utils';
 import type { QueryRunner } from 'typeorm';
 
 import Command from '../../../command';
-import { withSafeWiseOldMan } from '../../../helpers/wiseOldMan';
+import container from '../../../container';
 import Player from '../../../players/player';
+import type { IWiseOldManService } from '../../../services/wiseOldManService';
 import ClanPlayer from '../../clanPlayer';
 import type { MemberActivity } from '../memberActivityReport';
 import MemberActivityReport from '../memberActivityReport';
@@ -14,6 +14,8 @@ type Params = {
 
 class ApplyMemberActivityReportDataCommand extends Command<Params> {
   private readonly ignoredRanks = ['GUEST', 'JMOD'];
+  private readonly wiseOldMan =
+    container.resolve<IWiseOldManService>('WiseOldManService');
 
   async execute() {
     const queryRunner = this.db.createQueryRunner();
@@ -39,19 +41,14 @@ class ApplyMemberActivityReportDataCommand extends Command<Params> {
         });
 
         if (!player) {
-          player = await withSafeWiseOldMan(() =>
-            this.findPlayerWithPreviousName(queryRunner, member),
-          );
+          player = await this.findPlayerWithPreviousName(queryRunner, member);
 
           if (!player) {
             player = new Player();
             player.username = member.name;
 
-            const wiseOldMan = new WOMClient();
-            const wiseOldManPlayer = await withSafeWiseOldMan(() =>
-              wiseOldMan.players.getPlayerDetails(
-                player.username.toLowerCase(),
-              ),
+            const wiseOldManPlayer = await this.wiseOldMan.getPlayerDetails(
+              player.username.toLowerCase(),
             );
 
             if (wiseOldManPlayer) {
@@ -98,11 +95,7 @@ class ApplyMemberActivityReportDataCommand extends Command<Params> {
     queryRunner: QueryRunner,
     member: MemberActivity,
   ) {
-    const wiseOldMan = new WOMClient();
-
-    const nameChanges = await withSafeWiseOldMan(() =>
-      wiseOldMan.players.getPlayerNames(member.name),
-    );
+    const nameChanges = await this.wiseOldMan.getPlayerNames(member.name);
     if (!nameChanges?.length) {
       return undefined;
     }

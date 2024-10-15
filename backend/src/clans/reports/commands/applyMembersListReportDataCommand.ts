@@ -1,9 +1,9 @@
-import { WOMClient } from '@wise-old-man/utils';
 import { type QueryRunner } from 'typeorm';
 
 import Command from '../../../command';
-import { withSafeWiseOldMan } from '../../../helpers/wiseOldMan';
+import container from '../../../container';
 import Player from '../../../players/player';
+import type { IWiseOldManService } from '../../../services/wiseOldManService';
 import type ClanPlayer from '../../clanPlayer';
 import MembersListReport from '../membersListReport';
 
@@ -12,6 +12,9 @@ type Params = {
 };
 
 class ApplyMembersListReportDataCommand extends Command<Params> {
+  private readonly wiseOldMan =
+    container.resolve<IWiseOldManService>('WiseOldManService');
+
   async execute() {
     const queryRunner = this.db.createQueryRunner();
 
@@ -92,10 +95,9 @@ class ApplyMembersListReportDataCommand extends Command<Params> {
         : undefined;
     }
 
-    const wiseOldMan = new WOMClient();
-    const nameChanges = await withSafeWiseOldMan(() =>
-      wiseOldMan.nameChanges.searchNameChanges({ username: player.username }),
-    );
+    const nameChanges = await this.wiseOldMan.searchNameChanges({
+      username: player.username,
+    });
 
     const filteredNameChanges = nameChanges
       .filter((nc) => nc.createdAt > lastSeenAt)
@@ -122,10 +124,8 @@ class ApplyMembersListReportDataCommand extends Command<Params> {
   }
 
   private async getPlayerNewNameFromWiseOldMan(wiseOldManId: number) {
-    const wiseOldMan = new WOMClient();
-    const wiseOldManPlayer = await withSafeWiseOldMan(() =>
-      wiseOldMan.players.getPlayerDetailsById(wiseOldManId),
-    );
+    const wiseOldManPlayer =
+      await this.wiseOldMan.getPlayerDetailsById(wiseOldManId);
 
     if (!wiseOldManPlayer) {
       return undefined;
