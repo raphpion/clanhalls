@@ -27,7 +27,9 @@ class ClanUser {
   @JoinColumn({ name: 'clanId' })
   clan: Promise<Clan>;
 
-  @OneToOne(() => User, (user: User) => user.clanUser, { onDelete: 'CASCADE' })
+  @OneToOne(() => User, (user: User) => user.clanUser, {
+    onDelete: 'CASCADE',
+  })
   @JoinColumn({ name: 'userId' })
   user: Promise<User>;
 }

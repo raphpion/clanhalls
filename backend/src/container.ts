@@ -5,7 +5,6 @@ import ConfigService from './config';
 import db from './db';
 import type { IJobsService } from './jobs/jobsService';
 import JobsService from './jobs/jobsService';
-import dbMock from './mocks/dbMock';
 import WiseOldManServiceMock from './mocks/wiseOldManServiceMock';
 import type { IGoogleService } from './services/googleService';
 import GoogleService from './services/googleService';
@@ -19,13 +18,12 @@ container
   .registerSingleton<IJobsService>('JobsService', JobsService);
 
 const isTest = container.resolve<ConfigService>('ConfigService').isTest;
-const dataSource = isTest ? dbMock : db;
 const WiseOldManServiceClass = isTest
   ? WiseOldManServiceMock
   : WiseOldManService;
 
 container
-  .register<DataSource>('DataSource', { useValue: dataSource })
+  .register<DataSource>('DataSource', { useValue: db })
   .register<IWiseOldManService>('WiseOldManService', {
     useClass: WiseOldManServiceClass,
   });

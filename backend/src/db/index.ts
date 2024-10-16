@@ -17,6 +17,8 @@ import User from '../users/user';
 
 config({ path: path.join(__dirname, '../../../.env') });
 
+const isTest = process.env.NODE_ENV === 'test';
+
 export const entities = [
   Clan,
   ClanPlayer,
@@ -40,12 +42,13 @@ const db = new DataSource({
   port: Number(process.env.POSTGRES_PORT),
   username: process.env.POSTGRES_USER,
   password: process.env.POSTGRES_PASSWORD,
-  database: process.env.POSTGRES_DB,
-  synchronize: false,
-  logging: process.env.NODE_ENV === 'development',
+  database: isTest ? process.env.POSTGRES_TEST_DB : process.env.POSTGRES_DB,
+  synchronize: isTest,
+  dropSchema: isTest,
+  logging: process.env.NODE_ENV !== 'production',
   logger: 'file',
   entities,
-  subscribers,
+  subscribers: isTest ? [] : subscribers,
   migrations,
 });
 

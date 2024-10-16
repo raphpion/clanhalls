@@ -1,5 +1,5 @@
-
 import Command from '../../../command';
+import AppError, { AppErrorCodes } from '../../../extensions/errors';
 import type User from '../../../users/user';
 import type Clan from '../../clan';
 import type { Settings } from '../settingsReport';
@@ -18,6 +18,15 @@ class CreateSettingsReportCommand extends Command<Params, Result> {
     const repository = this.db.getRepository(SettingsReport);
 
     const { clan, settings, user } = this.params;
+
+    const clanUser = await user.clanUser;
+    if (!clanUser || clanUser.clanId !== clan.id) {
+      throw new AppError(
+        AppErrorCodes.BAD_REQUEST,
+        'User is not a member of the clan',
+      );
+    }
+
     const settingsReport = new SettingsReport();
 
     settingsReport.data = settings;

@@ -1,4 +1,3 @@
-
 import Command from '../../command';
 import AppError, { AppErrorCodes } from '../../extensions/errors';
 import type User from '../../users/user';
@@ -14,6 +13,14 @@ class CreateClanForUserCommand extends Command<Params> {
     const repository = this.db.getRepository(Clan);
 
     const { name, user } = this.params;
+
+    const existingClanUser = await user.clanUser;
+    if (existingClanUser) {
+      throw new AppError(
+        AppErrorCodes.BAD_REQUEST,
+        'The user is already in a clan',
+      );
+    }
 
     const existingClan = await repository.findOne({
       where: { name },
@@ -32,7 +39,7 @@ class CreateClanForUserCommand extends Command<Params> {
 
     await clan.addUser(user, true);
 
-    repository.save(clan);
+    await repository.save(clan);
   }
 }
 

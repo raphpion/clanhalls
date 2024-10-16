@@ -1,6 +1,5 @@
-import User from '../users/user';
-import Clan from './clan';
-import ClanUser from './clanUser';
+import User from '../../src/users/user';
+import Clan from '../../src/clans/clan';
 
 describe('Clan', () => {
   it('normalizes names adequately', () => {

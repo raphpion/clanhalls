@@ -41,7 +41,7 @@ class User {
   pictureUrl: string | null;
 
   @OneToOne(() => ClanUser, (clanUser: ClanUser) => clanUser.user)
-  clanUser: Promise<ClanUser>;
+  clanUser: Promise<ClanUser | null>;
 
   @OneToMany(() => Credentials, (credentials: Credentials) => credentials.user)
   credentials: Promise<Credentials[]>;
