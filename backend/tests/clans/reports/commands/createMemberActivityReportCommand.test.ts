@@ -1,15 +1,17 @@
 import 'reflect-metadata';
-import { DataSource } from 'typeorm';
+
+// eslint-disable-next-line import/order
 import container from '../../../../src/container';
-import User from '../../../../src/users/user';
-import CreateMemberActivityReportCommand from '../../../../src/clans/reports/commands/createMemberActivityReportCommand';
-import ClanUser from '../../../../src/clans/clanUser';
+
 import Clan from '../../../../src/clans/clan';
-import { MemberActivity } from '../../../../src/clans/reports/memberActivityReport';
 import CLAN_RANKS from '../../../../src/clans/ranks';
+import CreateMemberActivityReportCommand from '../../../../src/clans/reports/commands/createMemberActivityReportCommand';
+import type { MemberActivity } from '../../../../src/clans/reports/memberActivityReport';
+import type SeedingService from '../../../../src/db/seeding/seedingService';
+import User from '../../../../src/users/user';
 
 describe('CreateMemberActivityReportCommand', () => {
-  const db = container.resolve<DataSource>('DataSource');
+  const seedingService = container.resolve<SeedingService>('SeedingService');
 
   const data: MemberActivity[] = [
     {
@@ -27,48 +29,16 @@ describe('CreateMemberActivityReportCommand', () => {
   ] as const;
 
   beforeEach(async () => {
-    await db.initialize();
-
-    const user1 = new User();
-    user1.email = 'john.doe@gmail.com';
-    user1.emailNormalized = 'john.doe@gmailcom';
-    user1.googleId = '123456';
-    user1.username = 'JohnDoe';
-    user1.usernameNormalized = 'johndoe';
-
-    const user2 = new User();
-    user2.email = 'jane.doe@gmail.com';
-    user2.emailNormalized = 'jane.doe@gmailcom';
-    user2.googleId = '654321';
-    user2.username = 'JaneDoe';
-    user2.usernameNormalized = 'janedoe';
-
-    const clan = new Clan();
-    clan.name = 'The Worst Clan';
-    clan.nameNormalized = 'the-worst-clan';
-
-    await db.getRepository(Clan).save(clan);
-    await db.getRepository(User).save([user1, user2]);
-
-    const clanUser = new ClanUser();
-    clanUser.user = Promise.resolve(user1);
-    clanUser.clan = Promise.resolve(clan);
-
-    await db.getRepository(ClanUser).save(clanUser);
+    await seedingService.initialize();
   });
 
   afterEach(async () => {
-    await db.destroy();
+    seedingService.clear();
   });
 
   it('creates a member activity report', async () => {
-    const user = await db
-      .getRepository(User)
-      .findOneByOrFail({ email: 'john.doe@gmail.com' });
-
-    const clan = await db.getRepository(Clan).findOneByOrFail({
-      name: 'The Worst Clan',
-    });
+    const user = seedingService.getEntity(User, 'john_doe')!;
+    const clan = seedingService.getEntity(Clan, 'iron_wolves')!;
 
     const report = await new CreateMemberActivityReportCommand({
       user,
@@ -80,13 +50,8 @@ describe('CreateMemberActivityReportCommand', () => {
   });
 
   it('throws an error if the user is not a member of the clan', async () => {
-    const user = await db
-      .getRepository(User)
-      .findOneByOrFail({ email: 'jane.doe@gmail.com' });
-
-    const clan = await db.getRepository(Clan).findOneByOrFail({
-      name: 'The Worst Clan',
-    });
+    const user = seedingService.getEntity(User, 'john_doe')!;
+    const clan = seedingService.getEntity(Clan, 'night_blades')!;
 
     await expect(
       new CreateMemberActivityReportCommand({

@@ -1,0 +1,49 @@
+john_doe:
+  googleId: 1
+  username: JohnDoe
+  email: john.doe@gmail.com
+
+jane_doe:
+  googleId: 2
+  username: JaneDoe
+  email: jane.doe@gmail.com
+
+mike_smith:
+  googleId: 3
+  username: MikeSmith
+  email: mike.smith@gmail.com
+
+emily_johnson:
+  googleId: 4
+  username: EmilyJohnson
+  email: emily.johnson@gmail.com
+
+chris_brown:
+  googleId: 5
+  username: ChrisBrown
+  email: chris.brown@gmail.com
+
+sarah_miller:
+  googleId: 6
+  username: SarahMiller
+  email: sarah.miller@gmail.com
+
+david_clark:
+  googleId: 7
+  username: DavidClark
+  email: david.clark@gmail.com
+
+laura_wilson:
+  googleId: 8
+  username: LauraWilson
+  email: laura.wilson@gmail.com
+
+james_taylor:
+  googleId: 9
+  username: JamesTaylor
+  email: james.taylor@gmail.com
+
+olivia_anderson:
+  googleId: 10
+  username: OliviaAnderson
+  email: olivia.anderson@gmail.com

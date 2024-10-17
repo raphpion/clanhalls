@@ -1,0 +1,44 @@
+iron_wolves__john_doe__admin:
+  user: john_doe
+  clan: iron_wolves
+  admin: true
+
+iron_wolves__jane_doe__user:
+  user: jane_doe
+  clan: iron_wolves
+  admin: false
+
+shadow_ravens__mike_smith__admin:
+  user: mike_smith
+  clan: shadow_ravens
+  admin: true
+
+storm_keepers__emily_johnson__admin:
+  user: emily_johnson
+  clan: storm_keepers
+  admin: true
+
+storm_keepers__olivia_anderson__user:
+  user: olivia_anderson
+  clan: storm_keepers
+  admin: false
+
+night_blades__chris_brown__admin:
+  user: chris_brown
+  clan: night_blades
+  admin: true
+
+night_blades__laura_wilson__user:
+  user: laura_wilson
+  clan: night_blades
+  admin: false
+
+frost_guardians__sarah_miller__admin:
+  user: sarah_miller
+  clan: frost_guardians
+  admin: true
+
+frost_guardians__david_clark__user:
+  user: david_clark
+  clan: frost_guardians
+  admin: false
