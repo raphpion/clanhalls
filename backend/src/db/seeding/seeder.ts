@@ -8,7 +8,7 @@ import YAML from 'yaml';
 import type SeedingService from './seedingService';
 import type ConfigService from '../../config';
 
-export abstract class Seeder<Entity, Schema, Identifier = string> {
+abstract class Seeder<Entity, Schema, Identifier = string> {
   public abstract readonly entityName: string;
 
   protected abstract readonly schema: Joi.Schema<Record<string, Schema>>;
@@ -21,7 +21,7 @@ export abstract class Seeder<Entity, Schema, Identifier = string> {
   ) {}
 
   public async seed() {
-    const seeds = await this.getSeedingData();
+    const seeds = await this.getSeedData();
     if (!seeds) {
       return;
     }
@@ -67,7 +67,7 @@ export abstract class Seeder<Entity, Schema, Identifier = string> {
     entity: Entity,
   ): Identifier | Promise<Identifier>;
 
-  private async getSeedingData(): Promise<Record<string, Schema> | undefined> {
+  private async getSeedData(): Promise<Record<string, Schema> | undefined> {
     try {
       const seedFileData = await readFile(this.seedPath, 'utf-8');
       const seedFileJson = YAML.parse(seedFileData);
@@ -91,3 +91,5 @@ export abstract class Seeder<Entity, Schema, Identifier = string> {
     return join(__dirname, `./${env}/${seederName}.yml`);
   }
 }
+
+export default Seeder;

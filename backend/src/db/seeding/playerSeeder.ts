@@ -1,14 +1,14 @@
 import Joi from 'joi';
 
-import { Seeder } from './seeder';
+import Seeder from './seeder';
 import Player from '../../players/player';
 
-type PlayerSeeding = {
+type PlayerSeed = {
   wise_old_man_id: number | null;
   username: string;
 };
 
-const playerSeedingSchema = Joi.object<Record<string, PlayerSeeding>>().pattern(
+const playerSeedSchema = Joi.object<Record<string, PlayerSeed>>().pattern(
   Joi.string(),
   Joi.object({
     wise_old_man_id: Joi.number()
@@ -21,11 +21,11 @@ const playerSeedingSchema = Joi.object<Record<string, PlayerSeeding>>().pattern(
   }),
 );
 
-class PlayerSeeder extends Seeder<Player, PlayerSeeding> {
+class PlayerSeeder extends Seeder<Player, PlayerSeed> {
   entityName = Player.name;
-  schema = playerSeedingSchema;
+  schema = playerSeedSchema;
 
-  protected deserialize(seed: PlayerSeeding): Player {
+  protected deserialize(seed: PlayerSeed): Player {
     const player = new Player();
     player.wiseOldManId = seed.wise_old_man_id;
     player.username = seed.username;

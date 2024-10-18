@@ -1,15 +1,15 @@
 import Joi from 'joi';
 
-import { Seeder } from './seeder';
+import Seeder from './seeder';
 import User from '../../users/user';
 
-type UserSeeding = {
+type UserSeed = {
   google_id: string;
   username: string;
   email: string;
 };
 
-const userSeedingSchema = Joi.object<Record<string, UserSeeding>>().pattern(
+const userSeedSchema = Joi.object<Record<string, UserSeed>>().pattern(
   Joi.string(),
   Joi.object({
     google_id: Joi.number()
@@ -22,11 +22,11 @@ const userSeedingSchema = Joi.object<Record<string, UserSeeding>>().pattern(
   }),
 );
 
-class UserSeeder extends Seeder<User, UserSeeding> {
+class UserSeeder extends Seeder<User, UserSeed> {
   entityName = User.name;
-  schema = userSeedingSchema;
+  schema = userSeedSchema;
 
-  protected deserialize(seed: UserSeeding): User {
+  protected deserialize(seed: UserSeed): User {
     const user = new User();
     user.googleId = seed.google_id;
     user.username = seed.username;

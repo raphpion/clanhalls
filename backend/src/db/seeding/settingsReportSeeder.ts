@@ -1,13 +1,13 @@
 import { format } from 'date-fns';
 import Joi from 'joi';
 
-import { Seeder } from './seeder';
+import Seeder from './seeder';
 import Clan from '../../clans/clan';
 import type { Settings } from '../../clans/reports/settingsReport';
 import SettingsReport from '../../clans/reports/settingsReport';
 import User from '../../users/user';
 
-type SettingsReportSeeding = {
+type SettingsReportSeed = {
   user: string;
   clan: string;
   received_at: string;
@@ -15,8 +15,8 @@ type SettingsReportSeeding = {
   data: Settings;
 };
 
-const settingsReportSeedingSchema = Joi.object<
-  Record<string, SettingsReportSeeding>
+const settingsReportSeedSchema = Joi.object<
+  Record<string, SettingsReportSeed>
 >().pattern(
   Joi.string(),
   Joi.object({
@@ -33,12 +33,12 @@ const settingsReportSeedingSchema = Joi.object<
 
 class SettingsReportSeeder extends Seeder<
   SettingsReport,
-  SettingsReportSeeding
+  SettingsReportSeed
 > {
   entityName = SettingsReport.name;
-  schema = settingsReportSeedingSchema;
+  schema = settingsReportSeedSchema;
 
-  protected deserialize(seed: SettingsReportSeeding) {
+  protected deserialize(seed: SettingsReportSeed) {
     const clan = this.seedingService.getEntity(Clan, seed.clan);
     if (!clan) {
       console.log(`Clan not found: ${seed.clan}. Skipping...`);

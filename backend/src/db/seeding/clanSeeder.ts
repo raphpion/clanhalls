@@ -1,15 +1,15 @@
 import Joi from 'joi';
 
-import { Seeder } from './seeder';
+import Seeder from './seeder';
 import Clan from '../../clans/clan';
 
-type ClanSeeding = {
+type ClanSeed = {
   name: string;
   name_in_game: string;
   last_synced_at: string | null;
 };
 
-const clanSeedingSchema = Joi.object<Record<string, ClanSeeding>>().pattern(
+const clanSeedSchema = Joi.object<Record<string, ClanSeed>>().pattern(
   Joi.string(),
   Joi.object({
     name: Joi.string().required(),
@@ -18,11 +18,11 @@ const clanSeedingSchema = Joi.object<Record<string, ClanSeeding>>().pattern(
   }),
 );
 
-class ClanSeeder extends Seeder<Clan, ClanSeeding> {
+class ClanSeeder extends Seeder<Clan, ClanSeed> {
   entityName = Clan.name;
-  schema = clanSeedingSchema;
+  schema = clanSeedSchema;
 
-  protected deserialize(seed: ClanSeeding): Clan {
+  protected deserialize(seed: ClanSeed): Clan {
     const clan = new Clan();
     clan.name = seed.name;
     clan.nameNormalized = Clan.normalizeName(seed.name);

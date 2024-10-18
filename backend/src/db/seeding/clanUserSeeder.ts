@@ -1,18 +1,18 @@
 import Joi from 'joi';
 
-import { Seeder } from './seeder';
+import Seeder from './seeder';
 import Clan from '../../clans/clan';
 import ClanUser from '../../clans/clanUser';
 import User from '../../users/user';
 
-type ClanUserSeeding = {
+type ClanUserSeed = {
   clan: string;
   user: string;
   admin: boolean;
 };
 
-const clanUserSeedingSchema = Joi.object<
-  Record<string, ClanUserSeeding>
+const clanUserSeedSchema = Joi.object<
+  Record<string, ClanUserSeed>
 >().pattern(
   Joi.string(),
   Joi.object({
@@ -22,11 +22,11 @@ const clanUserSeedingSchema = Joi.object<
   }),
 );
 
-class ClanUserSeeder extends Seeder<ClanUser, ClanUserSeeding> {
+class ClanUserSeeder extends Seeder<ClanUser, ClanUserSeed> {
   entityName = ClanUser.name;
-  schema = clanUserSeedingSchema;
+  schema = clanUserSeedSchema;
 
-  protected deserialize(seed: ClanUserSeeding): ClanUser {
+  protected deserialize(seed: ClanUserSeed): ClanUser {
     const clan = this.seedingService.getEntity(Clan, seed.clan);
     if (!clan) {
       console.log(`Clan not found: ${seed.clan}. Skipping...`);
