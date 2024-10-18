@@ -12,6 +12,7 @@ import Clan from '../src/clans/clan';
 import ClanPlayer from '../src/clans/clanPlayer';
 import ClanRank from '../src/clans/clanRank';
 import ClanUser from '../src/clans/clanUser';
+import MemberActivityReport from '../src/clans/reports/memberActivityReport';
 import SettingsReport from '../src/clans/reports/settingsReport';
 import type SeedingService from '../src/db/seeding/seedingService';
 import Player from '../src/players/player';
@@ -73,6 +74,13 @@ describe('Seeding', () => {
   it('seeds clan users successfully', async () => {
     for (const key in await getSeedData('clan-user')) {
       const entity = seedingService.getEntity(ClanUser, key);
+      expect(entity).not.toBeNull();
+    }
+  });
+
+  it('seeds member activity reports successfully', async () => {
+    for (const key in await getSeedData('member-activity-report')) {
+      const entity = seedingService.getEntity(MemberActivityReport, key);
       expect(entity).not.toBeNull();
     }
   });

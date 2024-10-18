@@ -2,61 +2,61 @@ iron_wolves__john_doe:
   clan: iron_wolves
   player: john_doe
   rank: OWNER
-  last_seen_at: 2024-01-01
+  last_seen_at: 2024-02-05
 
 iron_wolves__jane_smith:
   clan: iron_wolves
   player: jane_smith
   rank: CLAN_RANK_2
-  last_seen_at: 2024-02-15
+  last_seen_at: 2024-02-05
 
 iron_wolves__mike_ross:
   clan: iron_wolves
   player: mike_ross
   rank: ADMINISTRATOR
-  last_seen_at: 2024-03-10
+  last_seen_at: 2024-02-05
 
 iron_wolves__lucas_wilson:
   clan: iron_wolves
   player: lucas_wilson
   rank: CLAN_RANK_4
-  last_seen_at: 2024-01-25
+  last_seen_at: 2024-02-05
 
 iron_wolves__ava_clark:
   clan: iron_wolves
   player: ava_clark
   rank: CLAN_RANK_5
-  last_seen_at: 2024-04-01
+  last_seen_at: 2024-02-05
 
 iron_wolves__william_turner:
   clan: iron_wolves
   player: william_turner
   rank: CLAN_RANK_6
-  last_seen_at: 2024-01-30
+  last_seen_at: 2024-02-05
 
 iron_wolves__olivia_hall:
   clan: iron_wolves
   player: olivia_hall
   rank: CLAN_RANK_7
-  last_seen_at: 2024-02-18
+  last_seen_at: 2024-02-05
 
 iron_wolves__benjamin_white:
   clan: iron_wolves
   player: benjamin_white
   rank: CLAN_RANK_8
-  last_seen_at: 2024-03-03
+  last_seen_at: 2024-02-05
 
 iron_wolves__mia_harris:
   clan: iron_wolves
   player: mia_harris
   rank: CLAN_RANK_9
-  last_seen_at: 2024-03-25
+  last_seen_at: 2024-02-05
 
 iron_wolves__lucy_king:
   clan: iron_wolves
   player: lucy_king
   rank: DEPUTY_OWNER
-  last_seen_at: 2024-04-10
+  last_seen_at: 2024-02-05
 
 shadow_ravens__daniel_ward:
   clan: shadow_ravens
