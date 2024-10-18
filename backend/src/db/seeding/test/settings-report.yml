@@ -1,0 +1,80 @@
+iron_wolves__john_doe__01:
+  user: john_doe
+  clan: iron_wolves
+  received_at: 2024-01-01
+  applied_at: 2024-01-01
+  data:
+    name: IronWolves
+    ranks:
+      JMOD: Jmod
+      OWNER: Owner
+      DEPUTY_OWNER: Deputy Owner
+      ADMINISTRATOR: Administrator
+      CLAN_RANK_1: Diamond
+      CLAN_RANK_2: Dragonstone
+      CLAN_RANK_3: Onyx
+      CLAN_RANK_4: Zenyte
+      CLAN_RANK_5: Maxed
+      CLAN_RANK_6: Gnome Child
+      CLAN_RANK_7: Imp
+      CLAN_RANK_8: Skulled
+      CLAN_RANK_9: Beast
+      CLAN_RANK_10: Legend
+      CLAN_RANK_11: TzKal
+      CLAN_RANK_12: Lieutenant
+      CLAN_RANK_13: Captain
+      CLAN_RANK_14: General
+      GUEST: Guest
+
+iron_wolves__john_doe__02:
+  user: john_doe
+  clan: iron_wolves
+  received_at: 2024-02-01
+  data:
+    name: Iron Wolves
+    ranks:
+      JMOD: Jmod
+      OWNER: Owner
+      DEPUTY_OWNER: Deputy Owner
+      ADMINISTRATOR: Administrator
+      CLAN_RANK_1: Diamond
+      CLAN_RANK_2: Dragonstone
+      CLAN_RANK_3: Onyx
+      CLAN_RANK_4: Zenyte
+      CLAN_RANK_5: Maxed
+      CLAN_RANK_6: Gnome Child
+      CLAN_RANK_7: Imp
+      CLAN_RANK_8: Skulled
+      CLAN_RANK_9: Beast
+      CLAN_RANK_10: Legend
+      CLAN_RANK_11: TzKal
+      CLAN_RANK_12: Lieutenant
+      CLAN_RANK_13: Captain
+      CLAN_RANK_14: General
+      GUEST: Guest
+
+iron_wolves__john_doe__03:
+  received_at: 2024-03-01
+  user: john_doe
+  clan: iron_wolves
+  data:
+    name: Iron Wolves
+    ranks:
+      JMOD: Jmod
+      OWNER: Owner
+      DEPUTY_OWNER: Deputy Owner
+      ADMINISTRATOR: Administrator
+      CLAN_RANK_1: Diamond
+      CLAN_RANK_2: Dragonstone
+      CLAN_RANK_3: Onyx
+      CLAN_RANK_4: Zenyte
+      CLAN_RANK_5: Maxed
+      CLAN_RANK_6: Gnome Child
+      CLAN_RANK_7: Imp
+      CLAN_RANK_8: Skulled
+      CLAN_RANK_9: Beast
+      CLAN_RANK_10: Legend
+      CLAN_RANK_11: TzKal
+      CLAN_RANK_12: Adventurer
+      CLAN_RANK_13: Moderator
+      GUEST: Guest

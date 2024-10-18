@@ -2,6 +2,7 @@ import type { QueryRunner } from 'typeorm';
 
 import Command from '../../../command';
 import container from '../../../container';
+import AppError, { AppErrorCodes } from '../../../extensions/errors';
 import Player from '../../../players/player';
 import type { IWiseOldManService } from '../../../services/wiseOldManService';
 import ClanPlayer from '../../clanPlayer';
@@ -28,6 +29,13 @@ class ApplyMemberActivityReportDataCommand extends Command<Params> {
         where: { id: this.params.reportId },
         relations: ['clan'],
       });
+
+      if (report.appliedAt) {
+        throw new AppError(
+          AppErrorCodes.BAD_REQUEST,
+          'Report has already been applied',
+        );
+      }
 
       const clan = await report.clan;
 

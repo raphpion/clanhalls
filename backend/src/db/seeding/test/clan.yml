@@ -1,5 +1,7 @@
 iron_wolves:
   name: Iron Wolves
+  name_in_game: IronWolves
+  last_synced_at: 2024-01-01
 
 shadow_ravens:
   name: Shadow Ravens

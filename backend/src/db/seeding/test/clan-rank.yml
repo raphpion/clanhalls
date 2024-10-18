@@ -1,0 +1,94 @@
+iron_wolves__jmod:
+  clan: iron_wolves
+  rank: JMOD
+  title: Jmod
+
+iron_wolves__owner:
+  clan: iron_wolves
+  rank: OWNER
+  title: Owner
+
+iron_wolves__deputy_owner:
+  clan: iron_wolves
+  rank: DEPUTY_OWNER
+  title: Deputy Owner
+
+iron_wolves__administrator:
+  clan: iron_wolves
+  rank: ADMINISTRATOR
+  title: Administrator
+
+iron_wolves__clan_rank_1:
+  clan: iron_wolves
+  rank: CLAN_RANK_1
+  title: Diamond
+
+iron_wolves__clan_rank_2:
+  clan: iron_wolves
+  rank: CLAN_RANK_2
+  title: Dragonstone
+
+iron_wolves__clan_rank_3:
+  clan: iron_wolves
+  rank: CLAN_RANK_3
+  title: Onyx
+
+iron_wolves__clan_rank_4:
+  clan: iron_wolves
+  rank: CLAN_RANK_4
+  title: Zenyte
+
+iron_wolves__clan_rank_5:
+  clan: iron_wolves
+  rank: CLAN_RANK_5
+  title: Maxed
+
+iron_wolves__clan_rank_6:
+  clan: iron_wolves
+  rank: CLAN_RANK_6
+  title: Gnome Child
+
+iron_wolves__clan_rank_7:
+  clan: iron_wolves
+  rank: CLAN_RANK_7
+  title: Imp
+
+iron_wolves__clan_rank_8:
+  clan: iron_wolves
+  rank: CLAN_RANK_8
+  title: Skulled
+
+iron_wolves__clan_rank_9:
+  clan: iron_wolves
+  rank: CLAN_RANK_9
+  title: Beast
+
+iron_wolves__clan_rank_10:
+  clan: iron_wolves
+  rank: CLAN_RANK_10
+  title: Legend
+
+iron_wolves__clan_rank_11:
+  clan: iron_wolves
+  rank: CLAN_RANK_11
+  title: TzKal
+
+iron_wolves__clan_rank_12:
+  clan: iron_wolves
+  rank: CLAN_RANK_12
+  title: Lieutenant
+
+iron_wolves__clan_rank_13:
+  clan: iron_wolves
+  rank: CLAN_RANK_13
+  title: Captain
+
+iron_wolves__clan_rank_14:
+  clan: iron_wolves
+  rank: CLAN_RANK_14
+  title: General
+
+iron_wolves__guest:
+  clan: iron_wolves
+  rank: GUEST
+  title: Guest

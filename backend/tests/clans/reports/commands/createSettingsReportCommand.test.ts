@@ -27,7 +27,7 @@ describe('CreateSettingsReport', () => {
       CLAN_RANK_14: 'General',
       CLAN_RANK_5: 'Maxed',
       OWNER: 'Owner',
-      JMOD: 'Jagex Moderator',
+      JMOD: 'Jmod',
       CLAN_RANK_12: 'Lieutenant',
       CLAN_RANK_1: 'Diamond',
       CLAN_RANK_4: 'Zenyte',

@@ -1,6 +1,6 @@
 export const CLAN_TITLES = [
   // Default Ranks
-  'Jagex Moderator',
+  'Jmod',
   'Owner',
   'Deputy Owner',
   'Administrator',

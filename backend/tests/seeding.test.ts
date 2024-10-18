@@ -9,7 +9,9 @@ import { join } from 'path';
 import YAML from 'yaml';
 
 import Clan from '../src/clans/clan';
+import ClanRank from '../src/clans/clanRank';
 import ClanUser from '../src/clans/clanUser';
+import SettingsReport from '../src/clans/reports/settingsReport';
 import type SeedingService from '../src/db/seeding/seedingService';
 import User from '../src/users/user';
 
@@ -45,9 +47,23 @@ describe('Seeding', () => {
     }
   });
 
+  it('seeds clan ranks successfully', async () => {
+    for (const key in await getSeedData('clan-rank')) {
+      const entity = seedingService.getEntity(ClanRank, key);
+      expect(entity).not.toBeNull();
+    }
+  });
+
   it('seeds clan users successfully', async () => {
     for (const key in await getSeedData('clan-user')) {
       const entity = seedingService.getEntity(ClanUser, key);
+      expect(entity).not.toBeNull();
+    }
+  });
+
+  it('seeds settings reports successfully', async () => {
+    for (const key in await getSeedData('settings-report')) {
+      const entity = seedingService.getEntity(SettingsReport, key);
       expect(entity).not.toBeNull();
     }
   });

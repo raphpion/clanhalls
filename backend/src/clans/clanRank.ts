@@ -3,7 +3,7 @@ import {
   Entity,
   JoinColumn,
   ManyToOne,
-  PrimaryGeneratedColumn,
+  PrimaryColumn,
   Unique,
 } from 'typeorm';
 
@@ -12,13 +12,10 @@ import Clan from './clan';
 @Entity()
 @Unique(['rank', 'clan'])
 class ClanRank {
-  @PrimaryGeneratedColumn()
-  readonly id: number;
-
-  @Column()
+  @PrimaryColumn()
   readonly clanId: number;
 
-  @Column()
+  @PrimaryColumn()
   rank: string;
 
   @Column()

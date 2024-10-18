@@ -1,10 +1,16 @@
 import { inject, injectable } from 'tsyringe';
 import type { DataSource, EntityTarget, ObjectLiteral } from 'typeorm';
 
-import type { Seeder } from './seeders';
-import { ClanSeeder, ClanUserSeeder, UserSeeder } from './seeders';
+import ClanRankSeeder from './clanRankSeeder';
+import ClanSeeder from './clanSeeder';
+import ClanUserSeeder from './clanUserSeeder';
+import type { Seeder } from './seeder';
+import SettingsReportSeeder from './settingsReportSeeder';
+import UserSeeder from './userSeeder';
 import Clan from '../../clans/clan';
+import ClanRank from '../../clans/clanRank';
 import ClanUser from '../../clans/clanUser';
+import SettingsReport from '../../clans/reports/settingsReport';
 import type ConfigService from '../../config';
 import User from '../../users/user';
 
@@ -15,12 +21,14 @@ class SeedingService {
     ClanSeeder,
     UserSeeder,
     // Weak entities
+    ClanRankSeeder,
     ClanUserSeeder,
-    // Add more seeders here
+    SettingsReportSeeder,
+    // Add more seeders here...
   ];
 
   private readonly seederTypeMap = new Map<string, EntityTarget<ObjectLiteral>>(
-    [Clan, User, ClanUser].map((e) => [e.name, e]),
+    [Clan, User, ClanRank, ClanUser, SettingsReport].map((e) => [e.name, e]),
   );
 
   private readonly seederMap = new Map<
