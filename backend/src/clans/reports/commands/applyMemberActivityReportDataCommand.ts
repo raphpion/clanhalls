@@ -6,7 +6,6 @@ import AppError, { AppErrorCodes } from '../../../extensions/errors';
 import Player from '../../../players/player';
 import type { IWiseOldManService } from '../../../services/wiseOldManService';
 import ClanPlayer from '../../clanPlayer';
-import type { MemberActivity } from '../memberActivityReport';
 import MemberActivityReport from '../memberActivityReport';
 
 type Params = {
@@ -49,7 +48,11 @@ class ApplyMemberActivityReportDataCommand extends Command<Params> {
         });
 
         if (!player) {
-          player = await this.findPlayerWithPreviousName(queryRunner, member);
+          player = await this.findExistingPlayerWithNewName(
+            queryRunner,
+            member.name,
+            clan.id,
+          );
 
           if (!player) {
             player = new Player();
@@ -99,30 +102,43 @@ class ApplyMemberActivityReportDataCommand extends Command<Params> {
     }
   }
 
-  private async findPlayerWithPreviousName(
+  private async findExistingPlayerWithNewName(
     queryRunner: QueryRunner,
-    member: MemberActivity,
+    newName: string,
+    clanId: number,
   ) {
-    const nameChanges = await this.wiseOldMan.getPlayerNames(member.name);
+    const nameChanges = await this.wiseOldMan.searchNameChanges(
+      {
+        username: newName,
+      },
+      { limit: 50 },
+    );
     if (!nameChanges?.length) {
       return undefined;
     }
 
-    let player: Player | undefined;
+    const filteredNameChanges = nameChanges
+      .filter((nc) => nc.status !== 'denied' && nc.newName === newName)
+      .sort((a, b) => b.createdAt.valueOf() - a.createdAt.valueOf());
 
-    if (nameChanges.length > 0) {
-      for (const nameChange of nameChanges) {
-        player = await queryRunner.manager.findOne(Player, {
-          where: { username: nameChange.oldName },
+    let player: Player | undefined;
+    for (const nameChange of filteredNameChanges) {
+      player = await queryRunner.manager.findOne(Player, {
+        where: { username: nameChange.oldName },
+      });
+
+      if (player) {
+        const clanPlayer = await queryRunner.manager.findOne(ClanPlayer, {
+          where: { clanId, playerId: player.id },
         });
 
-        if (player) {
-          player.wiseOldManId = nameChange.playerId;
-          player.username = member.name;
-          player = await queryRunner.manager.save(player);
+        if (clanPlayer.lastSeenAt > nameChange.createdAt) continue;
 
-          break;
-        }
+        player.wiseOldManId = nameChange.playerId;
+        player.username = newName;
+        player = await queryRunner.manager.save(player);
+
+        break;
       }
     }
 

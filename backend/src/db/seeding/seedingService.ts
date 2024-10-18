@@ -7,7 +7,7 @@ import ClanSeeder from './clanSeeder';
 import ClanUserSeeder from './clanUserSeeder';
 import MemberActivityReportSeeder from './memberActivityReportSeeder';
 import PlayerSeeder from './playerSeeder';
-import type { Seeder } from './seeder';
+import type Seeder from './seeder';
 import SettingsReportSeeder from './settingsReportSeeder';
 import UserSeeder from './userSeeder';
 import { entities } from '..';

@@ -3,7 +3,6 @@ import type {
   NameChangesSearchFilter,
   PlayerDetails,
 } from '@wise-old-man/utils';
-import { subYears } from 'date-fns';
 
 import type {
   IWiseOldManService,
@@ -13,8 +12,8 @@ import type {
 class WiseOldManServiceMock implements IWiseOldManService {
   private readonly details: PlayerDetails[] = [
     {
-      username: 'johndoe',
-      displayName: 'JohnDoe',
+      username: 'i am john',
+      displayName: 'I am John',
       combatLevel: 3,
       archive: null,
       latestSnapshot: undefined,
@@ -35,35 +34,13 @@ class WiseOldManServiceMock implements IWiseOldManService {
       exp: 0,
     },
     {
-      username: 'janedoe',
-      displayName: 'JaneDoe',
+      username: 'jane smiths',
+      displayName: 'Jane Smiths',
       combatLevel: 3,
       archive: null,
       latestSnapshot: undefined,
       id: 1,
-      type: 'regular',
-      build: 'main',
-      status: 'active',
-      country: 'AD',
-      patron: false,
-      ehp: 0,
-      ehb: 0,
-      ttm: 0,
-      tt200m: 0,
-      registeredAt: undefined,
-      updatedAt: undefined,
-      lastChangedAt: undefined,
-      lastImportedAt: undefined,
-      exp: 0,
-    },
-    {
-      username: 'jacksmith',
-      displayName: 'JackSmith',
-      combatLevel: 3,
-      archive: null,
-      latestSnapshot: undefined,
-      id: 2,
-      type: 'regular',
+      type: 'ironman',
       build: 'main',
       status: 'active',
       country: 'AD',
@@ -83,13 +60,24 @@ class WiseOldManServiceMock implements IWiseOldManService {
   private readonly nameChanges: NameChange[] = [
     {
       id: 0,
-      playerId: 0,
-      oldName: 'I am John',
-      newName: 'JohnDoe',
+      playerId: 1,
+      oldName: 'JaneSmith',
+      newName: 'Jane Smiths',
       status: 'approved',
-      createdAt: subYears(new Date(), 1),
-      updatedAt: subYears(new Date(), 1),
-      resolvedAt: subYears(new Date(), 1),
+      createdAt: new Date('2024-02-26'),
+      updatedAt: new Date('2024-02-26'),
+      resolvedAt: new Date('2024-02-26'),
+      reviewContext: null,
+    },
+    {
+      id: 1,
+      playerId: 0,
+      oldName: 'JohnDoe',
+      newName: 'I am John',
+      status: 'approved',
+      createdAt: new Date('2024-02-28'),
+      updatedAt: new Date('2024-02-28'),
+      resolvedAt: new Date('2024-02-28'),
       reviewContext: null,
     },
   ];
@@ -106,15 +94,45 @@ class WiseOldManServiceMock implements IWiseOldManService {
     return this.details.find((d) => d.id === id);
   }
 
-  public async getPlayerNames(_: string): Promise<NameChange[] | undefined> {
-    return undefined;
+  public async getPlayerNames(
+    username: string,
+  ): Promise<NameChange[] | undefined> {
+    const player = this.details.find((d) => d.username === username);
+    if (!player) return undefined;
+
+    return this.nameChanges.filter((nc) => nc.playerId === player.id);
   }
 
   public async searchNameChanges(
-    _: NameChangesSearchFilter,
-    __?: PaginationOptions,
+    filter: NameChangesSearchFilter,
+    pagination?: PaginationOptions,
   ): Promise<NameChange[] | undefined> {
-    return undefined;
+    const filteredList = this.nameChanges.filter((nc) => {
+      if (filter.username) {
+        const trimmedNames = [nc.oldName, nc.newName].map(this.trimUsername);
+        const trimmedUsername = this.trimUsername(filter.username);
+        if (!trimmedNames.some((n) => n.includes(trimmedUsername))) {
+          return false;
+        }
+      }
+
+      if (filter.status && nc.status !== filter.status) {
+        return false;
+      }
+
+      return true;
+    });
+
+    if (!pagination) return filteredList;
+
+    const offset = pagination.offset || 0;
+    const limit = pagination.limit || filteredList.length;
+
+    return filteredList.slice(offset, limit);
+  }
+
+  private trimUsername(username: string): string {
+    return username.replace(/ /g, '').toLowerCase();
   }
 }
 

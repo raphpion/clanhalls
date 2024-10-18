@@ -1,45 +1,35 @@
 john_doe:
-  wise_old_man_id: 1
+  wise_old_man_id: 0
   username: JohnDoe
 
 jane_smith:
-  wise_old_man_id: 2
   username: JaneSmith
 
 mike_ross:
-  wise_old_man_id: 3
   username: MikeRoss
 
 lucas_wilson:
-  wise_old_man_id: 4
   username: LucasWilsn
 
 ava_clark:
-  wise_old_man_id: 5
   username: AvaClark
 
 william_turner:
-  wise_old_man_id: 6
   username: WillTurner
 
 olivia_hall:
-  wise_old_man_id: 7
   username: OliviaHall
 
 benjamin_white:
-  wise_old_man_id: 8
   username: BenWhite
 
 mia_harris:
-  wise_old_man_id: 9
   username: MiaHarris
 
 lucy_king:
-  wise_old_man_id: 10
   username: LucyKing
 
 daniel_ward:
-  wise_old_man_id: 11
   username: DanWard
 
 emma_johnson:

@@ -64,3 +64,14 @@ iron_wolves__john_doe__03:
       rank: CLAN_RANK_1
     - name: AdamSmith
       rank: CLAN_RANK_4
+
+iron_wolves__john_doe__04:
+  user: john_doe
+  clan: iron_wolves
+  received_at: 2024-03-02
+  applied_at: null
+  data:
+    - name: I am John
+      rank: OWNER
+    - name: Jane Smiths
+      rank: CLAN_RANK_3

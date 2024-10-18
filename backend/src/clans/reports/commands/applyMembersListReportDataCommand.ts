@@ -102,9 +102,12 @@ class ApplyMembersListReportDataCommand extends Command<Params> {
         : undefined;
     }
 
-    const nameChanges = await this.wiseOldMan.searchNameChanges({
-      username: player.username,
-    });
+    const nameChanges = await this.wiseOldMan.searchNameChanges(
+      {
+        username: player.username,
+      },
+      { limit: 50 },
+    );
 
     const filteredNameChanges = nameChanges
       .filter((nc) => nc.createdAt > lastSeenAt)

@@ -1,4 +1,3 @@
-
 import Command from '../../command';
 import container from '../../container';
 import type { IWiseOldManService } from '../../services/wiseOldManService';
@@ -20,7 +19,6 @@ class AssociatePlayerToWiseOldManCommand extends Command<Params> {
       await queryRunner.startTransaction();
 
       const { player } = this.params;
-      console.log(player.username);
 
       if (player.wiseOldManId) {
         return;
@@ -37,10 +35,9 @@ class AssociatePlayerToWiseOldManCommand extends Command<Params> {
       player.wiseOldManId = wiseOldManPlayer.id;
       await queryRunner.manager.save(Player, player);
       await queryRunner.commitTransaction();
+      await queryRunner.release();
     } catch (error) {
-      console.log(error);
       await queryRunner.rollbackTransaction();
-    } finally {
       await queryRunner.release();
     }
   }
