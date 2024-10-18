@@ -80,10 +80,9 @@ class ApplyMembersListReportDataCommand extends Command<Params> {
       await queryRunner.manager.save(clanPlayersToUpdate);
       await queryRunner.manager.save(report);
       await queryRunner.commitTransaction();
+      await queryRunner.release();
     } catch (error) {
-      console.log(error);
       await queryRunner.rollbackTransaction();
-    } finally {
       await queryRunner.release();
     }
   }

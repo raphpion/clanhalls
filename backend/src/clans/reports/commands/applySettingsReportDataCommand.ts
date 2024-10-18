@@ -72,11 +72,11 @@ class ApplySettingsReportDataCommand extends Command<Params> {
       await queryRunner.manager.save(clan);
 
       await queryRunner.commitTransaction();
+      await queryRunner.release();
     } catch (error) {
       await queryRunner.rollbackTransaction();
-      throw error;
-    } finally {
       await queryRunner.release();
+      throw error;
     }
   }
 }

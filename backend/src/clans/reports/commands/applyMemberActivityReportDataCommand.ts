@@ -91,11 +91,11 @@ class ApplyMemberActivityReportDataCommand extends Command<Params> {
       report.appliedAt = new Date();
       await queryRunner.manager.save(report);
       await queryRunner.commitTransaction();
-    } catch (error) {
-      console.log(error);
-      await queryRunner.rollbackTransaction();
-    } finally {
       await queryRunner.release();
+    } catch (error) {
+      await queryRunner.rollbackTransaction();
+      await queryRunner.release();
+      throw error;
     }
   }
 
