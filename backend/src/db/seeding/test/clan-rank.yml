@@ -92,3 +92,383 @@ iron_wolves__guest:
   clan: iron_wolves
   rank: GUEST
   title: Guest
+
+shadow_ravens__jmod:
+  clan: shadow_ravens
+  rank: JMOD
+  title: Jmod
+
+shadow_ravens__owner:
+  clan: shadow_ravens
+  rank: OWNER
+  title: Owner
+
+shadow_ravens__deputy_owner:
+  clan: shadow_ravens
+  rank: DEPUTY_OWNER
+  title: Deputy Owner
+
+shadow_ravens__administrator:
+  clan: shadow_ravens
+  rank: ADMINISTRATOR
+  title: Administrator
+
+shadow_ravens__clan_rank_1:
+  clan: shadow_ravens
+  rank: CLAN_RANK_1
+  title: Sergeant
+
+shadow_ravens__clan_rank_2:
+  clan: shadow_ravens
+  rank: CLAN_RANK_2
+  title: Major
+
+shadow_ravens__clan_rank_3:
+  clan: shadow_ravens
+  rank: CLAN_RANK_3
+  title: Brigadier
+
+shadow_ravens__clan_rank_4:
+  clan: shadow_ravens
+  rank: CLAN_RANK_4
+  title: Marshal
+
+shadow_ravens__clan_rank_5:
+  clan: shadow_ravens
+  rank: CLAN_RANK_5
+  title: Onyx
+
+shadow_ravens__clan_rank_6:
+  clan: shadow_ravens
+  rank: CLAN_RANK_6
+  title: Ruby
+
+shadow_ravens__clan_rank_7:
+  clan: shadow_ravens
+  rank: CLAN_RANK_7
+  title: Emerald
+
+shadow_ravens__clan_rank_8:
+  clan: shadow_ravens
+  rank: CLAN_RANK_8
+  title: Sapphire
+
+shadow_ravens__clan_rank_9:
+  clan: shadow_ravens
+  rank: CLAN_RANK_9
+  title: Lieutenant
+
+shadow_ravens__clan_rank_10:
+  clan: shadow_ravens
+  rank: CLAN_RANK_10
+  title: Captain
+
+shadow_ravens__clan_rank_11:
+  clan: shadow_ravens
+  rank: CLAN_RANK_11
+  title: General
+
+shadow_ravens__clan_rank_12:
+  clan: shadow_ravens
+  rank: CLAN_RANK_12
+  title: Sergeant
+
+shadow_ravens__clan_rank_13:
+  clan: shadow_ravens
+  rank: CLAN_RANK_13
+  title: Lieutenant
+
+shadow_ravens__clan_rank_14:
+  clan: shadow_ravens
+  rank: CLAN_RANK_14
+  title: Captain
+
+shadow_ravens__guest:
+  clan: shadow_ravens
+  rank: GUEST
+  title: Guest
+
+storm_keepers__jmod:
+  clan: storm_keepers
+  rank: JMOD
+  title: Jmod
+
+storm_keepers__owner:
+  clan: storm_keepers
+  rank: OWNER
+  title: Owner
+
+storm_keepers__deputy_owner:
+  clan: storm_keepers
+  rank: DEPUTY_OWNER
+  title: Deputy Owner
+
+storm_keepers__administrator:
+  clan: storm_keepers
+  rank: ADMINISTRATOR
+  title: Administrator
+
+storm_keepers__clan_rank_1:
+  clan: storm_keepers
+  rank: CLAN_RANK_1
+  title: Warden
+
+storm_keepers__clan_rank_2:
+  clan: storm_keepers
+  rank: CLAN_RANK_2
+  title: Sentry
+
+storm_keepers__clan_rank_3:
+  clan: storm_keepers
+  rank: CLAN_RANK_3
+  title: Vanguard
+
+storm_keepers__clan_rank_4:
+  clan: storm_keepers
+  rank: CLAN_RANK_4
+  title: Templar
+
+storm_keepers__clan_rank_5:
+  clan: storm_keepers
+  rank: CLAN_RANK_5
+  title: Guardian
+
+storm_keepers__clan_rank_6:
+  clan: storm_keepers
+  rank: CLAN_RANK_6
+  title: General
+
+storm_keepers__clan_rank_7:
+  clan: storm_keepers
+  rank: CLAN_RANK_7
+  title: Colonel
+
+storm_keepers__clan_rank_8:
+  clan: storm_keepers
+  rank: CLAN_RANK_8
+  title: Captain
+
+storm_keepers__clan_rank_9:
+  clan: storm_keepers
+  rank: CLAN_RANK_9
+  title: Lieutenant
+
+storm_keepers__clan_rank_10:
+  clan: storm_keepers
+  rank: CLAN_RANK_10
+  title: Officer
+
+storm_keepers__clan_rank_11:
+  clan: storm_keepers
+  rank: CLAN_RANK_11
+  title: Commander
+
+storm_keepers__clan_rank_12:
+  clan: storm_keepers
+  rank: CLAN_RANK_12
+  title: Captain
+
+storm_keepers__clan_rank_13:
+  clan: storm_keepers
+  rank: CLAN_RANK_13
+  title: General
+
+storm_keepers__clan_rank_14:
+  clan: storm_keepers
+  rank: CLAN_RANK_14
+  title: Marshal
+
+storm_keepers__guest:
+  clan: storm_keepers
+  rank: GUEST
+  title: Guest
+
+night_blades__jmod:
+  clan: night_blades
+  rank: JMOD
+  title: Jmod
+
+night_blades__owner:
+  clan: night_blades
+  rank: OWNER
+  title: Owner
+
+night_blades__deputy_owner:
+  clan: night_blades
+  rank: DEPUTY_OWNER
+  title: Deputy Owner
+
+night_blades__administrator:
+  clan: night_blades
+  rank: ADMINISTRATOR
+  title: Administrator
+
+night_blades__clan_rank_1:
+  clan: night_blades
+  rank: CLAN_RANK_1
+  title: Brigadier
+
+night_blades__clan_rank_2:
+  clan: night_blades
+  rank: CLAN_RANK_2
+  title: Beast
+
+night_blades__clan_rank_3:
+  clan: night_blades
+  rank: CLAN_RANK_3
+  title: Wily
+
+night_blades__clan_rank_4:
+  clan: night_blades
+  rank: CLAN_RANK_4
+  title: Goblin
+
+night_blades__clan_rank_5:
+  clan: night_blades
+  rank: CLAN_RANK_5
+  title: Skulled
+
+night_blades__clan_rank_6:
+  clan: night_blades
+  rank: CLAN_RANK_6
+  title: Imp
+
+night_blades__clan_rank_7:
+  clan: night_blades
+  rank: CLAN_RANK_7
+  title: Gnome Child
+
+night_blades__clan_rank_8:
+  clan: night_blades
+  rank: CLAN_RANK_8
+  title: Gnome Elder
+
+night_blades__clan_rank_9:
+  clan: night_blades
+  rank: CLAN_RANK_9
+  title: Major
+
+night_blades__clan_rank_10:
+  clan: night_blades
+  rank: CLAN_RANK_10
+  title: Lieutenant
+
+night_blades__clan_rank_11:
+  clan: night_blades
+  rank: CLAN_RANK_11
+  title: Sergeant
+
+night_blades__clan_rank_12:
+  clan: night_blades
+  rank: CLAN_RANK_12
+  title: Commander
+
+night_blades__clan_rank_13:
+  clan: night_blades
+  rank: CLAN_RANK_13
+  title: Colonel
+
+night_blades__clan_rank_14:
+  clan: night_blades
+  rank: CLAN_RANK_14
+  title: Admiral
+
+night_blades__guest:
+  clan: night_blades
+  rank: GUEST
+  title: Guest
+
+frost_guardians__jmod:
+  clan: frost_guardians
+  rank: JMOD
+  title: Jmod
+
+frost_guardians__owner:
+  clan: frost_guardians
+  rank: OWNER
+  title: Owner
+
+frost_guardians__deputy_owner:
+  clan: frost_guardians
+  rank: DEPUTY_OWNER
+  title: Deputy Owner
+
+frost_guardians__administrator:
+  clan: frost_guardians
+  rank: ADMINISTRATOR
+  title: Administrator
+
+frost_guardians__clan_rank_1:
+  clan: frost_guardians
+  rank: CLAN_RANK_1
+  title: Diamond
+
+frost_guardians__clan_rank_2:
+  clan: frost_guardians
+  rank: CLAN_RANK_2
+  title: Dragonstone
+
+frost_guardians__clan_rank_3:
+  clan: frost_guardians
+  rank: CLAN_RANK_3
+  title: Onyx
+
+frost_guardians__clan_rank_4:
+  clan: frost_guardians
+  rank: CLAN_RANK_4
+  title: Zenyte
+
+frost_guardians__clan_rank_5:
+  clan: frost_guardians
+  rank: CLAN_RANK_5
+  title: Maxed
+
+frost_guardians__clan_rank_6:
+  clan: frost_guardians
+  rank: CLAN_RANK_6
+  title: Gnome Child
+
+frost_guardians__clan_rank_7:
+  clan: frost_guardians
+  rank: CLAN_RANK_7
+  title: Imp
+
+frost_guardians__clan_rank_8:
+  clan: frost_guardians
+  rank: CLAN_RANK_8
+  title: Skulled
+
+frost_guardians__clan_rank_9:
+  clan: frost_guardians
+  rank: CLAN_RANK_9
+  title: Beast
+
+frost_guardians__clan_rank_10:
+  clan: frost_guardians
+  rank: CLAN_RANK_10
+  title: Legend
+
+frost_guardians__clan_rank_11:
+  clan: frost_guardians
+  rank: CLAN_RANK_11
+  title: TzKal
+
+frost_guardians__clan_rank_12:
+  clan: frost_guardians
+  rank: CLAN_RANK_12
+  title: Lieutenant
+
+frost_guardians__clan_rank_13:
+  clan: frost_guardians
+  rank: CLAN_RANK_13
+  title: Captain
+
+frost_guardians__clan_rank_14:
+  clan: frost_guardians
+  rank: CLAN_RANK_14
+  title: General
+
+frost_guardians__guest:
+  clan: frost_guardians
+  rank: GUEST
+  title: Guest

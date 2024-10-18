@@ -1,17 +1,21 @@
 import { inject, injectable } from 'tsyringe';
 import type { DataSource, EntityTarget, ObjectLiteral } from 'typeorm';
 
+import ClanPlayerSeeder from './clanPlayerSeeder';
 import ClanRankSeeder from './clanRankSeeder';
 import ClanSeeder from './clanSeeder';
 import ClanUserSeeder from './clanUserSeeder';
+import PlayerSeeder from './playerSeeder';
 import type { Seeder } from './seeder';
 import SettingsReportSeeder from './settingsReportSeeder';
 import UserSeeder from './userSeeder';
 import Clan from '../../clans/clan';
+import ClanPlayer from '../../clans/clanPlayer';
 import ClanRank from '../../clans/clanRank';
 import ClanUser from '../../clans/clanUser';
 import SettingsReport from '../../clans/reports/settingsReport';
 import type ConfigService from '../../config';
+import Player from '../../players/player';
 import User from '../../users/user';
 
 @injectable()
@@ -19,8 +23,10 @@ class SeedingService {
   private readonly seedingEntityOrder = [
     // Strong entities
     ClanSeeder,
+    PlayerSeeder,
     UserSeeder,
     // Weak entities
+    ClanPlayerSeeder,
     ClanRankSeeder,
     ClanUserSeeder,
     SettingsReportSeeder,
@@ -28,7 +34,9 @@ class SeedingService {
   ];
 
   private readonly seederTypeMap = new Map<string, EntityTarget<ObjectLiteral>>(
-    [Clan, User, ClanRank, ClanUser, SettingsReport].map((e) => [e.name, e]),
+    [Clan, Player, User, ClanPlayer, ClanRank, ClanUser, SettingsReport].map(
+      (e) => [e.name, e],
+    ),
   );
 
   private readonly seederMap = new Map<
@@ -59,9 +67,9 @@ class SeedingService {
   public getEntity<Entity extends ObjectLiteral>(
     entity: EntityTarget<Entity>,
     key: string,
-  ): Entity | undefined {
+  ): Entity | null {
     const seeder = this.seederMap.get(entity);
-    if (!seeder) return undefined;
+    if (!seeder) return null;
 
     return seeder.getEntity(key) as Entity;
   }

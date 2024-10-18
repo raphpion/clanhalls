@@ -9,10 +9,12 @@ import { join } from 'path';
 import YAML from 'yaml';
 
 import Clan from '../src/clans/clan';
+import ClanPlayer from '../src/clans/clanPlayer';
 import ClanRank from '../src/clans/clanRank';
 import ClanUser from '../src/clans/clanUser';
 import SettingsReport from '../src/clans/reports/settingsReport';
 import type SeedingService from '../src/db/seeding/seedingService';
+import Player from '../src/players/player';
 import User from '../src/users/user';
 
 describe('Seeding', () => {
@@ -43,6 +45,20 @@ describe('Seeding', () => {
   it('seeds users successfully', async () => {
     for (const key in await getSeedData('user')) {
       const entity = seedingService.getEntity(User, key);
+      expect(entity).not.toBeNull();
+    }
+  });
+
+  it('seeds players successfully', async () => {
+    for (const key in await getSeedData('player')) {
+      const entity = seedingService.getEntity(Player, key);
+      expect(entity).not.toBeNull();
+    }
+  });
+
+  it('seeds clan players successfully', async () => {
+    for (const key in await getSeedData('clan-player')) {
+      const entity = seedingService.getEntity(ClanPlayer, key);
       expect(entity).not.toBeNull();
     }
   });

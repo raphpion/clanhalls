@@ -4,7 +4,7 @@ import { Seeder } from './seeder';
 import User from '../../users/user';
 
 type UserSeeding = {
-  googleId: string;
+  google_id: string;
   username: string;
   email: string;
 };
@@ -12,7 +12,7 @@ type UserSeeding = {
 const userSeedingSchema = Joi.object<Record<string, UserSeeding>>().pattern(
   Joi.string(),
   Joi.object({
-    googleId: Joi.number()
+    google_id: Joi.number()
       .integer()
       .strict()
       .custom((v) => v.toString())
@@ -28,7 +28,7 @@ class UserSeeder extends Seeder<User, UserSeeding> {
 
   protected deserialize(seed: UserSeeding): User {
     const user = new User();
-    user.googleId = seed.googleId;
+    user.googleId = seed.google_id;
     user.username = seed.username;
     user.usernameNormalized = User.normalizeUsername(seed.username);
     user.email = seed.email;
