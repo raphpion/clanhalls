@@ -14,6 +14,13 @@ class UpdateCredentialsCommand extends Command<Params, Result> {
   async execute() {
     const repository = this.db.getRepository(Credentials);
 
+    if (
+      this.params.updates.scope &&
+      !Credentials.validateScope(this.params.updates.scope)
+    ) {
+      throw new AppError(AppErrorCodes.BAD_REQUEST, 'Invalid scope');
+    }
+
     const { clientId, updates } = this.params;
     const credentials = await repository.findOne({
       where: { clientId },

@@ -64,6 +64,13 @@ class Credentials {
     return compare(clientSecret, this.clientSecretHash);
   }
 
+  static validateScope(scope: string) {
+    const parsedScope = scope.split(',');
+    const scopesStr = Object.values(Scopes) as string[];
+
+    return parsedScope.every((s) => scopesStr.includes(s));
+  }
+
   validateScope(scope: Scopes[]) {
     const parsedScope = this.scope.split(',');
 
