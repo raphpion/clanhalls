@@ -44,7 +44,7 @@ class Session {
   location: string;
 
   @CreateDateColumn()
-  readonly createdAt: Date;
+  createdAt: Date;
 
   @Column({ nullable: true })
   signedOutAt: Date | null = null;
@@ -56,9 +56,10 @@ class Session {
   lastSeenAt: Date;
 
   @ManyToOne(() => User, (user: User) => user.sessions)
+  @JoinColumn({ name: 'userId' })
   user: Promise<User>;
 
-  @JoinColumn()
+  @Column()
   userId: number;
 
   get isSignedOut() {

@@ -5,6 +5,7 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
   ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
@@ -41,7 +42,11 @@ class Credentials {
   @ManyToOne(() => User, (user: User) => user.credentials, {
     onDelete: 'CASCADE',
   })
+  @JoinColumn({ name: 'userId' })
   user: Promise<User>;
+
+  @Column()
+  userId: number;
 
   generateClientId() {
     this.clientId = randomBytes(16).toString('hex');
