@@ -84,6 +84,7 @@ class ApplyMembersListReportDataCommand extends Command<Params> {
     } catch (error) {
       await queryRunner.rollbackTransaction();
       await queryRunner.release();
+      throw error;
     }
   }
 

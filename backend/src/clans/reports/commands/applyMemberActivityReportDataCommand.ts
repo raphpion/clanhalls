@@ -127,19 +127,31 @@ class ApplyMemberActivityReportDataCommand extends Command<Params> {
         where: { username: nameChange.oldName },
       });
 
-      if (player) {
-        const clanPlayer = await queryRunner.manager.findOne(ClanPlayer, {
-          where: { clanId, playerId: player.id },
-        });
+      if (!player) continue;
 
-        if (clanPlayer.lastSeenAt > nameChange.createdAt) continue;
+      const wiseOldManPlayer = await this.wiseOldMan.getPlayerDetailsById(
+        nameChange.playerId,
+      );
 
-        player.wiseOldManId = nameChange.playerId;
-        player.username = newName;
-        player = await queryRunner.manager.save(player);
+      if (
+        !wiseOldManPlayer ||
+        wiseOldManPlayer.displayName !== newName ||
+        (player.wiseOldManId !== null &&
+          player.wiseOldManId !== nameChange.playerId)
+      )
+        continue;
 
-        break;
-      }
+      const clanPlayer = await queryRunner.manager.findOne(ClanPlayer, {
+        where: { clanId, playerId: player.id },
+      });
+
+      if (clanPlayer.lastSeenAt > nameChange.createdAt) continue;
+
+      player.wiseOldManId = nameChange.playerId;
+      player.username = newName;
+      player = await queryRunner.manager.save(player);
+
+      break;
     }
 
     return player;

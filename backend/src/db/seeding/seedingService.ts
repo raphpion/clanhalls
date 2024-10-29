@@ -6,6 +6,7 @@ import ClanRankSeeder from './clanRankSeeder';
 import ClanSeeder from './clanSeeder';
 import ClanUserSeeder from './clanUserSeeder';
 import MemberActivityReportSeeder from './memberActivityReportSeeder';
+import MembersListReportSeeder from './membersListReportSeeder';
 import PlayerSeeder from './playerSeeder';
 import type Seeder from './seeder';
 import SettingsReportSeeder from './settingsReportSeeder';
@@ -25,6 +26,7 @@ class SeedingService {
     ClanRankSeeder,
     ClanUserSeeder,
     MemberActivityReportSeeder,
+    MembersListReportSeeder,
     SettingsReportSeeder,
     // Add more seeders here...
   ];

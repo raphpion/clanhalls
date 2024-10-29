@@ -55,6 +55,28 @@ class WiseOldManServiceMock implements IWiseOldManService {
       lastImportedAt: undefined,
       exp: 0,
     },
+    {
+      username: 'mikeross',
+      displayName: 'MikeRoss',
+      combatLevel: 3,
+      archive: null,
+      latestSnapshot: undefined,
+      id: 2,
+      type: 'ironman',
+      build: 'main',
+      status: 'active',
+      country: 'AD',
+      patron: false,
+      ehp: 0,
+      ehb: 0,
+      ttm: 0,
+      tt200m: 0,
+      registeredAt: undefined,
+      updatedAt: undefined,
+      lastChangedAt: undefined,
+      lastImportedAt: undefined,
+      exp: 0,
+    },
   ];
 
   private readonly nameChanges: NameChange[] = [

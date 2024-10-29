@@ -1,0 +1,58 @@
+iron_wolves__john_doe__01:
+  user: john_doe
+  clan: iron_wolves
+  received_at: 2024-02-01
+  applied_at: 2024-02-05
+  data:
+    - name: JohnDoe
+      rank: OWNER
+    - name: JaneSmith
+      rank: CLAN_RANK_2
+    - name: MikeRoss
+      rank: ADMINISTRATOR
+    - name: LucasWilsn
+      rank: CLAN_RANK_4
+    - name: AvaClark
+      rank: CLAN_RANK_5
+    - name: WillTurner
+      rank: CLAN_RANK_6
+    - name: OliviaHall
+      rank: CLAN_RANK_7
+    - name: BenWhite
+      rank: CLAN_RANK_8
+    - name: MiaHarris
+      rank: CLAN_RANK_9
+    - name: LucyKing
+      rank: DEPUTY_OWNER
+
+iron_wolves__john_doe__02:
+  user: john_doe
+  clan: iron_wolves
+  received_at: 2024-02-10
+  applied_at: null
+  data:
+    - name: JaneSmith
+      rank: CLAN_RANK_3
+    - name: MikeRoss
+      rank: CLAN_RANK_1
+    - name: LucasWilsn
+      rank: CLAN_RANK_5
+    - name: WillTurner
+      rank: CLAN_RANK_7
+    - name: OliviaHall
+      rank: CLAN_RANK_8
+    - name: MiaHarris
+      rank: CLAN_RANK_10
+    - name: LucyKing
+      rank: DEPUTY_OWNER
+
+iron_wolves__john_doe__03:
+  user: john_doe
+  clan: iron_wolves
+  received_at: 2024-02-20
+  applied_at: null
+  data:
+    - name: I am John
+      rank: OWNER
+    - name: Jane Smiths
+      rank: CLAN_RANK_3

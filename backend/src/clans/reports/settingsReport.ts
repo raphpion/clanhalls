@@ -45,6 +45,12 @@ class SettingsReport {
   @ManyToOne('User', (user: User) => user.settingsReports)
   @JoinColumn({ name: 'userId' })
   user: Promise<User>;
+
+  @Column()
+  clanId: number;
+
+  @Column()
+  userId: number;
 }
 
 export default SettingsReport;

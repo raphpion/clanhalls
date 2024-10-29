@@ -44,6 +44,12 @@ class MembersListReport {
   @ManyToOne('User', (user: User) => user.memberActivityReports)
   @JoinColumn({ name: 'userId' })
   user: Promise<User>;
+
+  @Column()
+  clanId: number;
+
+  @Column()
+  userId: number;
 }
 
 export default MembersListReport;
