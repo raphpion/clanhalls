@@ -89,4 +89,36 @@
       "export default ${1:$TM_FILENAME_BASE};",
     ],
   },
+
+  "Unit test": {
+    "prefix": "utest",
+    "body": ["import ${1:model} from '${2:path}';", "", "describe('${1:model}', () => {", "  ${3:cases}", "});"],
+  },
+
+  "Integration test": {
+    "prefix": "itest",
+    "body": [
+      "import 'reflect-metadata';",
+      "import type { DataSource } from 'typeorm';",
+      "",
+      "// eslint-disable-next-line import/order",
+      "import container from '${1:src path}/container';",
+      "import type SeedingService from '${1:src path}/db/seeding/seedingService';",
+      "",
+      "describe('${2:model}', () => {",
+      "  const db = container.resolve<DataSource>('DataSource');",
+      "  const seedingService = container.resolve<SeedingService>('SeedingService');",
+      "",
+      "  beforeEach(async () => {",
+      "    await seedingService.initialize();",
+      "  });",
+      "",
+      "  afterEach(async () => {",
+      "    seedingService.clear();",
+      "  });",
+      "",
+      "  ${3:cases}",
+      "});",
+    ],
+  },
 }

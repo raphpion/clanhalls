@@ -47,3 +47,7 @@ olivia_anderson:
   google_id: 10
   username: OliviaAnderson
   email: olivia.anderson@gmail.com
+
+no_username:
+  google_id: 11
+  email: no.username@gmail.com

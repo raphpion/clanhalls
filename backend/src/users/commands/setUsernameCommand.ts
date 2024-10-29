@@ -1,4 +1,3 @@
-
 import Command from '../../command';
 import AppError, { AppErrorCodes } from '../../extensions/errors';
 import User from '../user';

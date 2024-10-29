@@ -7,7 +7,7 @@ import AppError, { AppErrorCodes } from '../../extensions/errors';
 import type { Request, Response, NextFunction } from '../../extensions/express';
 import validate from '../../middleware/validationMiddleware';
 import type { IGoogleService } from '../../services/googleService';
-import CreateUserCommand from '../../users/commands/createUserCommand';
+import SignUpUserCommand from '../../users/commands/signUpUserCommand';
 import UpdateUserCommand from '../../users/commands/updateUserCommand';
 import UserByGoogleIdQuery from '../../users/queries/userByGoogleIdQuery';
 
@@ -50,7 +50,7 @@ async function signInWithGoogle(req: Request, _: Response, next: NextFunction) {
 
     let user = await new UserByGoogleIdQuery({ googleId }).execute();
     if (user === null) {
-      user = await new CreateUserCommand({
+      user = await new SignUpUserCommand({
         googleId,
         email,
         emailVerified,

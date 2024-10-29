@@ -5,7 +5,7 @@ import User from '../../users/user';
 
 type UserSeed = {
   google_id: string;
-  username: string;
+  username: string | null;
   email: string;
 };
 
@@ -17,7 +17,7 @@ const userSeedSchema = Joi.object<Record<string, UserSeed>>().pattern(
       .strict()
       .custom((v) => v.toString())
       .required(),
-    username: Joi.string().required(),
+    username: Joi.string().optional().allow(null).default(null),
     email: Joi.string().email().required(),
   }),
 );
@@ -29,10 +29,12 @@ class UserSeeder extends Seeder<User, UserSeed> {
   protected deserialize(seed: UserSeed): User {
     const user = new User();
     user.googleId = seed.google_id;
-    user.username = seed.username;
-    user.usernameNormalized = User.normalizeUsername(seed.username);
     user.email = seed.email;
     user.emailNormalized = User.normalizeEmail(seed.email);
+    user.username = seed.username;
+    user.usernameNormalized = seed.username
+      ? User.normalizeUsername(seed.username)
+      : null;
 
     return user;
   }
