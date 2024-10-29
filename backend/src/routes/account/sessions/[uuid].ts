@@ -7,7 +7,7 @@ import type {
   Response,
 } from '../../../extensions/express';
 import { requireAuth } from '../../../middleware/authMiddleware';
-import RevokeSessionCommand from '../../../sessions/commands/revokeSessionCommand';
+import RevokeSessionForCommand from '../../../sessions/commands/revokeSessionForUserCommand';
 
 const sessionsUuidRoutes = express.Router({ mergeParams: true });
 
@@ -21,7 +21,8 @@ async function revokeSession(req: Request, res: Response, next: NextFunction) {
 
     const { uuid } = req.params;
 
-    await new RevokeSessionCommand({
+    await new RevokeSessionForCommand({
+      userId: req.userEntity.id,
       uuid,
     }).execute();
 

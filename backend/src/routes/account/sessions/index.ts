@@ -8,7 +8,7 @@ import type {
   Response,
 } from '../../../extensions/express';
 import { requireAuth } from '../../../middleware/authMiddleware';
-import RevokeAllSessionsCommand from '../../../sessions/commands/revokeAllSessionsCommand';
+import RevokeAllSessionsForUserCommand from '../../../sessions/commands/revokeAllSessionsForUserCommand';
 
 const sessionsRoutes = express.Router();
 
@@ -58,7 +58,7 @@ async function revokeAllSessions(
       throw new AppError(AppErrorCodes.UNAUTHORIZED, 'Unauthorized');
     }
 
-    await new RevokeAllSessionsCommand({
+    await new RevokeAllSessionsForUserCommand({
       user: req.userEntity,
     }).execute();
 

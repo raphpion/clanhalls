@@ -1,0 +1,56 @@
+john_doe_01:
+  user: john_doe
+  session_id: 1
+  method: google
+  ip_address: ::1
+  user_agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36
+  device_type: desktop
+  os: Windows
+  browser: Chrome
+  location: Unknown location
+
+john_doe_02:
+  user: john_doe
+  session_id: 2
+  method: google
+  ip_address: ::1
+  user_agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/
+  device_type: desktop
+  os: Windows
+  browser: Chrome
+  location: Unknown location
+
+john_doe_03:
+  user: john_doe
+  session_id: 3
+  method: google
+  ip_address: ::1
+  user_agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/
+  device_type: desktop
+  os: Windows
+  browser: Chrome
+  location: Unknown location
+
+john_doe_04:
+  user: john_doe
+  session_id: 4
+  method: google
+  ip_address: ::1
+  user_agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/
+  device_type: desktop
+  os: Windows
+  browser: Chrome
+  location: Unknown location
+  created_at: 2021-01-01
+  expires_at: 4000-01-01
+
+jane_doe_01:
+  user: jane_doe
+  session_id: 1
+  method: google
+  ip_address: ::1
+  user_agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36
+  device_type: desktop
+  os: Windows
+  browser: Chrome
+  location: Unknown location

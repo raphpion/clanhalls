@@ -1,4 +1,3 @@
-
 import Command from '../../command';
 import type User from '../../users/user';
 import Session from '../session';
@@ -7,7 +6,7 @@ type Params = {
   user: User;
 };
 
-class RevokeAllSessionsCommand extends Command<Params> {
+class RevokeAllSessionsForUserCommand extends Command<Params> {
   async execute() {
     const repository = this.db.getRepository(Session);
 
@@ -23,4 +22,4 @@ class RevokeAllSessionsCommand extends Command<Params> {
   }
 }
 
-export default RevokeAllSessionsCommand;
+export default RevokeAllSessionsForUserCommand;

@@ -1,3 +1,4 @@
+import { addWeeks } from 'date-fns';
 import UAParser from 'ua-parser-js';
 
 import Command from '../../command';
@@ -38,7 +39,7 @@ class CreateSessionForUserCommand extends Command<Params, Result> {
     session.location = location;
     session.browser = browser;
     session.lastSeenAt = new Date();
-    session.expiresAt = new Date(Date.now() + 1000 * 60 * 60 * 24 * 14); // 14 days
+    session.expiresAt = addWeeks(new Date(), 2);
 
     return repository.save(session);
   }

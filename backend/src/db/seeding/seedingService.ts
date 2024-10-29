@@ -9,6 +9,7 @@ import MemberActivityReportSeeder from './memberActivityReportSeeder';
 import MembersListReportSeeder from './membersListReportSeeder';
 import PlayerSeeder from './playerSeeder';
 import type Seeder from './seeder';
+import SessionSeeder from './sessionSeeder';
 import SettingsReportSeeder from './settingsReportSeeder';
 import UserSeeder from './userSeeder';
 import { entities } from '..';
@@ -22,6 +23,7 @@ class SeedingService {
     PlayerSeeder,
     UserSeeder,
     // Weak entities
+    SessionSeeder,
     ClanPlayerSeeder,
     ClanRankSeeder,
     ClanUserSeeder,
