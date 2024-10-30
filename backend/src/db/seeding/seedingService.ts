@@ -5,6 +5,7 @@ import ClanPlayerSeeder from './clanPlayerSeeder';
 import ClanRankSeeder from './clanRankSeeder';
 import ClanSeeder from './clanSeeder';
 import ClanUserSeeder from './clanUserSeeder';
+import CredentialsSeeder from './credentialsSeeder';
 import MemberActivityReportSeeder from './memberActivityReportSeeder';
 import MembersListReportSeeder from './membersListReportSeeder';
 import PlayerSeeder from './playerSeeder';
@@ -23,6 +24,7 @@ class SeedingService {
     PlayerSeeder,
     UserSeeder,
     // Weak entities
+    CredentialsSeeder,
     SessionSeeder,
     ClanPlayerSeeder,
     ClanRankSeeder,

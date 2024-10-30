@@ -29,7 +29,11 @@ abstract class Seeder<Entity, Schema, Identifier = string> {
     const identifierToKeyMap = new Map<Identifier, string>();
     const entities = await Promise.all(
       Object.entries(seeds).map(async ([key, seed]) => {
-        const entity = this.deserialize(seed);
+        let entity = this.deserialize(seed);
+        if (entity instanceof Promise) {
+          entity = await entity;
+        }
+
         let identifier = this.getIdentifier(entity);
         if (identifier instanceof Promise) {
           identifier = await identifier;
@@ -61,7 +65,7 @@ abstract class Seeder<Entity, Schema, Identifier = string> {
     return this.entityMapping.get(key) || null;
   }
 
-  protected abstract deserialize(seed: Schema): Entity;
+  protected abstract deserialize(seed: Schema): Entity | Promise<Entity>;
 
   protected abstract getIdentifier(
     entity: Entity,
