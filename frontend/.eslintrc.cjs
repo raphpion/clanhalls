@@ -59,4 +59,17 @@ module.exports = {
       },
     ],
   },
+  settings: {
+    react: {
+      version: 'detect',
+    },
+  },
+  overrides: [
+    {
+      files: ['src/ui/**/*.{js,jsx,ts,tsx}'],
+      rules: {
+        'react-refresh/only-export-components': 'off',
+      },
+    },
+  ],
 };

@@ -4,7 +4,7 @@ import { Button } from '$ui/button';
 
 import useSessionsContext from './context';
 import View from './View';
-import useConfirmationDialog from '../../ConfirmationDialog/ConfirmationDialogContext';
+import useConfirmationDialog from '../../ConfirmationDialog/context';
 import Header from '../common/Header';
 
 function Sessions() {

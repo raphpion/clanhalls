@@ -1,7 +1,7 @@
 import { Outlet, createRootRouteWithContext } from '@tanstack/react-router';
 
 import { AppContext } from '$common/AppContext';
-import { ConfirmationDialogProvider } from '$common/ConfirmationDialog/ConfirmationDialogContext';
+import { ConfirmationDialogProvider } from '$common/ConfirmationDialog';
 import { ThemeProvider } from '$common/Theme';
 import { Toaster } from '$ui/toaster';
 

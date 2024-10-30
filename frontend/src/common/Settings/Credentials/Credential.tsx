@@ -14,7 +14,7 @@ import {
 import { cn } from '$ui/utils';
 
 import useCredentialsContext from './context';
-import useConfirmationDialog from '../../ConfirmationDialog/ConfirmationDialogContext';
+import useConfirmationDialog from '../../ConfirmationDialog/context';
 
 type Props = {
   credential: CredentialsData;

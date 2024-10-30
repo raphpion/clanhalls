@@ -2,7 +2,7 @@ import { useMutation } from '@tanstack/react-query';
 
 import { deleteMyClan } from '$api/account';
 import useAppContext from '$common/AppContext';
-import useConfirmationDialog from '$common/ConfirmationDialog/ConfirmationDialogContext';
+import useConfirmationDialog from '$common/ConfirmationDialog/context';
 import { Button } from '$ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '$ui/card';
 import { toast } from '$ui/hooks/use-toast';

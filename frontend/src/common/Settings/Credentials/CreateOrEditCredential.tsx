@@ -1,4 +1,4 @@
-import { Fragment, useEffect, useMemo } from 'react';
+import { Fragment, useEffect, useMemo, useRef } from 'react';
 
 import { Field, Form, FormikContext, useFormik } from 'formik';
 
@@ -47,6 +47,8 @@ function CreateOrEditCredential({
   const { createPending, editPending, createCredentials, editCredentials } =
     useCredentialsContext();
 
+  const lastOpen = useRef(props.open);
+
   const initialValues = useMemo(
     () => ({
       name: editingCredential?.name || '',
@@ -84,11 +86,15 @@ function CreateOrEditCredential({
     },
   });
 
-  useEffect(() => {
-    formik.resetForm({ values: initialValues });
-  }, [initialValues]);
-
   const handleClose = () => props.onOpenChange(false);
+
+  useEffect(() => {
+    if (props.open !== lastOpen.current) {
+      formik.resetForm({ values: initialValues });
+    }
+
+    lastOpen.current = props.open;
+  }, [props.open, initialValues, formik]);
 
   const submitContent = (() => {
     if (createPending || editPending) {

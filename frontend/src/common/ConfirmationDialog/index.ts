@@ -1,3 +1,9 @@
 import ConfirmationDialog from './ConfirmationDialog';
+import useConfirmationDialog from './context';
+import ConfirmationDialogProvider from './Provider';
 
-export default ConfirmationDialog;
+export {
+  ConfirmationDialog,
+  ConfirmationDialogProvider,
+  useConfirmationDialog,
+};

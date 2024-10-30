@@ -13,7 +13,7 @@ import { cn } from '$ui/utils';
 
 import useSessionsContext from './context';
 import { type ActiveSessionData } from '../../../api/account';
-import useConfirmationDialog from '../../ConfirmationDialog/ConfirmationDialogContext';
+import useConfirmationDialog from '../../ConfirmationDialog/context';
 
 type Props = {
   session: ActiveSessionData;

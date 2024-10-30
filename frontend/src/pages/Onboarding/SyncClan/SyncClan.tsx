@@ -13,7 +13,11 @@ import useAppContext from '$common/AppContext';
 import CopyCredentials from '$common/Credentials/CopyCredentials';
 import Loading from '$common/Loading';
 import OnboardingLayout from '$common/OnboardingLayout';
-import { CredentialScopes, type Scopes, scopesToString } from '$helpers/credentials';
+import {
+  CredentialScopes,
+  type Scopes,
+  scopesToString,
+} from '$helpers/credentials';
 import { usePageTitle } from '$hooks';
 import { Button } from '$ui/button';
 import { Checkbox } from '$ui/checkbox';
@@ -69,7 +73,7 @@ function SyncClan() {
       setCredentials(credentials);
       setLoading(false);
     })();
-  }, [getCredentialsQuery.data]);
+  }, [createCredentialsMutation, getCredentialsQuery.data]);
 
   useEffect(() => {
     if (getClanQuery.data === undefined) return;
@@ -77,7 +81,7 @@ function SyncClan() {
     if (getClanQuery.data?.lastSyncedAt) {
       navigate({ to: '/' });
     }
-  }, [getClanQuery.data]);
+  }, [getClanQuery.data, navigate]);
 
   if (!clan) return null;
 

@@ -1,24 +1,11 @@
+import { useCallback, useState, type PropsWithChildren } from 'react';
+
+import ConfirmationDialog from './ConfirmationDialog';
 import {
-  createContext,
-  useCallback,
-  useContext,
-  useState,
-  type PropsWithChildren,
-} from 'react';
-
-import ConfirmationDialog, { type Props } from './ConfirmationDialog';
-
-type AskConfirmationArgs = Omit<PropsState, 'open'>;
-
-type PropsState = Omit<Props, 'onConfirm' | 'onCancel'>;
-
-type ConfirmationDialogContextType = {
-  askConfirmation(args: AskConfirmationArgs): Promise<boolean>;
-};
-
-export const ConfirmationDialogContext = createContext<
-  ConfirmationDialogContextType | undefined
->(undefined);
+  type AskConfirmationArgs,
+  ConfirmationDialogContext,
+  type PropsState,
+} from './context';
 
 export function ConfirmationDialogProvider({ children }: PropsWithChildren) {
   const [props, setProps] = useState<PropsState>({
@@ -79,15 +66,4 @@ export function ConfirmationDialogProvider({ children }: PropsWithChildren) {
   );
 }
 
-function useConfirmationDialog() {
-  const context = useContext(ConfirmationDialogContext);
-  if (context === undefined) {
-    throw new Error(
-      'useConfirmationDialog must be used within a ConfirmationDialogProvider',
-    );
-  }
-
-  return context;
-}
-
-export default useConfirmationDialog;
+export default ConfirmationDialogProvider;
