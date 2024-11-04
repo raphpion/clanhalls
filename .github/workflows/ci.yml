@@ -1,4 +1,4 @@
-name: CI
+name: CI: Lint & Test
 
 on:
   push:
@@ -9,7 +9,7 @@ on:
       - main
 
 jobs:
-  build:
+  lint-and-test-code:
     runs-on: ubuntu-latest
 
     steps:
