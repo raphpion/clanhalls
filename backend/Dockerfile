@@ -4,11 +4,11 @@ EXPOSE 8080
 
 WORKDIR /clan-halls/backend
 
-COPY . .
+COPY ./backend .
+COPY ./.env ../.env
 
 RUN npm i -s
-RUN npm i pm2 -g
-RUN npm i typeorm -g
+RUN npm i typescript typeorm pm2 -g
 
 RUN npm run build
 

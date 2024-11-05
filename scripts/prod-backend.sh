@@ -1,0 +1,1 @@
+typeorm migration:run -- -d backend/dist/db/index.js && pm2 backend/dist/index.js

@@ -11,6 +11,13 @@ export default defineConfig({
   plugins: [tsconfigPaths(), TanStackRouterVite(), react()],
   server: {
     host: '0.0.0.0',
-    port: 3000,
+    port: Number(process.env.FRONTEND_PORT || 3000),
+    proxy: {
+      '/api': {
+        target: `http://localhost:${process.env.BACKEND_PORT!}`,
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api/, ''),
+      },
+    },
   },
 });

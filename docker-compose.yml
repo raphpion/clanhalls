@@ -21,18 +21,6 @@ services:
     env_file:
       - .env
 
-  backend:
-    container_name: clan-halls_backend
-    build:
-      context: ./backend
-    image: clan-halls_backend
-    ports:
-      - ${BACKEND_PORT}:8000
-    depends_on:
-      - postgres
-      - redis
-    restart: unless-stopped
-
 volumes:
   pgdata:
   redisdata:

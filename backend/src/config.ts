@@ -8,6 +8,7 @@ config({ path: join(__dirname, '../.env') });
 
 export type Config = {
   env: 'development' | 'production' | 'test';
+  instances: number;
   port: number;
   sessionSecret: string;
   googleClientId: string;
@@ -31,6 +32,7 @@ class ConfigService {
     env: Joi.string()
       .valid('development', 'production', 'test')
       .default('development'),
+    instances: Joi.number().integer().min(1).required(),
     port: Joi.number().integer().min(1).max(65535).required(),
     sessionSecret: Joi.string().required(),
     googleClientId: Joi.string().required(),
@@ -54,7 +56,8 @@ class ConfigService {
 
   constructor() {
     this.config = {
-      port: Number(process.env.PORT || 5000),
+      instances: Number(process.env.THREAD_INSTANCES!),
+      port: Number(process.env.BACKEND_PORT || 5000),
       env: process.env.NODE_ENV as Config['env'],
       sessionSecret: process.env.SESSION_SECRET,
       googleClientId: process.env.GOOGLE_CLIENT_ID,
