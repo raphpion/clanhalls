@@ -56,7 +56,7 @@ class ConfigService {
 
   constructor() {
     this.config = {
-      instances: Number(process.env.THREAD_INSTANCES!),
+      instances: Number(process.env.BACKEND_INSTANCES),
       port: Number(process.env.BACKEND_PORT || 5000),
       env: process.env.NODE_ENV as Config['env'],
       sessionSecret: process.env.SESSION_SECRET,

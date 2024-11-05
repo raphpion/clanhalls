@@ -45,5 +45,8 @@ jobs:
         run: docker compose up -d
         working-directory: .
 
+      - name: Make backend script executable
+        run: chmod +x ./scripts/prod-backend.sh
+
       - name: Run Backend Deployment Script
         run: ./scripts/prod-backend.sh
