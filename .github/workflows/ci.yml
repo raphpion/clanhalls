@@ -1,4 +1,4 @@
-name: "CI: Lint & Test"
+name: 'CI: Lint & Test'
 
 on:
   push:
@@ -20,7 +20,7 @@ jobs:
         run: echo "${{ secrets.TEST_ENV }}" > .env
 
       - name: Start Docker containers
-        run: docker compose -f docker-compose.dev.yml up -d
+        run: docker compose up -d
 
       - name: Install dependencies
         run: npm ci

@@ -42,7 +42,7 @@ jobs:
 
       - name: Deploy Databases with Docker Compose
         if: success()
-        run: docker-compose up -d
+        run: docker compose up -d
         working-directory: .
 
       - name: Run Backend Deployment Script
