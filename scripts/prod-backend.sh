@@ -1,1 +1,1 @@
-typeorm migration:run -d /db/index.js && pm2 start index.js
+typeorm migration:run -d backend/dist/db/index.js && pm2 start backend/dist/index.js
