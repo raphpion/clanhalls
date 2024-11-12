@@ -141,7 +141,7 @@ export async function createCredentials(
   payload: CreateCredentialsPayload,
 ): Promise<CreateCredentialsData> {
   const response = await post<CreateCredentialsPayload, CreateCredentialsData>(
-    '/account/credentials',
+    '/api/account/credentials',
     payload,
   );
   return response.data;
