@@ -52,12 +52,7 @@ function SyncClan() {
 
   useEffect(() => {
     (async () => {
-      if (
-        getCredentialsQuery.data === undefined ||
-        createCredentialsMutation.isPending ||
-        createCredentialsMutation.isSuccess
-      )
-        return;
+      if (getCredentialsQuery.data === undefined) return;
 
       if (getCredentialsQuery.data.length > 0) {
         setLoading(false);
@@ -78,7 +73,8 @@ function SyncClan() {
       setCredentials(newCredentials);
       setLoading(false);
     })();
-  }, [createCredentialsMutation, credentials, getCredentialsQuery.data]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [getCredentialsQuery.data]);
 
   useEffect(() => {
     if (getClanQuery.data === undefined) return;
