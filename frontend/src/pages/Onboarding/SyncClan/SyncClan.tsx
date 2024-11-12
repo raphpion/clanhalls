@@ -52,7 +52,12 @@ function SyncClan() {
 
   useEffect(() => {
     (async () => {
-      if (getCredentialsQuery.data === undefined || credentials) return;
+      if (
+        getCredentialsQuery.data === undefined ||
+        createCredentialsMutation.isPending ||
+        createCredentialsMutation.isSuccess
+      )
+        return;
 
       if (getCredentialsQuery.data.length > 0) {
         setLoading(false);
