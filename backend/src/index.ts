@@ -41,12 +41,7 @@ async function initializeSession(app: express.Application) {
   app.use(bodyParser.json());
   app.use(bodyParser.urlencoded({ extended: true }));
   app.use(cookieParser(sessionSecret));
-  app.use(
-    cors({
-      credentials: true,
-      origin: 'http://localhost:3000', // TODO: Update this to the actual frontend URL
-    }),
-  );
+  app.use(cors());
 
   const redisClient = createClient({
     url: `redis://${redisConfig.url}:${redisConfig.port}`,
