@@ -1,6 +1,4 @@
 
-export const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
-
 export type ApiResult<TResult> = {
   data: TResult;
   status: number;

@@ -4,7 +4,6 @@ import 'reflect-metadata';
 import container from '../../../../src/container';
 
 import Clan from '../../../../src/clans/clan';
-import CLAN_RANKS from '../../../../src/clans/ranks';
 import CreateMembersListReportCommand from '../../../../src/clans/reports/commands/createMembersListReportCommand';
 import type { ListMember } from '../../../../src/clans/reports/membersListReport';
 import type SeedingService from '../../../../src/db/seeding/seedingService';
@@ -16,15 +15,15 @@ describe('CreateMembersListReportCommand', () => {
   const data: ListMember[] = [
     {
       name: 'JohnDoe',
-      rank: CLAN_RANKS[17],
+      rank: 126,
     },
     {
       name: 'JaneDoe',
-      rank: CLAN_RANKS[16],
+      rank: 125,
     },
     {
       name: 'JackSmith',
-      rank: CLAN_RANKS[1],
+      rank: 0,
     },
   ] as const;
 

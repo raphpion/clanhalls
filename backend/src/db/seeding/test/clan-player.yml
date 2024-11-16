@@ -1,119 +1,119 @@
 iron_wolves__john_doe:
   clan: iron_wolves
   player: john_doe
-  rank: OWNER
+  rank: 126
   last_seen_at: 2024-02-05
 
 iron_wolves__jane_smith:
   clan: iron_wolves
   player: jane_smith
-  rank: CLAN_RANK_2
+  rank: 10
   last_seen_at: 2024-02-05
 
 iron_wolves__mike_ross:
   clan: iron_wolves
   player: mike_ross
-  rank: ADMINISTRATOR
+  rank: 100
   last_seen_at: 2024-02-05
 
 iron_wolves__lucas_wilson:
   clan: iron_wolves
   player: lucas_wilson
-  rank: CLAN_RANK_4
+  rank: 30
   last_seen_at: 2024-02-05
 
 iron_wolves__ava_clark:
   clan: iron_wolves
   player: ava_clark
-  rank: CLAN_RANK_5
+  rank: 40
   last_seen_at: 2024-02-05
 
 iron_wolves__william_turner:
   clan: iron_wolves
   player: william_turner
-  rank: CLAN_RANK_6
+  rank: 50
   last_seen_at: 2024-02-05
 
 iron_wolves__olivia_hall:
   clan: iron_wolves
   player: olivia_hall
-  rank: CLAN_RANK_7
+  rank: 60
   last_seen_at: 2024-02-05
 
 iron_wolves__benjamin_white:
   clan: iron_wolves
   player: benjamin_white
-  rank: CLAN_RANK_8
+  rank: 70
   last_seen_at: 2024-02-05
 
 iron_wolves__mia_harris:
   clan: iron_wolves
   player: mia_harris
-  rank: CLAN_RANK_9
+  rank: 80
   last_seen_at: 2024-02-05
 
 iron_wolves__lucy_king:
   clan: iron_wolves
   player: lucy_king
-  rank: DEPUTY_OWNER
+  rank: 125
   last_seen_at: 2024-02-05
 
 shadow_ravens__daniel_ward:
   clan: shadow_ravens
   player: daniel_ward
-  rank: OWNER
+  rank: 126
   last_seen_at: 2024-01-20
 
 shadow_ravens__emma_johnson:
   clan: shadow_ravens
   player: emma_johnson
-  rank: CLAN_RANK_3
+  rank: 20
   last_seen_at: 2024-02-22
 
 storm_keepers__oliver_brown:
   clan: storm_keepers
   player: oliver_brown
-  rank: OWNER
+  rank: 126
   last_seen_at: 2024-02-28
 
 storm_keepers__liam_evans:
   clan: storm_keepers
   player: liam_evans
-  rank: CLAN_RANK_12
+  rank: 115
   last_seen_at: 2024-03-12
 
 night_blades__sophia_green:
   clan: night_blades
   player: sophia_green
-  rank: OWNER
+  rank: 126
   last_seen_at: 2024-03-05
 
 night_blades__james_moore:
   clan: night_blades
   player: james_moore
-  rank: CLAN_RANK_13
+  rank: 115
   last_seen_at: 2024-02-17
 
 frost_guardians__amelia_martin:
   clan: frost_guardians
   player: amelia_martin
-  rank: OWNER
+  rank: 126
   last_seen_at: 2024-01-10
 
 frost_guardians__jack_thomas:
   clan: frost_guardians
   player: jack_thomas
-  rank: CLAN_RANK_10
+  rank: 90
   last_seen_at: 2024-04-05
 
 frost_guardians__henry_scott:
   clan: frost_guardians
   player: henry_scott
-  rank: CLAN_RANK_11
+  rank: 100
   last_seen_at: 2024-03-15
 
 frost_guardians__ella_wood:
   clan: frost_guardians
   player: ella_wood
-  rank: CLAN_RANK_14
+  rank: 120
   last_seen_at: 2024-01-27

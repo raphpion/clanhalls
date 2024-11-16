@@ -1,4 +1,3 @@
-
 import type {
   PaginatedQueryParams,
   PaginatedQueryResult,
@@ -7,7 +6,6 @@ import { resolvePaginatedQuery } from '../../db/queries';
 import Query from '../../query';
 import type Clan from '../clan';
 import ClanPlayer from '../clanPlayer';
-import CLAN_RANKS from '../ranks';
 
 export type Params = PaginatedQueryParams<{
   clan: Clan;
@@ -22,7 +20,7 @@ export type Params = PaginatedQueryParams<{
 export type ClanPlayerData = {
   uuid: string;
   username: string;
-  rank: string;
+  rank: number;
   title: string | undefined;
   lastSeenAt: Date;
 };
@@ -36,12 +34,6 @@ class ClanPlayersQuery extends Query<Params, Result> {
     const { clan, ...params } = this.params;
 
     const sort = (() => {
-      if (params.orderBy.field === 'rank') {
-        return `CASE clanPlayer.rank ${CLAN_RANKS.map(
-          (rank, index) => `WHEN '${rank}' THEN ${index}`,
-        ).join(' ')} ELSE ${CLAN_RANKS.length} END`;
-      }
-
       if (params.orderBy.field === 'username') {
         return 'player.username';
       }
@@ -63,13 +55,7 @@ class ClanPlayersQuery extends Query<Params, Result> {
       );
     }
 
-    if (params.orderBy.field === 'rank') {
-      query
-        .addSelect(sort, 'rank_order')
-        .orderBy('rank_order', params.orderBy.order);
-    } else {
-      query.orderBy(sort, params.orderBy.order);
-    }
+    query.orderBy(sort, params.orderBy.order);
 
     const { items, ...queryResult } = await resolvePaginatedQuery(
       query,

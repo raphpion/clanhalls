@@ -27,8 +27,8 @@ const sendMemberActivityReportPayloadSchema =
       .items(
         Joi.object<MemberActivity>({
           name: Joi.string().required(),
-          rank: Joi.string().required(),
-        })
+          rank: Joi.number().min(-1).max(127).required(),
+        }),
       )
       .required(),
   });
@@ -39,16 +39,16 @@ routes.post(
   '/',
   requireCredentials(
     [Scopes.CLAN_REPORTING],
-    ['user', 'user.clanUser', 'user.clanUser.clan']
+    ['user', 'user.clanUser', 'user.clanUser.clan'],
   ),
   validate(sendMemberActivityReportPayloadSchema),
-  sendMemberActivityReport
+  sendMemberActivityReport,
 );
 
 async function sendMemberActivityReport(
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) {
   try {
     if (!req.credentialsEntity || !req.userEntity) {
@@ -60,7 +60,7 @@ async function sendMemberActivityReport(
     if (!clan) {
       throw new AppError(
         AppErrorCodes.BAD_REQUEST,
-        'User is not in a clan. You must create or join it on the website.'
+        'User is not in a clan. You must create or join it on the website.',
       );
     }
 

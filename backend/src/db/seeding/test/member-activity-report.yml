@@ -5,25 +5,25 @@ iron_wolves__john_doe__01:
   applied_at: 2024-02-05
   data:
     - name: JohnDoe
-      rank: OWNER
+      rank: 126
     - name: JaneSmith
-      rank: CLAN_RANK_2
+      rank: 10
     - name: MikeRoss
-      rank: ADMINISTRATOR
+      rank: 100
     - name: LucasWilsn
-      rank: CLAN_RANK_4
+      rank: 30
     - name: AvaClark
-      rank: CLAN_RANK_5
+      rank: 40
     - name: WillTurner
-      rank: CLAN_RANK_6
+      rank: 50
     - name: OliviaHall
-      rank: CLAN_RANK_7
+      rank: 60
     - name: BenWhite
-      rank: CLAN_RANK_8
+      rank: 70
     - name: MiaHarris
-      rank: CLAN_RANK_9
+      rank: 80
     - name: LucyKing
-      rank: DEPUTY_OWNER
+      rank: 125
 
 iron_wolves__john_doe__02:
   user: john_doe
@@ -32,19 +32,19 @@ iron_wolves__john_doe__02:
   applied_at: null
   data:
     - name: JaneSmith
-      rank: CLAN_RANK_3
+      rank: 20
     - name: MikeRoss
-      rank: CLAN_RANK_1
+      rank: 0
     - name: LucasWilsn
-      rank: CLAN_RANK_5
+      rank: 40
     - name: WillTurner
-      rank: CLAN_RANK_7
+      rank: 60
     - name: OliviaHall
-      rank: CLAN_RANK_8
+      rank: 70
     - name: MiaHarris
-      rank: CLAN_RANK_10
+      rank: 90
     - name: LucyKing
-      rank: DEPUTY_OWNER
+      rank: 125
 
 iron_wolves__john_doe__03:
   user: john_doe
@@ -53,17 +53,17 @@ iron_wolves__john_doe__03:
   applied_at: null
   data:
     - name: JohnDoe
-      rank: OWNER
+      rank: 126
     - name: MikeRoss
-      rank: CLAN_RANK_1
+      rank: 0
     - name: BenWhite
-      rank: CLAN_RANK_9
+      rank: 80
     - name: LucyKing
-      rank: DEPUTY_OWNER
+      rank: 125
     - name: EmilyDoe
-      rank: CLAN_RANK_1
+      rank: 0
     - name: AdamSmith
-      rank: CLAN_RANK_4
+      rank: 30
 
 iron_wolves__john_doe__04:
   user: john_doe
@@ -72,6 +72,6 @@ iron_wolves__john_doe__04:
   applied_at: null
   data:
     - name: I am John
-      rank: OWNER
+      rank: 126
     - name: Jane Smiths
-      rank: CLAN_RANK_3
+      rank: 20

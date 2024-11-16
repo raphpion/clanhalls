@@ -10,11 +10,10 @@ import {
 
 import type User from '../../users/user';
 import type Clan from '../clan';
-import type { Rank } from '../ranks';
 
 export type ListMember = {
   name: string;
-  rank: Rank;
+  rank: number;
 };
 
 @Entity()

@@ -14,27 +14,22 @@ describe('CreateSettingsReport', () => {
 
   const data: Settings = {
     name: 'The Worst Clan',
-    ranks: {
-      CLAN_RANK_3: 'Onyx',
-      CLAN_RANK_8: 'Skulled',
-      DEPUTY_OWNER: 'Deputy Owner',
-      CLAN_RANK_7: 'Imp',
-      GUEST: 'Guest',
-      CLAN_RANK_13: 'Captain',
-      CLAN_RANK_11: 'TzKal',
-      CLAN_RANK_2: 'Dragonstone',
-      CLAN_RANK_9: 'Beast',
-      CLAN_RANK_14: 'General',
-      CLAN_RANK_5: 'Maxed',
-      OWNER: 'Owner',
-      JMOD: 'Jmod',
-      CLAN_RANK_12: 'Lieutenant',
-      CLAN_RANK_1: 'Diamond',
-      CLAN_RANK_4: 'Zenyte',
-      CLAN_RANK_6: 'Gnome Child',
-      ADMINISTRATOR: 'Administrator',
-      CLAN_RANK_10: 'Legend',
-    },
+    ranks: [
+      { rank: 0, title: 'Diamond' },
+      { rank: 10, title: 'Dragonstone' },
+      { rank: 20, title: 'Onyx' },
+      { rank: 30, title: 'Zenyte' },
+      { rank: 40, title: 'Maxed' },
+      { rank: 50, title: 'Gnome Child' },
+      { rank: 60, title: 'Skulled' },
+      { rank: 70, title: 'Imp' },
+      { rank: 80, title: 'Beast' },
+      { rank: 90, title: 'Legend' },
+      { rank: 95, title: 'TzKal' },
+      { rank: 115, title: 'Lieutenant' },
+      { rank: 120, title: 'Captain' },
+      { rank: 124, title: 'General' },
+    ],
   } as const;
 
   beforeEach(async () => {

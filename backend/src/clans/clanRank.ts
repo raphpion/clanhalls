@@ -16,7 +16,7 @@ class ClanRank {
   readonly clanId: number;
 
   @PrimaryColumn()
-  rank: string;
+  rank: number;
 
   @Column()
   title: string;

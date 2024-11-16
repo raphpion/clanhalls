@@ -3,6 +3,7 @@ import Joi from 'joi';
 
 import CreateSettingsReportCommand from '../../../clans/reports/commands/createSettingsReportCommand';
 import type { Settings } from '../../../clans/reports/settingsReport';
+import CLAN_TITLES from '../../../clans/titles';
 import AppError, { AppErrorCodes } from '../../../extensions/errors';
 import type {
   Request,
@@ -24,7 +25,16 @@ const sendSettingsReportPayload = Joi.object<SendSettingsReportPayload>({
   clientSecret: Joi.string().required(),
   settings: Joi.object({
     name: Joi.string().required(),
-    ranks: Joi.object().pattern(Joi.string(), Joi.string()).required(),
+    ranks: Joi.array()
+      .items(
+        Joi.object({
+          rank: Joi.number().min(-1).max(127).required(),
+          title: Joi.string()
+            .required()
+            .allow(...Object.values(CLAN_TITLES)),
+        }),
+      )
+      .required(),
   }),
 });
 
@@ -34,16 +44,16 @@ routes.post(
   '/',
   requireCredentials(
     [Scopes.CLAN_REPORTING],
-    ['user', 'user.clanUser', 'user.clanUser.clan']
+    ['user', 'user.clanUser', 'user.clanUser.clan'],
   ),
   validate(sendSettingsReportPayload),
-  sendSettingsReport
+  sendSettingsReport,
 );
 
 async function sendSettingsReport(
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) {
   try {
     if (!req.credentialsEntity || !req.userEntity) {
@@ -55,7 +65,7 @@ async function sendSettingsReport(
     if (!clan) {
       throw new AppError(
         AppErrorCodes.BAD_REQUEST,
-        'User is not in a clan. You must create or join it on the website.'
+        'User is not in a clan. You must create or join it on the website.',
       );
     }
 

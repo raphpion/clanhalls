@@ -22,7 +22,7 @@ class ClanPlayer {
   lastSeenAt: Date;
 
   @Column()
-  rank: string;
+  rank: number;
 
   @OneToOne(() => Clan, (clan: Clan) => clan.clanPlayers, {
     onDelete: 'CASCADE',

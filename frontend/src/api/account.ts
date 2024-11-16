@@ -28,7 +28,7 @@ export type SessionData = {
 export type ClanPlayerQueryData = {
   uuid: string;
   username: string;
-  rank: string;
+  rank: number;
   title: string | undefined;
   lastSeenAt: string;
 };

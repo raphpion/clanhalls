@@ -13,7 +13,7 @@ type Params = {
 };
 
 class ApplyMemberActivityReportDataCommand extends Command<Params> {
-  private readonly ignoredRanks = ['GUEST', 'JMOD'];
+  private readonly ignoredRanks = [-1, 127];
   private readonly wiseOldMan =
     container.resolve<IWiseOldManService>('WiseOldManService');
 
