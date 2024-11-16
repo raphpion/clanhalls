@@ -64,6 +64,7 @@ async function initializeSession(app: express.Application) {
 
   app.use(
     session({
+      proxy: isProduction,
       cookie: {
         httpOnly: isProduction,
         secure: isProduction,
