@@ -107,6 +107,7 @@ export async function createSessionForUser(
 
     session.uuid = sessionEntity.uuid;
 
+    req.session.save();
     res.sendStatus(201);
   } catch (error) {
     next(error);
