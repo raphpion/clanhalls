@@ -41,7 +41,12 @@ async function initializeSession(app: express.Application) {
   app.use(bodyParser.json());
   app.use(bodyParser.urlencoded({ extended: true }));
   app.use(cookieParser(sessionSecret));
-  app.use(cors());
+  app.use(
+    cors({
+      origin: isProduction ? 'https://app.clanhalls.net' : '*',
+      credentials: true,
+    }),
+  );
 
   const redisClient = createClient({
     url: `redis://${redisConfig.url}:${redisConfig.port}`,
