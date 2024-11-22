@@ -1,9 +1,6 @@
 name: 'CI: Lint & Test'
 
 on:
-  # push:
-  #   branches:
-  #     - main
   # pull_request:
   #   branches:
   #     - main
@@ -34,7 +31,3 @@ jobs:
 
       - name: Lint Frontend
         run: npm run lint -w frontend
-
-      - name: Shutdown Docker containers
-        if: always()
-        run: docker compose -f docker-compose.dev.yml down || true
