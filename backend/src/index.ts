@@ -34,7 +34,6 @@ async function startup() {
 async function initializeSession(app: express.Application) {
   const configService = container.resolve<ConfigService>('ConfigService');
   const isProduction = configService.get((c) => c.env) === 'production';
-  console.log(`is production? ${isProduction}`);
   const sessionSecret = configService.get((c) => c.sessionSecret);
   const redisConfig = configService.get((c) => c.redis);
 

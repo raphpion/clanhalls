@@ -1,9 +1,9 @@
 name: 'CI: Lint & Test'
 
 on:
-  # pull_request:
-  #   branches:
-  #     - main
+  pull_request:
+    branches:
+      - main
   workflow_dispatch: # Allows manual triggering
 
 jobs:
