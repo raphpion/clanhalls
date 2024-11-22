@@ -5,6 +5,7 @@ import Seeder from './seeder';
 import Clan from '../../clans/clan';
 import type { Settings } from '../../clans/reports/settingsReport';
 import SettingsReport from '../../clans/reports/settingsReport';
+import CLAN_TITLES from '../../clans/titles';
 import User from '../../users/user';
 
 type SettingsReportSeed = {
@@ -26,15 +27,21 @@ const settingsReportSeedSchema = Joi.object<
     applied_at: Joi.string().allow(null).optional().default(null),
     data: Joi.object({
       name: Joi.string().required(),
-      ranks: Joi.object().pattern(Joi.string(), Joi.string()).required(),
+      ranks: Joi.array()
+        .items(
+          Joi.object({
+            rank: Joi.number().min(-1).max(127).required(),
+            title: Joi.string()
+              .required()
+              .allow(...Object.values(CLAN_TITLES)),
+          }),
+        )
+        .required(),
     }),
   }),
 );
 
-class SettingsReportSeeder extends Seeder<
-  SettingsReport,
-  SettingsReportSeed
-> {
+class SettingsReportSeeder extends Seeder<SettingsReport, SettingsReportSeed> {
   entityName = SettingsReport.name;
   schema = settingsReportSeedSchema;
 

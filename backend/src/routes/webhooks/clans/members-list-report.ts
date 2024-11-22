@@ -28,7 +28,7 @@ const sendMembersListReportPayloadSchema =
       .items(
         Joi.object<MemberActivity>({
           name: Joi.string().required(),
-          rank: Joi.string().required(),
+          rank: Joi.number().min(-1).max(127).required(),
         }),
       )
       .required(),

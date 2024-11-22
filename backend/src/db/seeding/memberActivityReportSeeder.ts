@@ -3,7 +3,6 @@ import Joi from 'joi';
 
 import Seeder from './seeder';
 import Clan from '../../clans/clan';
-import CLAN_RANKS from '../../clans/ranks';
 import type { MemberActivity } from '../../clans/reports/memberActivityReport';
 import MemberActivityReport from '../../clans/reports/memberActivityReport';
 import User from '../../users/user';
@@ -28,9 +27,7 @@ const memberActivityReportSeedSchema = Joi.object<
     data: Joi.array().items(
       Joi.object({
         name: Joi.string().required(),
-        rank: Joi.string()
-          .required()
-          .valid(...Object.values(CLAN_RANKS)),
+        rank: Joi.number().min(-1).max(127).required(),
       }),
     ),
   }),

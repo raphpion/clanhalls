@@ -26,7 +26,7 @@ import { Button } from '../../../../../ui/button';
 export type ClanPlayer = {
   username: string;
   title?: string;
-  rank?: string;
+  rank?: number;
   lastSeenAt?: string;
 };
 

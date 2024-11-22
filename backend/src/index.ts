@@ -43,8 +43,8 @@ async function initializeSession(app: express.Application) {
   app.use(cookieParser(sessionSecret));
   app.use(
     cors({
+      origin: isProduction ? 'https://app.clanhalls.net' : '*',
       credentials: true,
-      origin: 'http://localhost:3000', // TODO: Update this to the actual frontend URL
     }),
   );
 

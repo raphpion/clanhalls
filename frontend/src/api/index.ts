@@ -1,6 +1,3 @@
-import { isAbsoluteURL } from './helpers';
-
-export const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
 
 export type ApiResult<TResult> = {
   data: TResult;
@@ -40,10 +37,8 @@ async function execute<TData, TResult>(
     headers.set('Content-Type', 'application/json; charset=utf-8');
   }
 
-  const input = isAbsoluteURL(url) ? url : new URL(url, apiBaseUrl);
-
   let result: unknown;
-  const response = await fetch(input, {
+  const response = await fetch(url, {
     method,
     headers,
     body,

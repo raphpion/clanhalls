@@ -28,7 +28,7 @@ export type SessionData = {
 export type ClanPlayerQueryData = {
   uuid: string;
   username: string;
-  rank: string;
+  rank: number;
   title: string | undefined;
   lastSeenAt: string;
 };
@@ -106,15 +106,15 @@ export type VerifyClanNameAvailabilityData = {
 };
 
 export async function createClan(name: string): Promise<void> {
-  await post<CreateClanPayload>('/account/clan', { name });
+  await post<CreateClanPayload>('/api/account/clan', { name });
 }
 
 export async function deleteMyClan(): Promise<void> {
-  await _delete('/account/clan');
+  await _delete('/api/account/clan');
 }
 
 export async function getClan(): Promise<ClanData> {
-  const response = await get<ClanData>('/account/clan');
+  const response = await get<ClanData>('/api/account/clan');
   return response.data;
 }
 
@@ -132,7 +132,7 @@ export async function queryClanPlayers(
   }
 
   const response = await get<PaginatedQueryResult<ClanPlayerQueryData>>(
-    `/account/clan/players?${searchParams.toString()}`,
+    `/api/account/clan/players?${searchParams.toString()}`,
   );
   return response.data;
 }
@@ -141,45 +141,45 @@ export async function createCredentials(
   payload: CreateCredentialsPayload,
 ): Promise<CreateCredentialsData> {
   const response = await post<CreateCredentialsPayload, CreateCredentialsData>(
-    '/account/credentials',
+    '/api/account/credentials',
     payload,
   );
   return response.data;
 }
 
 export async function deleteCredentials(clientId: string): Promise<void> {
-  await _delete<{ clientId: string }>(`/account/credentials/${clientId}`);
+  await _delete<{ clientId: string }>(`/api/account/credentials/${clientId}`);
 }
 
 export async function getCredentials(): Promise<CredentialsData[]> {
-  const response = await get<CredentialsData[]>('/account/credentials');
+  const response = await get<CredentialsData[]>('/api/account/credentials');
   return response.data;
 }
 
 export async function getSession(): Promise<SessionData> {
-  const response = await get<SessionData>('/account');
+  const response = await get<SessionData>('/api/account');
   return response.data;
 }
 
 export async function getActiveSessions(): Promise<ActiveSessionData[]> {
-  const response = await get<ActiveSessionData[]>('/account/sessions');
+  const response = await get<ActiveSessionData[]>('/api/account/sessions');
   return response.data;
 }
 
 export async function revokeSession(uuid: string): Promise<void> {
-  await _delete(`/account/sessions/${uuid}`);
+  await _delete(`/api/account/sessions/${uuid}`);
 }
 
 export async function revokeAllSessions(): Promise<void> {
-  await _delete('/account/sessions');
+  await _delete('/api/account/sessions');
 }
 
 export async function signInWithGoogle(token: string): Promise<void> {
-  await post<{ token: string }>('/account/sign-in-with-google', { token });
+  await post<{ token: string }>('/api/account/sign-in-with-google', { token });
 }
 
 export async function signOut(): Promise<void> {
-  await post('/account/sign-out');
+  await post('/api/account/sign-out');
 }
 
 export async function updateCredentials(
@@ -188,7 +188,7 @@ export async function updateCredentials(
   const { clientId, ...payloadWithoutClientId } = payload;
 
   await put<UpdateCredentialsPayload>(
-    `/account/credentials/${clientId}`,
+    `/api/account/credentials/${clientId}`,
     payloadWithoutClientId,
   );
 }
@@ -197,7 +197,7 @@ export async function verifyClanNameAvailability(
   name: string,
 ): Promise<VerifyClanNameAvailabilityData> {
   const response = await get<VerifyClanNameAvailabilityData>(
-    `/account/clan/verify-name-availability?name=${name}`,
+    `/api/account/clan/verify-name-availability?name=${name}`,
   );
   return response.data;
 }
@@ -206,11 +206,11 @@ export async function verifyUsernameAvailability(
   username: string,
 ): Promise<VerifyUsernameAvailabilityData> {
   const response = await get<VerifyUsernameAvailabilityData>(
-    `/account/verify-username-availability?username=${username}`,
+    `/api/account/verify-username-availability?username=${username}`,
   );
   return response.data;
 }
 
 export async function setUsername(username: string): Promise<void> {
-  await post<SetUsernamePayload>('/account/set-username', { username });
+  await post<SetUsernamePayload>('/api/account/set-username', { username });
 }

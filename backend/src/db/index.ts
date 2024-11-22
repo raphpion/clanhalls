@@ -33,8 +33,14 @@ export const entities = [
   User,
 ];
 
-export const migrations = [__dirname + '/migrations/**/*.ts'];
-export const subscribers = [__dirname + '/subscribers/**/*.ts'];
+export const migrations = [
+  __dirname + '/migrations/**/*.ts',
+  __dirname + '/migrations/**/*.js',
+];
+export const subscribers = [
+  __dirname + '/subscribers/**/*.ts',
+  __dirname + '/subscribers/**/*.js',
+];
 
 const db = new DataSource({
   type: 'postgres',

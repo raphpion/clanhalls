@@ -10,12 +10,11 @@ import {
 
 import type User from '../../users/user';
 import type Clan from '../clan';
-import type { Rank } from '../ranks';
 import type { Title } from '../titles';
 
 export type Settings = {
   name: string;
-  ranks: Record<Rank, Title>;
+  ranks: { rank: number; title: Title }[];
 };
 
 @Entity()

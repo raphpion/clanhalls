@@ -61,9 +61,9 @@ describe('ApplySettingsReportDataCommand', () => {
     const clanRanks = await clan.clanRanks;
     expect(clanRanks).toHaveLength(Object.keys(report.data.ranks).length);
 
-    const modifiedRank1 = clanRanks.find((r) => r.rank === 'CLAN_RANK_12');
-    const modifiedRank2 = clanRanks.find((r) => r.rank === 'CLAN_RANK_13');
-    const deletedRank = clanRanks.find((r) => r.rank === 'CLAN_RANK_14');
+    const modifiedRank1 = clanRanks.find((r) => r.rank === 95);
+    const modifiedRank2 = clanRanks.find((r) => r.rank === 120);
+    const deletedRank = clanRanks.find((r) => r.rank === 124);
 
     expect(modifiedRank1).toBeDefined();
     expect(modifiedRank1!.title).toBe('Adventurer');

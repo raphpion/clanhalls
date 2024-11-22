@@ -3,24 +3,19 @@ import Joi from 'joi';
 import Seeder from './seeder';
 import Clan from '../../clans/clan';
 import ClanRank from '../../clans/clanRank';
-import { CLAN_RANKS, type Rank } from '../../clans/ranks';
 import { CLAN_TITLES, type Title } from '../../clans/titles';
 
 type ClanRankSeed = {
   clan: string;
-  rank: Rank;
+  rank: number;
   title: Title;
 };
 
-const clanRankSeedSchema = Joi.object<
-  Record<string, ClanRankSeed>
->().pattern(
+const clanRankSeedSchema = Joi.object<Record<string, ClanRankSeed>>().pattern(
   Joi.string(),
   Joi.object({
     clan: Joi.string().required(),
-    rank: Joi.string()
-      .required()
-      .valid(...Object.values(CLAN_RANKS)),
+    rank: Joi.number().min(-1).max(127).required(),
     title: Joi.string()
       .required()
       .valid(...Object.values(CLAN_TITLES)),

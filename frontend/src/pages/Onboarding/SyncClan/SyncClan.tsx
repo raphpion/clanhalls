@@ -65,15 +65,16 @@ function SyncClan() {
       const scopes = {} as Scopes;
       scopes[CredentialScopes.CLAN_REPORTING] = true;
 
-      const credentials = await createCredentialsMutation.mutateAsync({
+      const newCredentials = await createCredentialsMutation.mutateAsync({
         name: 'Onboarding',
         scope: scopesToString(scopes),
       });
 
-      setCredentials(credentials);
+      setCredentials(newCredentials);
       setLoading(false);
     })();
-  }, [createCredentialsMutation, getCredentialsQuery.data]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [getCredentialsQuery.data]);
 
   useEffect(() => {
     if (getClanQuery.data === undefined) return;

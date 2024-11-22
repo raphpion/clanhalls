@@ -40,7 +40,7 @@ class ApplySettingsReportDataCommand extends Command<Params> {
 
       const newClanRanks: ClanRank[] = [];
 
-      for (const [rank, title] of Object.entries(report.data.ranks)) {
+      for (const { rank, title } of Object.values(report.data.ranks)) {
         let clanRank = previousClanRanks.find((r) => r.rank === rank);
         if (clanRank && clanRank.title === title) {
           newClanRanks.push(clanRank);

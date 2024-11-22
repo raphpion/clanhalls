@@ -27,7 +27,7 @@ const membersListReportSeedSchema = Joi.object<
     data: Joi.array().items(
       Joi.object({
         name: Joi.string().required(),
-        rank: Joi.string().required(),
+        rank: Joi.number().min(-1).max(127).required(),
       }),
     ),
   }),

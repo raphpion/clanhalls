@@ -3,14 +3,12 @@ import Joi from 'joi';
 import Seeder from './seeder';
 import Clan from '../../clans/clan';
 import ClanPlayer from '../../clans/clanPlayer';
-import type { Rank } from '../../clans/ranks';
-import CLAN_RANKS from '../../clans/ranks';
 import Player from '../../players/player';
 
 type ClanPlayerSeed = {
   clan: string;
   player: string;
-  rank: Rank;
+  rank: number;
   last_seen_at: string;
 };
 
@@ -21,9 +19,7 @@ const clanPlayerSeedSchema = Joi.object<
   Joi.object({
     clan: Joi.string().required(),
     player: Joi.string().required(),
-    rank: Joi.string()
-      .required()
-      .valid(...Object.values(CLAN_RANKS)),
+    rank: Joi.number().min(-1).max(127).required(),
     last_seen_at: Joi.string().required(),
   }),
 );

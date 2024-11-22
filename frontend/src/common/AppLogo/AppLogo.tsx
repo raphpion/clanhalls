@@ -1,10 +1,10 @@
-import type { HTMLAttributes } from 'react';
+import type { ComponentProps } from 'react';
 
 import { Link } from '@tanstack/react-router';
 
 import { cn } from '$ui/utils';
 
-type Props = HTMLAttributes<'a'> & {
+type Props = ComponentProps<typeof Link> & {
   size?: number;
   withText?: boolean;
 };
