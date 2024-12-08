@@ -43,8 +43,6 @@ function AdminUsersHome() {
       }),
     });
 
-  const handlePageChange = (page: number) => navigate({ search: { page } });
-
   return (
     <Fragment>
       <h1 className="mb-8 text-3xl font-bold">Users</h1>
