@@ -39,11 +39,20 @@ class SignUpUserCommand extends Command<Params, Result> {
       );
     }
 
-    const user = new User();
+    let user = new User();
     user.googleId = googleId;
     user.changeEmail(email);
     user.emailVerified = emailVerified;
     user.pictureUrl = pictureUrl;
+
+    await repository.save(user);
+
+    user = await repository.findOne({
+      where: { googleId },
+    });
+
+    user.createdBy = user.id;
+    user.updatedBy = user.id;
 
     return repository.save(user);
   }

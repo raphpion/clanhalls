@@ -4,10 +4,10 @@ import {
   Entity,
   OneToMany,
   OneToOne,
-  PrimaryGeneratedColumn,
 } from 'typeorm';
 
 import Credentials from './credentials/credentials';
+import BaseEntity from '../baseEntity';
 import ClanUser from '../clans/clanUser';
 import MemberActivityReport from '../clans/reports/memberActivityReport';
 import SettingsReport from '../clans/reports/settingsReport';
@@ -15,10 +15,7 @@ import AppError, { AppErrorCodes } from '../extensions/errors';
 import Session from '../sessions/session';
 
 @Entity()
-class User {
-  @PrimaryGeneratedColumn()
-  readonly id: number;
-
+class User extends BaseEntity {
   @Column({ unique: true, length: 255 })
   googleId: string;
 
@@ -40,6 +37,12 @@ class User {
   @Column({ nullable: true })
   pictureUrl: string | null;
 
+  @Column({ nullable: false, default: false })
+  isSuperAdmin: boolean;
+
+  @Column({ nullable: true })
+  disabledAt: Date | null;
+
   @OneToOne(() => ClanUser, (clanUser: ClanUser) => clanUser.user)
   clanUser: Promise<ClanUser | null>;
 
@@ -60,6 +63,10 @@ class User {
 
   @OneToMany(() => Session, (session: Session) => session.user)
   sessions: Promise<Session[]>;
+
+  get isDisabled() {
+    return this.disabledAt !== null;
+  }
 
   static normalizeEmail(email: string) {
     if (Joi.string().email().validate(email).error) {
@@ -89,6 +96,22 @@ class User {
     this.email = email;
     this.emailNormalized = emailNormalized;
     this.emailVerified = false;
+  }
+
+  disable() {
+    if (this.disabledAt) {
+      throw new AppError(AppErrorCodes.BAD_REQUEST, 'User is already disabled');
+    }
+
+    this.disabledAt = new Date();
+  }
+
+  enable() {
+    if (!this.disabledAt) {
+      throw new AppError(AppErrorCodes.BAD_REQUEST, 'User is not disabled');
+    }
+
+    this.disabledAt = null;
   }
 
   setPictureUrl(pictureUrl: string | null) {

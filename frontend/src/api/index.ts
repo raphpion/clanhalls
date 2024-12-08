@@ -1,4 +1,3 @@
-
 export type ApiResult<TResult> = {
   data: TResult;
   status: number;
@@ -57,8 +56,18 @@ async function execute<TData, TResult>(
   }
 
   if (!response.ok) {
-    const error: ApiError = { status: response.status, data: result };
-    throw error;
+    if (url.startsWith('/api/')) {
+      const error: ApiError = { status: response.status, data: result };
+
+      // TODO: find a better way to handle this
+      if ([401, 403].includes(error.status)) {
+        window.location.reload();
+      }
+
+      throw error;
+    }
+
+    throw new Error(response.statusText);
   }
 
   return { data: result as TResult, status: response.status };
@@ -81,4 +90,13 @@ export async function post<TData, TResult = unknown>(
 
 export async function put<TData, TResult = unknown>(url: string, data?: TData) {
   return await execute<TData, TResult>('PUT', url, data);
+}
+
+export function isApiError(error: unknown): error is ApiError {
+  return (
+    typeof error === 'object' &&
+    error !== null &&
+    'status' in error &&
+    typeof (error as ApiError).status === 'number'
+  );
 }

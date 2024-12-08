@@ -12,10 +12,14 @@
 
 import { Route as rootRoute } from './routes/__root'
 import { Route as SignInImport } from './routes/sign-in'
+import { Route as AdminImport } from './routes/admin'
 import { Route as IndexImport } from './routes/index'
+import { Route as AdminIndexImport } from './routes/admin/index'
 import { Route as OnboardingSyncClanImport } from './routes/onboarding/sync-clan'
 import { Route as OnboardingSetUsernameImport } from './routes/onboarding/set-username'
 import { Route as OnboardingCreateClanImport } from './routes/onboarding/create-clan'
+import { Route as AdminUsersImport } from './routes/admin/users'
+import { Route as AdminClansImport } from './routes/admin/clans'
 
 // Create/Update Routes
 
@@ -24,9 +28,19 @@ const SignInRoute = SignInImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
+const AdminRoute = AdminImport.update({
+  path: '/admin',
+  getParentRoute: () => rootRoute,
+} as any)
+
 const IndexRoute = IndexImport.update({
   path: '/',
   getParentRoute: () => rootRoute,
+} as any)
+
+const AdminIndexRoute = AdminIndexImport.update({
+  path: '/',
+  getParentRoute: () => AdminRoute,
 } as any)
 
 const OnboardingSyncClanRoute = OnboardingSyncClanImport.update({
@@ -44,6 +58,16 @@ const OnboardingCreateClanRoute = OnboardingCreateClanImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
+const AdminUsersRoute = AdminUsersImport.update({
+  path: '/users',
+  getParentRoute: () => AdminRoute,
+} as any)
+
+const AdminClansRoute = AdminClansImport.update({
+  path: '/clans',
+  getParentRoute: () => AdminRoute,
+} as any)
+
 // Populate the FileRoutesByPath interface
 
 declare module '@tanstack/react-router' {
@@ -55,12 +79,33 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexImport
       parentRoute: typeof rootRoute
     }
+    '/admin': {
+      id: '/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AdminImport
+      parentRoute: typeof rootRoute
+    }
     '/sign-in': {
       id: '/sign-in'
       path: '/sign-in'
       fullPath: '/sign-in'
       preLoaderRoute: typeof SignInImport
       parentRoute: typeof rootRoute
+    }
+    '/admin/clans': {
+      id: '/admin/clans'
+      path: '/clans'
+      fullPath: '/admin/clans'
+      preLoaderRoute: typeof AdminClansImport
+      parentRoute: typeof AdminImport
+    }
+    '/admin/users': {
+      id: '/admin/users'
+      path: '/users'
+      fullPath: '/admin/users'
+      preLoaderRoute: typeof AdminUsersImport
+      parentRoute: typeof AdminImport
     }
     '/onboarding/create-clan': {
       id: '/onboarding/create-clan'
@@ -83,6 +128,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof OnboardingSyncClanImport
       parentRoute: typeof rootRoute
     }
+    '/admin/': {
+      id: '/admin/'
+      path: '/'
+      fullPath: '/admin/'
+      preLoaderRoute: typeof AdminIndexImport
+      parentRoute: typeof AdminImport
+    }
   }
 }
 
@@ -90,6 +142,11 @@ declare module '@tanstack/react-router' {
 
 export const routeTree = rootRoute.addChildren({
   IndexRoute,
+  AdminRoute: AdminRoute.addChildren({
+    AdminClansRoute,
+    AdminUsersRoute,
+    AdminIndexRoute,
+  }),
   SignInRoute,
   OnboardingCreateClanRoute,
   OnboardingSetUsernameRoute,
@@ -105,6 +162,7 @@ export const routeTree = rootRoute.addChildren({
       "filePath": "__root.tsx",
       "children": [
         "/",
+        "/admin",
         "/sign-in",
         "/onboarding/create-clan",
         "/onboarding/set-username",
@@ -114,8 +172,24 @@ export const routeTree = rootRoute.addChildren({
     "/": {
       "filePath": "index.tsx"
     },
+    "/admin": {
+      "filePath": "admin.tsx",
+      "children": [
+        "/admin/clans",
+        "/admin/users",
+        "/admin/"
+      ]
+    },
     "/sign-in": {
       "filePath": "sign-in.tsx"
+    },
+    "/admin/clans": {
+      "filePath": "admin/clans.tsx",
+      "parent": "/admin"
+    },
+    "/admin/users": {
+      "filePath": "admin/users.tsx",
+      "parent": "/admin"
     },
     "/onboarding/create-clan": {
       "filePath": "onboarding/create-clan.tsx"
@@ -125,6 +199,10 @@ export const routeTree = rootRoute.addChildren({
     },
     "/onboarding/sync-clan": {
       "filePath": "onboarding/sync-clan.tsx"
+    },
+    "/admin/": {
+      "filePath": "admin/index.tsx",
+      "parent": "/admin"
     }
   }
 }

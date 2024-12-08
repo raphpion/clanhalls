@@ -56,6 +56,8 @@ async function signInWithGoogle(req: Request, _: Response, next: NextFunction) {
         emailVerified,
         pictureUrl,
       }).execute();
+    } else if (user.isDisabled) {
+      throw new AppError(AppErrorCodes.PERMISSION_DENIED, 'Account disabled');
     }
 
     const updates = {

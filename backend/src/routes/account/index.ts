@@ -42,6 +42,7 @@ async function getSession(req: Request, res: Response, next: NextFunction) {
       emailNormalized,
       emailVerified,
       pictureUrl,
+      isSuperAdmin,
     } = req.userEntity;
 
     const clanUser = await req.userEntity.clanUser;
@@ -65,6 +66,7 @@ async function getSession(req: Request, res: Response, next: NextFunction) {
         emailVerified,
         pictureUrl,
         isClanAdmin: clanUser?.isAdmin || false,
+        isSuperAdmin,
       },
       clan: clanData,
     });

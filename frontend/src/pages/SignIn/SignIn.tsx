@@ -2,11 +2,13 @@ import { type CredentialResponse, GoogleLogin } from '@react-oauth/google';
 import { useMutation } from '@tanstack/react-query';
 import { useNavigate } from '@tanstack/react-router';
 
+import { isApiError } from '$api';
 import { signInWithGoogle } from '$api/account';
 import AuthLayout from '$common/AuthLayout';
 import Loading from '$common/Loading';
 import { useTheme } from '$common/Theme';
 import { usePageTitle } from '$hooks';
+import { toast } from '$ui/hooks/use-toast';
 
 function SignIn() {
   const navigate = useNavigate();
@@ -16,6 +18,22 @@ function SignIn() {
   const signInMutation = useMutation({
     mutationKey: ['sign-in'],
     mutationFn: signInWithGoogle,
+    onError: (error) => {
+      if (isApiError(error) && error.status === 403) {
+        toast({
+          title: 'Your account is disabled.',
+          variant: 'destructive',
+        });
+
+        return;
+      }
+
+      toast({
+        title: 'An unexpected error occurred while signing in.',
+        description: 'Please try again later.',
+        variant: 'destructive',
+      });
+    },
     onSuccess: () => navigate({ to: '/' }),
   });
 

@@ -2,7 +2,7 @@ import { Fragment, useState } from 'react';
 
 import { useMutation } from '@tanstack/react-query';
 import { useNavigate } from '@tanstack/react-router';
-import { LogOutIcon, SettingsIcon } from 'lucide-react';
+import { CrownIcon, LogOutIcon, SettingsIcon } from 'lucide-react';
 
 import { signOut } from '$api/account';
 import useAppContext from '$common/AppContext';
@@ -63,6 +63,12 @@ function UserMenu() {
           </DropdownMenuLabel>
           <DropdownMenuSeparator />
           <DropdownMenuGroup>
+            {user.isSuperAdmin && (
+              <DropdownMenuItem onClick={() => navigate({ to: '/admin' })}>
+                <CrownIcon size={16} className="mr-2" />
+                Admin
+              </DropdownMenuItem>
+            )}
             <DropdownMenuItem onClick={() => setSettingsOpen(true)}>
               <SettingsIcon size={16} className="mr-2" />
               Settings

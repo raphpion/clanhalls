@@ -1,16 +1,18 @@
 import Command from '../../command';
-import type User from '../../users/user';
+import User from '../../users/user';
 import Session from '../session';
 
 type Params = {
-  user: User;
+  googleId: string;
 };
 
 class RevokeAllSessionsForUserCommand extends Command<Params> {
   async execute() {
-    const repository = this.db.getRepository(Session);
+    const sessionRepository = this.db.getRepository(Session);
+    const userRepository = this.db.getRepository(User);
 
-    const { user } = this.params;
+    const { googleId } = this.params;
+    const user = await userRepository.findOneBy({ googleId });
 
     const sessions = await user.sessions;
     for (const session of sessions) {
@@ -18,7 +20,7 @@ class RevokeAllSessionsForUserCommand extends Command<Params> {
       session.signOut();
     }
 
-    await repository.save(sessions);
+    await sessionRepository.save(sessions);
   }
 }
 

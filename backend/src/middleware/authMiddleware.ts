@@ -31,6 +31,12 @@ export function requireAuth(relations: string[] = []) {
         relations: sessionRelations,
       }).execute();
 
+      const sessionUser = await session?.user;
+      if (sessionUser?.isDisabled) {
+        req.session.destroy(console.error);
+        return res.sendStatus(403);
+      }
+
       if (!session || session.signedOutAt) {
         req.session.destroy(console.error);
         return res.sendStatus(401);
@@ -61,6 +67,13 @@ export function retrieveAuth(relations: string[] = []) {
         uuid: req.session.uuid,
         relations: sessionRelations,
       }).execute();
+
+      const sessionUser = await session?.user;
+      if (sessionUser?.isDisabled) {
+        req.session.destroy(console.error);
+        return res.sendStatus(403);
+      }
+
       if (!session || session.isSignedOut) {
         req.session.destroy(console.error);
         return next();
@@ -94,6 +107,11 @@ export function requireCredentials(scope: Scopes[], relations: string[] = []) {
         return res.sendStatus(401);
       }
 
+      const credentialsUser = await credentials.user;
+      if (credentialsUser.isDisabled) {
+        return res.sendStatus(403);
+      }
+
       const credentialsValid =
         await credentials.validateClientSecret(clientSecret);
       if (!credentialsValid) {
@@ -106,10 +124,31 @@ export function requireCredentials(scope: Scopes[], relations: string[] = []) {
       }
 
       req.credentialsEntity = credentials;
-      req.userEntity = await credentials.user;
+      req.userEntity = credentialsUser;
       next();
     } catch (error) {
       next(error);
     }
   };
+}
+
+export function requireSuperAdmin(relations: string[] = []) {
+  return [
+    requireAuth(relations),
+    async function (req: Request, res: Response, next: NextFunction) {
+      try {
+        if (!req.userEntity) {
+          throw new AppError(AppErrorCodes.UNAUTHORIZED, 'Unauthorized');
+        }
+
+        if (req.userEntity.isDisabled || !req.userEntity.isSuperAdmin) {
+          throw new AppError(AppErrorCodes.PERMISSION_DENIED, 'Forbidden');
+        }
+
+        next();
+      } catch (error) {
+        next(error);
+      }
+    },
+  ];
 }

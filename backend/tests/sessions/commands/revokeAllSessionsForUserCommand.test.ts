@@ -24,7 +24,7 @@ describe('RevokeAllSessionsForUserCommand', () => {
     const user = seedingService.getEntity(User, 'john_doe')!;
 
     await new RevokeAllSessionsForUserCommand({
-      user,
+      googleId: user.googleId,
     }).execute();
 
     const sessions = await db.getRepository(Session).find({

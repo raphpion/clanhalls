@@ -59,7 +59,7 @@ async function revokeAllSessions(
     }
 
     await new RevokeAllSessionsForUserCommand({
-      user: req.userEntity,
+      googleId: req.userEntity.googleId,
     }).execute();
 
     res.sendStatus(204);

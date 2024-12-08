@@ -15,6 +15,8 @@ export type SessionData = {
     emailNormalized: string;
     emailVerified: boolean;
     pictureUrl: string | null;
+    isClanAdmin: boolean;
+    isSuperAdmin: boolean;
   } | null;
 
   clan: {
