@@ -12,6 +12,7 @@ export type Config = {
   port: number;
   sessionSecret: string;
   googleClientId: string;
+
   postgres: {
     host: string;
     port: number;
@@ -19,10 +20,16 @@ export type Config = {
     password: string;
     dbName: string;
   };
+
   redis: {
     url: string;
     port: number;
     password: string;
+  };
+
+  wiseOldMan: {
+    apiKey: string;
+    userAgent: string;
   };
 };
 
@@ -50,6 +57,11 @@ class ConfigService {
       port: Joi.number().required(),
       password: Joi.string().required(),
     }),
+
+    wiseOldMan: Joi.object({
+      apiKey: Joi.string().required(),
+      userAgent: Joi.string().required(),
+    }),
   });
 
   private readonly config: Config;
@@ -74,6 +86,11 @@ class ConfigService {
         url: process.env.REDIS_URL,
         port: Number(process.env.REDIS_PORT),
         password: process.env.REDIS_PASSWORD,
+      },
+
+      wiseOldMan: {
+        apiKey: process.env.WISE_OLD_MAN_API_KEY,
+        userAgent: process.env.WISE_OLD_MAN_USER_AGENT,
       },
     };
 

@@ -4,7 +4,9 @@ import type {
   PlayerDetails,
 } from '@wise-old-man/utils';
 import { WOMClient } from '@wise-old-man/utils';
-import { injectable } from 'tsyringe';
+import { inject, injectable } from 'tsyringe';
+
+import type ConfigService from '../config';
 
 export interface IWiseOldManService {
   getPlayerDetails(username: string): Promise<PlayerDetails | undefined>;
@@ -23,7 +25,13 @@ export interface PaginationOptions {
 
 @injectable()
 class WiseOldManService implements IWiseOldManService {
-  private readonly client: WOMClient = new WOMClient();
+  public constructor(
+    @inject('ConfigService') private readonly configService: ConfigService,
+  ) {}
+
+  private readonly client: WOMClient = new WOMClient(
+    this.configService.get((config) => config.wiseOldMan),
+  );
 
   public async getPlayerDetails(
     username: string,
