@@ -145,7 +145,11 @@ class ApplyMemberActivityReportDataCommand extends Command<Params> {
         where: { clanId, playerId: player.id },
       });
 
-      if (clanPlayer.lastSeenAt > nameChange.createdAt) continue;
+      if (
+        !clanPlayer?.lastSeenAt ||
+        clanPlayer.lastSeenAt >= nameChange.createdAt
+      )
+        continue;
 
       player.wiseOldManId = nameChange.playerId;
       player.username = newName;
