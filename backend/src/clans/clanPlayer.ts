@@ -18,7 +18,7 @@ class ClanPlayer {
   @PrimaryColumn()
   readonly playerId: number;
 
-  @Column()
+  @Column({ type: 'timestamptz' })
   lastSeenAt: Date;
 
   @Column()

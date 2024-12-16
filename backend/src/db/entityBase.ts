@@ -7,13 +7,13 @@ import {
 
 @Entity()
 class EntityBase {
-  @CreateDateColumn()
+  @CreateDateColumn({ type: 'timestamptz' })
   readonly createdAt: Date;
 
-  @UpdateDateColumn()
+  @UpdateDateColumn({ type: 'timestamptz' })
   readonly updatedAt: Date;
 
-  @DeleteDateColumn({ nullable: true })
+  @DeleteDateColumn({ type: 'timestamptz', nullable: true })
   deletedAt: Date | null = null;
 }
 

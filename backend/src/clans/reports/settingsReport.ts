@@ -26,10 +26,10 @@ class SettingsReport {
   @Generated('uuid')
   readonly uuid: string;
 
-  @CreateDateColumn()
+  @CreateDateColumn({ type: 'timestamptz' })
   receivedAt: Date;
 
-  @Column({ nullable: true })
+  @Column({ type: 'timestamptz', nullable: true })
   appliedAt: Date | null = null;
 
   @Column('jsonb')

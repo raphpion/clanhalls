@@ -13,6 +13,7 @@ import { cn } from '$ui/utils';
 
 import useSessionsContext from './context';
 import { type ActiveSessionData } from '../../../api/account';
+import { formatDateToLocal } from '../../../helpers/dates';
 import useConfirmationDialog from '../../ConfirmationDialog/context';
 
 type Props = {
@@ -84,7 +85,7 @@ function Session({ session, isFirst, isLast }: Props) {
           <p className="text-sm text-muted-foreground">
             {session.isCurrent
               ? 'Your current session'
-              : `Last seen at ${new Date(session.lastSeenAt).toLocaleString()}`}
+              : `Last seen on ${formatDateToLocal(session.lastSeenAt, true)}`}
           </p>
         </div>
         <div>

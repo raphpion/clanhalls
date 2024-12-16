@@ -14,6 +14,7 @@ import {
 import { cn } from '$ui/utils';
 
 import useCredentialsContext from './context';
+import { formatDateToLocal } from '../../../helpers/dates';
 import useConfirmationDialog from '../../ConfirmationDialog/context';
 
 type Props = {
@@ -60,11 +61,11 @@ function Credential({ credential, isFirst, isLast }: Props) {
             <p className="text-lg font-semibold">{credential.name}</p>
             <p>{credential.clientId}</p>
             <p className="text-slate-500">
-              Created on {new Date(credential.createdAt).toLocaleString()}
+              Created on {formatDateToLocal(credential.createdAt, true)}
             </p>
             <p className="text-slate-500">
               {credential.lastUsedAt
-                ? `Last used on ${new Date(credential.lastUsedAt).toLocaleString()}`
+                ? `Last used on ${formatDateToLocal(credential.lastUsedAt, true)}`
                 : 'Never used'}
             </p>
             {credential.scope && (

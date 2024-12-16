@@ -13,10 +13,10 @@ abstract class BaseEntity {
   @PrimaryGeneratedColumn()
   readonly id: number;
 
-  @CreateDateColumn()
+  @CreateDateColumn({ type: 'timestamptz' })
   readonly createdAt: Date;
 
-  @UpdateDateColumn()
+  @UpdateDateColumn({ type: 'timestamptz' })
   updatedAt: Date;
 
   @Column({ nullable: true })

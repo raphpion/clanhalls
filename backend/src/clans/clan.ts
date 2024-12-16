@@ -33,7 +33,7 @@ class Clan {
   @Column({ length: 20, nullable: true })
   nameInGame: string | null = null;
 
-  @Column({ nullable: true })
+  @Column({ type: 'timestamptz', nullable: true })
   lastSyncedAt: Date | null;
 
   @OneToMany(() => ClanUser, (clanUser: ClanUser) => clanUser.clan, {

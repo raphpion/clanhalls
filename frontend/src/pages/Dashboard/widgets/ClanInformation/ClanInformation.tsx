@@ -3,6 +3,7 @@ import { useMutation } from '@tanstack/react-query';
 import { deleteMyClan } from '$api/account';
 import useAppContext from '$common/AppContext';
 import useConfirmationDialog from '$common/ConfirmationDialog/context';
+import { formatDateToLocal } from '$helpers/dates';
 import { Button } from '$ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '$ui/card';
 import { toast } from '$ui/hooks/use-toast';
@@ -58,7 +59,7 @@ function ClanInformation() {
       </CardHeader>
       <CardContent className="space-y-4">
         {clan.lastSyncedAt && (
-          <p>Last synced at {new Date(clan.lastSyncedAt).toLocaleString()}.</p>
+          <p>Last synced on {formatDateToLocal(clan.lastSyncedAt, true)}.</p>
         )}
         <Button variant="destructive" onClick={handleClickDeleteClan}>
           Delete clan

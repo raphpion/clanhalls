@@ -8,7 +8,10 @@ import {
 } from '@tanstack/react-table';
 import { ArrowDown, ArrowUp } from 'lucide-react';
 
+import { type ClanPlayerQueryParams } from '$api/account';
 import ClanTitleIcon from '$common/ClanTitleIcon';
+import { formatDateToLocal } from '$helpers/dates';
+import { Button } from '$ui/button';
 import {
   Table,
   TableCell,
@@ -20,8 +23,6 @@ import {
 
 import Loading from './Loading';
 import NoContent from './NoContent';
-import { type ClanPlayerQueryParams } from '../../../../../api/account';
-import { Button } from '../../../../../ui/button';
 
 export type ClanPlayer = {
   username: string;
@@ -85,13 +86,12 @@ const getGolumns = (
     header: () => (
       <Header
         field="lastSeenAt"
-        title="Last Seen At"
+        title="Last Seen On"
         onClick={onOrderByLastSeenAt}
         orderBy={orderBy}
       />
     ),
-    accessorFn: (row) =>
-      row.lastSeenAt ? new Date(row.lastSeenAt).toLocaleString() : undefined,
+    accessorFn: (row) => formatDateToLocal(row.lastSeenAt, true),
   },
 ];
 
