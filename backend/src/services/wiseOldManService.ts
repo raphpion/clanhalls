@@ -25,6 +25,8 @@ export interface PaginationOptions {
 
 @injectable()
 class WiseOldManService implements IWiseOldManService {
+  private rateLimitedCounter = 0;
+
   public constructor(
     @inject('ConfigService') private readonly configService: ConfigService,
   ) {}
@@ -72,16 +74,24 @@ class WiseOldManService implements IWiseOldManService {
     // eslint-disable-next-line no-constant-condition
     while (true) {
       try {
-        return await callback();
+        await callback();
+
+        // Reset the rate limited counter if the request is successful
+        this.rateLimitedCounter = 0;
       } catch (error) {
         if (error.name === 'NotFoundError') {
           return undefined;
         }
 
         if (error.name === 'RateLimitError') {
-          // Retry in 60 seconds if the request fails because of rate limiting
+          this.rateLimitedCounter += 1;
+
+          // Retry in 60 seconds plus a delay if the request fails because of rate limiting
           // See https://docs.wiseoldman.net/#rate-limits--api-keys
-          await new Promise((r) => setTimeout(r, 60000));
+          await new Promise((r) =>
+            setTimeout(r, 60000 + this.rateLimitedCounter),
+          );
+
           continue;
         }
 

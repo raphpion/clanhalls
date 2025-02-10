@@ -1,7 +1,7 @@
 services:
   postgres:
     container_name: clan-halls_postgres
-    image: postgres:latest
+    image: postgres:16
     restart: always
     ports:
       - ${POSTGRES_PORT}:5432

@@ -14,8 +14,8 @@ import WiseOldManService, {
 } from './services/wiseOldManService';
 
 container
-  .register<ConfigService>('ConfigService', { useClass: ConfigService })
-  .register<DataSource>('DataSource', { useValue: db })
+  .registerSingleton<ConfigService>('ConfigService', ConfigService)
+  .registerInstance<DataSource>('DataSource', db)
   .register<SeedingService>('SeedingService', { useClass: SeedingService })
   .register<IGoogleService>('GoogleService', { useClass: GoogleService })
   .registerSingleton<IJobsService>('JobsService', JobsService);
@@ -25,8 +25,9 @@ const WiseOldManServiceClass = isTest
   ? WiseOldManServiceMock
   : WiseOldManService;
 
-container.register<IWiseOldManService>('WiseOldManService', {
-  useClass: WiseOldManServiceClass,
-});
+container.registerSingleton<IWiseOldManService>(
+  'WiseOldManService',
+  WiseOldManServiceClass,
+);
 
 export default container;
