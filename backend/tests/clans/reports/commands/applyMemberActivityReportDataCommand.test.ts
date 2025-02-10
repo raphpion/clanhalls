@@ -7,7 +7,6 @@ import container from '../../../../src/container';
 import ApplyMemberActivityReportDataCommand from '../../../../src/clans/reports/commands/applyMemberActivityReportDataCommand';
 import MemberActivityReport from '../../../../src/clans/reports/memberActivityReport';
 import type SeedingService from '../../../../src/db/seeding/seedingService';
-import Player from '../../../../src/players/player';
 
 describe('ApplyMemberActivityReportDataCommand', () => {
   const db = container.resolve<DataSource>('DataSource');
@@ -102,31 +101,6 @@ describe('ApplyMemberActivityReportDataCommand', () => {
       expect(player).not.toBeNull();
       expect(player!.username).toBe(member.name);
     }
-  });
-
-  it('updates existing players, adds wise old man id if not present, in case they have changed their name', async () => {
-    const report = seedingService.getEntity(
-      MemberActivityReport,
-      'iron_wolves__john_doe__04',
-    )!;
-
-    const johnDoe = seedingService.getEntity(Player, 'john_doe')!;
-    const janeSmith = seedingService.getEntity(Player, 'jane_smith')!;
-
-    await new ApplyMemberActivityReportDataCommand({
-      reportId: report.id,
-    }).execute();
-
-    const johnDoeAfter = await db
-      .getRepository(Player)
-      .findOneBy({ id: johnDoe.id });
-    expect(johnDoeAfter?.username).toBe('I am John');
-
-    const janeSmithAfter = await db
-      .getRepository(Player)
-      .findOneBy({ id: janeSmith.id });
-    expect(janeSmithAfter?.wiseOldManId).not.toBeNull();
-    expect(janeSmithAfter?.username).toBe('Jane Smiths');
   });
 
   it('throws an error if the report has already been applied', async () => {

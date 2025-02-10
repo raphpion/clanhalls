@@ -51,7 +51,6 @@ class ApplyMemberActivityReportDataCommand extends Command<Params> {
           player = await this.findExistingPlayerWithNewName(
             queryRunner,
             member.name,
-            clan.id,
           );
 
           if (!player) {
@@ -105,60 +104,14 @@ class ApplyMemberActivityReportDataCommand extends Command<Params> {
   private async findExistingPlayerWithNewName(
     queryRunner: QueryRunner,
     newName: string,
-    clanId: number,
   ) {
-    const nameChanges = await this.wiseOldMan.searchNameChanges(
-      {
-        username: newName,
-      },
-      { limit: 50 },
-    );
-    if (!nameChanges?.length) {
-      return undefined;
-    }
+    const womPlayer = await this.wiseOldMan.getPlayerDetails(newName);
+    console.log(newName, womPlayer);
+    if (!womPlayer) return;
 
-    const filteredNameChanges = nameChanges
-      .filter((nc) => nc.status !== 'denied' && nc.newName === newName)
-      .sort((a, b) => b.createdAt.valueOf() - a.createdAt.valueOf());
-
-    let player: Player | undefined;
-    for (const nameChange of filteredNameChanges) {
-      player = await queryRunner.manager.findOne(Player, {
-        where: { username: nameChange.oldName },
-      });
-
-      if (!player) continue;
-
-      const wiseOldManPlayer = await this.wiseOldMan.getPlayerDetailsById(
-        nameChange.playerId,
-      );
-
-      if (
-        !wiseOldManPlayer ||
-        wiseOldManPlayer.displayName !== newName ||
-        (player.wiseOldManId !== null &&
-          player.wiseOldManId !== nameChange.playerId)
-      )
-        continue;
-
-      const clanPlayer = await queryRunner.manager.findOne(ClanPlayer, {
-        where: { clanId, playerId: player.id },
-      });
-
-      if (
-        !clanPlayer?.lastSeenAt ||
-        clanPlayer.lastSeenAt >= nameChange.createdAt
-      )
-        continue;
-
-      player.wiseOldManId = nameChange.playerId;
-      player.username = newName;
-      player = await queryRunner.manager.save(player);
-
-      break;
-    }
-
-    return player;
+    return queryRunner.manager.findOne(Player, {
+      where: { wiseOldManId: womPlayer.id },
+    });
   }
 }
 
