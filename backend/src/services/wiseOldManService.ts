@@ -86,6 +86,8 @@ class WiseOldManService implements IWiseOldManService {
         if (error.name === 'RateLimitError') {
           this.rateLimitedCounter += 1;
 
+          console.log(`[WOM] Rate limited ${this.rateLimitedCounter} times`);
+
           // Retry in 60 seconds plus a delay if the request fails because of rate limiting
           // See https://docs.wiseoldman.net/#rate-limits--api-keys
           await new Promise((r) =>
