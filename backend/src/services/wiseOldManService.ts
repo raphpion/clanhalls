@@ -23,9 +23,17 @@ export interface PaginationOptions {
   offset?: number;
 }
 
+type QueueItem<T> = {
+  execute: () => Promise<T>;
+  resolve: (value: T) => void;
+  reject: (error: Error) => void;
+};
+
 @injectable()
 class WiseOldManService implements IWiseOldManService {
-  private rateLimitedCounter = 0;
+  private queue: QueueItem<unknown>[] = [];
+  private processing = false;
+  private rateLimited = false;
 
   public constructor(
     @inject('ConfigService') private readonly configService: ConfigService,
@@ -38,7 +46,7 @@ class WiseOldManService implements IWiseOldManService {
   public async getPlayerDetails(
     username: string,
   ): Promise<PlayerDetails | undefined> {
-    return this.withSafeWiseOldMan(() =>
+    return this.enqueueRequest(() =>
       this.client.players.getPlayerDetails(username),
     );
   }
@@ -46,7 +54,7 @@ class WiseOldManService implements IWiseOldManService {
   public async getPlayerDetailsById(
     id: number,
   ): Promise<PlayerDetails | undefined> {
-    return this.withSafeWiseOldMan(() =>
+    return this.enqueueRequest(() =>
       this.client.players.getPlayerDetailsById(id),
     );
   }
@@ -54,7 +62,7 @@ class WiseOldManService implements IWiseOldManService {
   public async getPlayerNames(
     username: string,
   ): Promise<NameChange[] | undefined> {
-    return this.withSafeWiseOldMan(() =>
+    return this.enqueueRequest(() =>
       this.client.players.getPlayerNames(username),
     );
   }
@@ -63,43 +71,52 @@ class WiseOldManService implements IWiseOldManService {
     filter: NameChangesSearchFilter,
     pagination?: PaginationOptions,
   ): Promise<NameChange[] | undefined> {
-    return this.withSafeWiseOldMan(() =>
+    return this.enqueueRequest(() =>
       this.client.nameChanges.searchNameChanges(filter, pagination),
     );
   }
 
-  private async withSafeWiseOldMan<T>(
-    callback: () => Promise<T>,
-  ): Promise<T | undefined> {
-    // eslint-disable-next-line no-constant-condition
-    while (true) {
-      try {
-        await callback();
+  private enqueueRequest<T>(callback: () => Promise<T>): Promise<T> {
+    return new Promise<T>((resolve, reject) => {
+      this.queue.push({ execute: callback, resolve, reject });
+      console.log(`[WOM] Enqueued request, queue length: ${this.queue.length}`);
+      this.processQueue();
+    });
+  }
 
-        // Reset the rate limited counter if the request is successful
-        this.rateLimitedCounter = 0;
+  private async processQueue() {
+    if (this.processing || this.rateLimited) return;
+
+    this.processing = true;
+
+    while (this.queue.length > 0) {
+      const { execute, resolve, reject } = this.queue.shift()!;
+
+      try {
+        const result = await execute();
+        resolve(result);
+        console.log(
+          `[WOM] Request resolved, queue length: ${this.queue.length}`,
+        );
       } catch (error) {
         if (error.name === 'NotFoundError') {
-          return undefined;
+          resolve(undefined);
+        } else if (error.name === 'RateLimitError') {
+          this.rateLimited = true;
+          console.log('[WOM] Rate limited, pausing requests for 60 seconds.');
+
+          await new Promise((r) => setTimeout(r, 60000));
+          this.rateLimited = false;
+
+          // Re-add the failed request to the front of the queue
+          this.queue.unshift({ execute, resolve, reject });
+        } else {
+          reject(error);
         }
-
-        if (error.name === 'RateLimitError') {
-          this.rateLimitedCounter += 1;
-
-          console.log(`[WOM] Rate limited ${this.rateLimitedCounter} times`);
-
-          // Retry in 60 seconds plus a delay if the request fails because of rate limiting
-          // See https://docs.wiseoldman.net/#rate-limits--api-keys
-          await new Promise((r) =>
-            setTimeout(r, 60000 + this.rateLimitedCounter),
-          );
-
-          continue;
-        }
-
-        throw error;
       }
     }
+
+    this.processing = false;
   }
 }
 
