@@ -15,12 +15,17 @@ import container from './container';
 import type { IJobsService } from './jobs/jobsService';
 import errorMiddleware from './middleware/errorMiddleware';
 import routes from './routes';
+import type { ILoggerService } from './services/loggerService';
+
+const db = container.resolve<DataSource>('DataSource');
+const configService = container.resolve<ConfigService>('ConfigService');
+const jobService = container.resolve<IJobsService>('JobsService');
+const loggerService = container.resolve<ILoggerService>('LoggerService');
 
 startup();
 
 async function startup() {
   const app = express();
-  const db = container.resolve<DataSource>('DataSource');
 
   await Promise.all([initializeSession(app), db.initialize()]);
   await container.resolve<IJobsService>('JobsService').initialize();
@@ -32,7 +37,6 @@ async function startup() {
 }
 
 async function initializeSession(app: express.Application) {
-  const configService = container.resolve<ConfigService>('ConfigService');
   const isProduction = configService.get((c) => c.env) === 'production';
   const sessionSecret = configService.get((c) => c.sessionSecret);
   const redisConfig = configService.get((c) => c.redis);
@@ -77,8 +81,8 @@ async function initializeSession(app: express.Application) {
 }
 
 async function shutdown(signal: string) {
-  console.log(`Recieved ${signal}. Shutting down...`);
-  await container.resolve<IJobsService>('JobsService').shutdown();
+  loggerService.log('info', `Recieved ${signal}. Shutting down...`);
+  await jobService.shutdown();
   process.exit();
 }
 
@@ -91,6 +95,6 @@ async function initializeApi(app: express.Application) {
   app.use(errorMiddleware);
 
   app.listen(port, () =>
-    console.log(`Server is running on http://localhost:${port}`),
+    loggerService.log('info', `Server is running on http://localhost:${port}`),
   );
 }

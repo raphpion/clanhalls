@@ -106,7 +106,6 @@ class ApplyMemberActivityReportDataCommand extends Command<Params> {
     newName: string,
   ) {
     const womPlayer = await this.wiseOldMan.getPlayerDetails(newName);
-    console.log(newName, womPlayer);
     if (!womPlayer) return;
 
     return queryRunner.manager.findOne(Player, {

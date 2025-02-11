@@ -6,6 +6,7 @@ import type {
 import { WOMClient } from '@wise-old-man/utils';
 import { inject, injectable } from 'tsyringe';
 
+import type { ILoggerService } from './loggerService';
 import type ConfigService from '../config';
 
 export interface IWiseOldManService {
@@ -29,6 +30,8 @@ type QueueItem<T> = {
   reject: (error: Error) => void;
 };
 
+const LOGGER_NAME = 'WiseOldManService';
+
 @injectable()
 class WiseOldManService implements IWiseOldManService {
   private queue: QueueItem<unknown>[] = [];
@@ -37,6 +40,7 @@ class WiseOldManService implements IWiseOldManService {
 
   public constructor(
     @inject('ConfigService') private readonly configService: ConfigService,
+    @inject('LoggerService') private readonly loggerService: ILoggerService,
   ) {}
 
   private readonly client: WOMClient = new WOMClient(
@@ -79,7 +83,11 @@ class WiseOldManService implements IWiseOldManService {
   private enqueueRequest<T>(callback: () => Promise<T>): Promise<T> {
     return new Promise<T>((resolve, reject) => {
       this.queue.push({ execute: callback, resolve, reject });
-      console.log(`[WOM] Enqueued request, queue length: ${this.queue.length}`);
+      this.loggerService.logService(
+        'info',
+        LOGGER_NAME,
+        `Enqueued request, queue length: ${this.queue.length}`,
+      );
       this.processQueue();
     });
   }
@@ -95,15 +103,21 @@ class WiseOldManService implements IWiseOldManService {
       try {
         const result = await execute();
         resolve(result);
-        console.log(
-          `[WOM] Request resolved, queue length: ${this.queue.length}`,
+        this.loggerService.logService(
+          'info',
+          LOGGER_NAME,
+          `Request resolved, queue length: ${this.queue.length}`,
         );
       } catch (error) {
         if (error.name === 'NotFoundError') {
           resolve(undefined);
         } else if (error.name === 'RateLimitError') {
           this.rateLimited = true;
-          console.log('[WOM] Rate limited, pausing requests for 60 seconds.');
+          this.loggerService.logService(
+            'info',
+            LOGGER_NAME,
+            'Rate limited, pausing requests for 60 seconds.',
+          );
 
           await new Promise((r) => setTimeout(r, 60000));
           this.rateLimited = false;

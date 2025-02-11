@@ -9,6 +9,7 @@ import type { JobClass } from './job';
 import type Job from './job';
 import AssociatePlayerToWiseOldManJob from './players/associatePlayerToWiseOldManJob';
 import type ConfigService from '../config';
+import type { ILoggerService } from '../services/loggerService';
 
 export interface IJobsService {
   initialize(): Promise<void>;
@@ -38,6 +39,8 @@ const CRON_JOBS: CronJob[] = [
 
 const STARTUP_JOBS: JobClass<unknown>[] = [];
 
+const LOGGER_NAME = 'JobsService';
+
 @singleton()
 class JobsService implements IJobsService {
   private queues: Queue[];
@@ -45,13 +48,18 @@ class JobsService implements IJobsService {
 
   constructor(
     @inject('ConfigService') private readonly configService: ConfigService,
+    @inject('LoggerService') private readonly loggerService: ILoggerService,
   ) {
     this.queues = [];
     this.workers = [];
   }
 
   async add<T>(job: JobClass<T>, payload?: T) {
-    console.log(`Adding job of type ${job.name}`);
+    this.loggerService.logService(
+      'info',
+      LOGGER_NAME,
+      `Adding job of type ${job.name}`,
+    );
     const queue = this.queues.find((queue) => queue.name === job.name);
     if (!queue) {
       throw new Error(`Implementation queue for job ${job.name} not found`);
@@ -113,7 +121,11 @@ class JobsService implements IJobsService {
         throw new Error(`Implementation queue for job ${job.name} not found`);
       }
 
-      console.log(`Scheduling CRON job ${job.name} with pattern ${interval}`);
+      this.loggerService.logService(
+        'info',
+        LOGGER_NAME,
+        `Scheduling CRON job ${job.name} with pattern ${interval}`,
+      );
       await queue.add(job.name, undefined, { repeat: { pattern: interval } });
     }
 
@@ -123,7 +135,11 @@ class JobsService implements IJobsService {
         throw new Error(`Implementation queue for job ${job.name} not found`);
       }
 
-      console.log(`Scheduling startup job ${job.name}`);
+      this.loggerService.logService(
+        'info',
+        LOGGER_NAME,
+        `Scheduling startup job ${job.name}`,
+      );
       await queue.add(job.name, undefined, { priority: 1 });
     }
   }
@@ -139,13 +155,19 @@ class JobsService implements IJobsService {
   }
 
   private async handleJob(bullMQJob: BullMQJob, job: Job<unknown>) {
-    console.log(`Processing job ${job.name} with id ${bullMQJob.id}`);
+    this.loggerService.logService(
+      'info',
+      LOGGER_NAME,
+      `Processing job ${job.name} with id ${bullMQJob.id}`,
+    );
 
     try {
       await job.execute(bullMQJob.data);
       await job.onSuccess(bullMQJob.data);
 
-      console.log(
+      this.loggerService.logService(
+        'info',
+        LOGGER_NAME,
         `Processed job ${job.name} with id ${bullMQJob.id} successfully`,
       );
     } catch (error) {

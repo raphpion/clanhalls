@@ -9,12 +9,15 @@ import JobsService from './jobs/jobsService';
 import WiseOldManServiceMock from './mocks/wiseOldManServiceMock';
 import type { IGoogleService } from './services/googleService';
 import GoogleService from './services/googleService';
+import type { ILoggerService } from './services/loggerService';
+import LoggerService from './services/loggerService';
 import WiseOldManService, {
   type IWiseOldManService,
 } from './services/wiseOldManService';
 
 container
   .registerSingleton<ConfigService>('ConfigService', ConfigService)
+  .registerSingleton<ILoggerService>('LoggerService', LoggerService)
   .registerInstance<DataSource>('DataSource', db)
   .register<SeedingService>('SeedingService', { useClass: SeedingService })
   .register<IGoogleService>('GoogleService', { useClass: GoogleService })

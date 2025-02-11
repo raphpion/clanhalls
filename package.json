@@ -3,5 +3,8 @@
   "workspaces": [
     "backend",
     "frontend"
-  ]
+  ],
+  "dependencies": {
+    "winston": "^3.17.0"
+  }
 }
