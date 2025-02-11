@@ -28,9 +28,12 @@ class LoggerService implements ILoggerService {
 
     return winston.createLogger({
       level: 'info',
-      format: winston.format.printf(({ timestamp, level, message }) => {
-        return `${timestamp} [${name}] ${level}: ${message}`;
-      }),
+      format: winston.format.combine(
+        winston.format.timestamp(),
+        winston.format.printf(({ timestamp, level, message }) => {
+          return `${timestamp} [${name}] ${level}: ${message}`;
+        }),
+      ),
       transports: [
         new winston.transports.File({ filename: logFile }),
         ...(name === APP_LOGGER_NAME ||
