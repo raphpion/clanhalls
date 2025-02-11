@@ -1,5 +1,8 @@
 # Clan Halls
 
+[![Discord](https://img.shields.io/badge/Discord-%235865F2.svg?style=for-the-badge&logo=discord&logoColor=white)](https://discord.gg/eU938j3UNv)
+[![Ko-Fi](https://img.shields.io/badge/Ko--fi-F16061?style=for-the-badge&logo=ko-fi&logoColor=white)](https://ko-fi.com/nordveil)
+
 This is a web application that helps you manage your clan in Old School RuneScape. Use it with the [Clan Members Activity Tracker RuneLite plugin](https://github.com/raphpion/clan-members-activity-tracker).
 
 ## Getting Started
