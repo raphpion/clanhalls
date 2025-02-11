@@ -33,7 +33,8 @@ class LoggerService implements ILoggerService {
       }),
       transports: [
         new winston.transports.File({ filename: logFile }),
-        ...(this.configService.get((config) => config.env) !== 'production'
+        ...(name === APP_LOGGER_NAME ||
+        this.configService.get((config) => config.env) !== 'production'
           ? [new winston.transports.Console()]
           : []),
       ],
