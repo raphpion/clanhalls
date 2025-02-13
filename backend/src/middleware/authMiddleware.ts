@@ -94,7 +94,30 @@ export function retrieveAuth(relations: string[] = []) {
 export function requireCredentials(scope: Scopes[], relations: string[] = []) {
   return async function (req: Request, res: Response, next: NextFunction) {
     try {
-      const { clientId, clientSecret } = req.body as CredentialsPayload;
+      let clientId: string | undefined;
+      let clientSecret: string | undefined;
+
+      if (req.headers.authorization) {
+        const authHeader = req.headers.authorization;
+
+        if (authHeader.startsWith('Basic ')) {
+          const base64Credentials = authHeader.split(' ')[1];
+          const decodedCredentials = Buffer.from(
+            base64Credentials,
+            'base64',
+          ).toString('utf-8');
+          [clientId, clientSecret] = decodedCredentials.split(':');
+        }
+      }
+
+      if (!clientId || !clientSecret) {
+        const bodyPayload = req.body as CredentialsPayload | undefined;
+        if (bodyPayload) {
+          clientId = bodyPayload.clientId;
+          clientSecret = bodyPayload.clientSecret;
+        }
+      }
+
       if (!clientId || !clientSecret) {
         return res.sendStatus(401);
       }

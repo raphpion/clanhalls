@@ -15,14 +15,14 @@ import validate from '../../../middleware/validationMiddleware';
 import UpdateCredentialsCommand from '../../../users/credentials/commands/updateCredentialsCommand';
 import { Scopes } from '../../../users/credentials/credentials';
 
-type SendMemberActivityReportPayload = CredentialsPayload & {
+type SendMemberActivityReportPayload = Partial<CredentialsPayload> & {
   members: MemberActivity[];
 };
 
 const sendMemberActivityReportPayloadSchema =
   Joi.object<SendMemberActivityReportPayload>({
-    clientId: Joi.string().required(),
-    clientSecret: Joi.string().required(),
+    clientId: Joi.string().optional(),
+    clientSecret: Joi.string().optional(),
     members: Joi.array()
       .items(
         Joi.object<MemberActivity>({
