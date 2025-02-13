@@ -11,6 +11,8 @@ import type { IGoogleService } from './services/googleService';
 import GoogleService from './services/googleService';
 import type { ILoggerService } from './services/loggerService';
 import LoggerService from './services/loggerService';
+import type { ITokenService } from './services/tokenService';
+import TokenService from './services/tokenService';
 import WiseOldManService, {
   type IWiseOldManService,
 } from './services/wiseOldManService';
@@ -18,6 +20,7 @@ import WiseOldManService, {
 container
   .registerSingleton<ConfigService>('ConfigService', ConfigService)
   .registerSingleton<ILoggerService>('LoggerService', LoggerService)
+  .register<ITokenService>('TokenService', { useClass: TokenService })
   .registerInstance<DataSource>('DataSource', db)
   .register<SeedingService>('SeedingService', { useClass: SeedingService })
   .register<IGoogleService>('GoogleService', { useClass: GoogleService })

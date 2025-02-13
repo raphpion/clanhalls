@@ -11,6 +11,7 @@ export type Config = {
   instances: number;
   port: number;
   sessionSecret: string;
+  jwtSecret: string;
   googleClientId: string;
 
   postgres: {
@@ -42,6 +43,7 @@ class ConfigService {
     instances: Joi.number().integer().min(1).required(),
     port: Joi.number().integer().min(1).max(65535).required(),
     sessionSecret: Joi.string().required(),
+    jwtSecret: Joi.string().required(),
     googleClientId: Joi.string().required(),
 
     postgres: Joi.object({
@@ -72,6 +74,7 @@ class ConfigService {
       port: Number(process.env.BACKEND_PORT || 5000),
       env: process.env.NODE_ENV as Config['env'],
       sessionSecret: process.env.SESSION_SECRET,
+      jwtSecret: process.env.JWT_SECRET,
       googleClientId: process.env.GOOGLE_CLIENT_ID,
 
       postgres: {

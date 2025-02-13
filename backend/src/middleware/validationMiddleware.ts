@@ -10,7 +10,7 @@ export enum ValidationType {
 
 function validate(
   schema: ObjectSchema,
-  type: ValidationType = ValidationType.BODY
+  type: ValidationType = ValidationType.BODY,
 ) {
   return (req: Request, res: Response, next: NextFunction) => {
     const data = req[type];

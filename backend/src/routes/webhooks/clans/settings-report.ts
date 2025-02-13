@@ -1,3 +1,5 @@
+// TODO: remove legacy params support (settings: { ... }) once new plugin version releases
+
 import express from 'express';
 import Joi from 'joi';
 
@@ -34,7 +36,7 @@ const sendSettingsReportPayload = Joi.object<SendSettingsReportPayload>({
         }),
       )
       .required(),
-  }).required(),
+  }).optional(),
   name: Joi.string().optional(),
   ranks: Joi.array()
     .items(

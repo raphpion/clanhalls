@@ -1,10 +1,14 @@
 import Joi from 'joi';
 
+import container from '../container';
 import AppError, { AppErrorCodes } from '../extensions/errors';
 import type { NextFunction, Request, Response } from '../extensions/express';
+import type { AccessToken, ITokenService } from '../services/tokenService';
+import { TokenType } from '../services/tokenService';
 import UpdateSessionLastSeenAtCommand from '../sessions/commands/updateSessionLastSeenAtCommand';
 import SessionByUuidQuery from '../sessions/queries/sessionByUuidQuery';
 import type { Scopes } from '../users/credentials/credentials';
+import type Credentials from '../users/credentials/credentials';
 import CredentialsByClientIdQuery from '../users/credentials/queries/credentialsByClientIdQuery';
 
 export type CredentialsPayload = {
@@ -94,56 +98,57 @@ export function retrieveAuth(relations: string[] = []) {
 export function requireCredentials(scope: Scopes[], relations: string[] = []) {
   return async function (req: Request, res: Response, next: NextFunction) {
     try {
-      let clientId: string | undefined;
-      let clientSecret: string | undefined;
+      const tokenService = container.resolve<ITokenService>('TokenService');
+      let credentials: Credentials | undefined;
 
       if (req.headers.authorization) {
         const authHeader = req.headers.authorization;
 
-        if (authHeader.startsWith('Basic ')) {
-          const base64Credentials = authHeader.split(' ')[1];
-          const decodedCredentials = Buffer.from(
-            base64Credentials,
-            'base64',
-          ).toString('utf-8');
-          [clientId, clientSecret] = decodedCredentials.split(':');
+        if (authHeader.startsWith('Bearer ')) {
+          const accessToken = authHeader.split(' ')[1];
+          const { clientId } = tokenService.verify<AccessToken>(
+            accessToken,
+            TokenType.ACCESS,
+          );
+
+          credentials = await new CredentialsByClientIdQuery({
+            clientId,
+            relations,
+          }).execute();
         }
       }
 
-      if (!clientId || !clientSecret) {
+      // TODO: remove this block once plugin is updated
+      if (!credentials) {
         const bodyPayload = req.body as CredentialsPayload | undefined;
         if (bodyPayload) {
-          clientId = bodyPayload.clientId;
-          clientSecret = bodyPayload.clientSecret;
+          const { clientId, clientSecret } = bodyPayload;
+
+          credentials = await new CredentialsByClientIdQuery({
+            clientId,
+            relations,
+          }).execute();
+
+          const credentialsValid =
+            await credentials.validateClientSecret(clientSecret);
+          if (!credentialsValid) {
+            return res.sendStatus(401);
+          }
         }
       }
 
-      if (!clientId || !clientSecret) {
-        return res.sendStatus(401);
-      }
-
-      const credentials = await new CredentialsByClientIdQuery({
-        clientId,
-        relations,
-      }).execute();
       if (!credentials) {
         return res.sendStatus(401);
       }
 
       const credentialsUser = await credentials.user;
       if (credentialsUser.isDisabled) {
-        return res.sendStatus(403);
-      }
-
-      const credentialsValid =
-        await credentials.validateClientSecret(clientSecret);
-      if (!credentialsValid) {
         return res.sendStatus(401);
       }
 
       const scopeValid = credentials.validateScope(scope);
       if (!scopeValid) {
-        res.status(401).send('Credentials do not have the required scope');
+        return res.sendStatus(401);
       }
 
       req.credentialsEntity = credentials;
