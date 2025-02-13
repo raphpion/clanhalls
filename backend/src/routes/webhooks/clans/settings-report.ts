@@ -16,12 +16,26 @@ import validate from '../../../middleware/validationMiddleware';
 import UpdateCredentialsCommand from '../../../users/credentials/commands/updateCredentialsCommand';
 import { Scopes } from '../../../users/credentials/credentials';
 
-type SendSettingsReportPayload = Partial<CredentialsPayload> & Settings;
+type SendSettingsReportPayload = Partial<CredentialsPayload> &
+  (Settings | { settings: Settings });
 
 const sendSettingsReportPayload = Joi.object<SendSettingsReportPayload>({
   clientId: Joi.string().optional(),
   clientSecret: Joi.string().optional(),
-  name: Joi.string().required(),
+  settings: Joi.object({
+    name: Joi.string().required(),
+    ranks: Joi.array()
+      .items(
+        Joi.object({
+          rank: Joi.number().min(-1).max(127).required(),
+          title: Joi.string()
+            .required()
+            .allow(...Object.values(CLAN_TITLES)),
+        }),
+      )
+      .required(),
+  }).required(),
+  name: Joi.string().optional(),
   ranks: Joi.array()
     .items(
       Joi.object({
@@ -31,7 +45,7 @@ const sendSettingsReportPayload = Joi.object<SendSettingsReportPayload>({
           .allow(...Object.values(CLAN_TITLES)),
       }),
     )
-    .required(),
+    .optional(),
 });
 
 const routes = express.Router();
@@ -65,12 +79,15 @@ async function sendSettingsReport(
       );
     }
 
-    const { name, ranks } = req.body as SendSettingsReportPayload;
+    const payload = req.body as SendSettingsReportPayload;
 
     const report = await new CreateSettingsReportCommand({
       user: req.userEntity,
       clan,
-      settings: { name, ranks },
+      settings:
+        'settings' in payload
+          ? payload.settings
+          : { name: payload.name, ranks: payload.ranks },
     }).execute();
 
     await new UpdateCredentialsCommand({
