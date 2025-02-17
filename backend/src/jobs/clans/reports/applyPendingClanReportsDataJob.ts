@@ -12,7 +12,7 @@ type ReportEntry = {
   receivedAt: Date;
 };
 
-class ApplyPendinyPendingClanReportsJob extends Job<undefined> {
+class ApplyPendingClanReportsJob extends Job<undefined> {
   async execute() {
     const memberActivityReports = await this.db
       .createQueryBuilder(MemberActivityReport, 'report')
@@ -82,4 +82,4 @@ class ApplyPendinyPendingClanReportsJob extends Job<undefined> {
   }
 }
 
-export default ApplyPendinyPendingClanReportsJob;
+export default ApplyPendingClanReportsJob;
