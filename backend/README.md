@@ -32,13 +32,13 @@ In [`package.json`](./package.json), you can see a few scripts that are used to 
 - To generate a new migration, run the following command:
 
   ```bash
-  npm run db:generate src/db/migrations/<Name>
+  npm run migration:generate src/db/migrations/<Name>
   ```
 
 - To create a fresh migration file, run the following command:
 
   ```bash
-  npm run db:create src/db/migrations/<Name>
+  npm run migration:create src/db/migrations/<Name>
   ```
 
 - To reset the database to a clean state with up to date schema, run the following command:

@@ -12,6 +12,7 @@ import type {
 import { requireCredentials } from '../../../middleware/authMiddleware';
 import type { CredentialsPayload } from '../../../middleware/authMiddleware';
 import validate from '../../../middleware/validationMiddleware';
+import { normalizePlayerName } from '../../../players/playerUtils';
 import UpdateCredentialsCommand from '../../../users/credentials/commands/updateCredentialsCommand';
 import { Scopes } from '../../../users/credentials/credentials';
 
@@ -65,11 +66,15 @@ async function sendMemberActivityReport(
     }
 
     const { members } = req.body as SendMemberActivityReportPayload;
+    const membersNormalized = members.map((member) => ({
+      ...member,
+      name: normalizePlayerName(member.name),
+    }));
 
     const report = await new CreateMemberActivityReportCommand({
       user: req.userEntity,
       clan,
-      members,
+      members: membersNormalized,
     }).execute();
 
     await new UpdateCredentialsCommand({

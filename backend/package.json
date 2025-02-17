@@ -15,7 +15,7 @@
     "migrate": "npm run typeorm migration:run -- -d ./src/db/index.ts",
     "migration:revert": "npm run typeorm migration:revert -- -d ./src/db/index.ts",
     "migration:generate": "npm run typeorm -- migration:generate -d ./src/db/index.ts",
-    "migration:create": "npm run typeorm -- migration:create -d ./src/db/index.ts",
+    "migration:create": "npm run typeorm -- migration:create",
     "db:reset": "npm run db:drop && npm run migrate"
   },
   "author": "Raphaël Pion",
