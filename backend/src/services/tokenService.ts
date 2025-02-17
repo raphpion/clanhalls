@@ -42,16 +42,22 @@ class TokenService implements ITokenService {
   }
 
   public verify<T extends object>(token: string, type?: TokenType): T {
-    const decoded = verify(token, this.jwtSecret) as JwtPayload;
-    if (!decoded || typeof decoded !== 'object') {
+    try {
+      const decoded = verify(token, this.jwtSecret) as JwtPayload;
+      if (!decoded || typeof decoded !== 'object') {
+        throw new AppError(AppErrorCodes.UNAUTHORIZED, 'Invalid token');
+      }
+
+      if (type && decoded.type !== type) {
+        throw new AppError(AppErrorCodes.UNAUTHORIZED, 'Invalid token');
+      }
+
+      return decoded as T;
+    } catch (error) {
+      console.log('Server UTC time:', new Date().toISOString());
+      console.log(token, error);
       throw new AppError(AppErrorCodes.UNAUTHORIZED, 'Invalid token');
     }
-
-    if (type && decoded.type !== type) {
-      throw new AppError(AppErrorCodes.UNAUTHORIZED, 'Invalid token');
-    }
-
-    return decoded as T;
   }
 
   public createAccessToken(clientId: string): [string, number] {

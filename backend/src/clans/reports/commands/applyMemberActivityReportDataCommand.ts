@@ -106,7 +106,7 @@ class ApplyMemberActivityReportDataCommand extends Command<Params> {
     newName: string,
   ) {
     const womPlayer = await this.wiseOldMan.getPlayerDetails(newName);
-    if (!womPlayer) return;
+    if (!womPlayer) return undefined;
 
     return queryRunner.manager.findOne(Player, {
       where: { wiseOldManId: womPlayer.id },
