@@ -109,7 +109,9 @@ class ConfigService {
 
   get isMainThread(): boolean {
     return (
-      process.env.NODE_ENV === 'development' || process.env.THREAD_INDEX === undefined || process.env.THREAD_INDEX === '0'
+      process.env.NODE_ENV === 'development' ||
+      process.env.THREAD_INDEX === undefined ||
+      process.env.THREAD_INDEX === '0'
     );
   }
 
