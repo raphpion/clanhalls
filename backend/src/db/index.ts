@@ -4,6 +4,7 @@ import { config } from 'dotenv';
 import { DataSource } from 'typeorm';
 
 import Clan from '../clans/clan';
+import ClanInvitation from '../clans/clanInvitation';
 import ClanPlayer from '../clans/clanPlayer';
 import ClanRank from '../clans/clanRank';
 import ClanUser from '../clans/clanUser';
@@ -21,6 +22,7 @@ const isTest = process.env.NODE_ENV === 'test';
 
 export const entities = [
   Clan,
+  ClanInvitation,
   ClanPlayer,
   ClanRank,
   ClanUser,

@@ -8,6 +8,7 @@ import {
 } from 'typeorm';
 
 import Clan from './clan';
+import ClanInvitation from './clanInvitation';
 import User from '../users/user';
 
 @Entity()
@@ -32,6 +33,19 @@ class ClanUser {
   })
   @JoinColumn({ name: 'userId' })
   user: Promise<User>;
+
+  @ManyToOne(
+    () => ClanInvitation,
+    (clanInvitation: ClanInvitation) => clanInvitation.users,
+    {
+      onDelete: 'CASCADE',
+    },
+  )
+  @JoinColumn({ name: 'clanInvitationId' })
+  clanInvitation: Promise<ClanInvitation | null>;
+
+  @Column({ nullable: true })
+  clanInvitationId: number | null;
 }
 
 export default ClanUser;

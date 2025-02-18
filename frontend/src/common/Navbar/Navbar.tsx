@@ -1,6 +1,6 @@
 import { Fragment } from 'react';
 
-import { AlignLeftIcon, HomeIcon } from 'lucide-react';
+import { AlignLeftIcon, HomeIcon, MailPlusIcon } from 'lucide-react';
 
 import {
   Sheet,
@@ -13,9 +13,9 @@ import { Skeleton } from '$ui/skeleton';
 
 import NavLink from './NavLink';
 import UserMenu from './UserMenu';
+import useAppContext from '../AppContext';
 import AppLogo from '../AppLogo';
 import { ThemeToggle } from '../Theme';
-
 
 type Props = {
   mockNav?: boolean;
@@ -23,6 +23,12 @@ type Props = {
 };
 
 function Navbar({ mockNav, mockUserMenu }: Props) {
+  const { user } = useAppContext();
+
+  if (!user) {
+    return null;
+  }
+
   return (
     <div className="border-b">
       <div className="flex items-center justify-between px-4">
@@ -39,6 +45,14 @@ function Navbar({ mockNav, mockUserMenu }: Props) {
                 </SheetHeader>
                 <div className="my-8 space-y-2">
                   <NavLink to="/" icon={HomeIcon} title="Dashboard" menu />
+                  {user.isClanAdmin && (
+                    <NavLink
+                      to="/invitations"
+                      icon={MailPlusIcon}
+                      title="Invitations"
+                      menu
+                    />
+                  )}
                 </div>
               </SheetContent>
             </Sheet>
@@ -50,6 +64,13 @@ function Navbar({ mockNav, mockUserMenu }: Props) {
               <AppLogo withText />
               <div className="hidden h-12 items-center space-x-2 sm:flex">
                 <NavLink to="/" icon={HomeIcon} title="Dashboard" />
+                {user.isClanAdmin && (
+                  <NavLink
+                    to="/invitations"
+                    icon={MailPlusIcon}
+                    title="Invitations"
+                  />
+                )}
               </div>
             </Fragment>
           ) : (

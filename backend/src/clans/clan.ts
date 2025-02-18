@@ -7,6 +7,7 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
+import ClanInvitation from './clanInvitation';
 import ClanPlayer from './clanPlayer';
 import ClanRank from './clanRank';
 import ClanUser from './clanUser';
@@ -50,6 +51,15 @@ class Clan {
     cascade: true,
   })
   clanRanks: Promise<ClanRank[]>;
+
+  @OneToMany(
+    () => ClanInvitation,
+    (clanInvitation: ClanInvitation) => clanInvitation.clan,
+    {
+      cascade: true,
+    },
+  )
+  clanInvitations: Promise<ClanInvitation[]>;
 
   @OneToMany(
     () => MemberActivityReport,

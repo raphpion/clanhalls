@@ -1,6 +1,7 @@
 import express from 'express';
 import Joi from 'joi';
 
+import invitationsRoutes from './invitations';
 import playersRoutes from './players';
 import verifyNameAvailabilityRoutes from './verify-name-availability';
 import CreateClanForUserCommand from '../../../clans/commands/createClanForUserCommand';
@@ -25,6 +26,7 @@ const createClanSchema = Joi.object<CreateClanPayload>({
 
 const clanRoutes = express.Router();
 
+clanRoutes.use('/invitations', invitationsRoutes);
 clanRoutes.use('/players', playersRoutes);
 clanRoutes.use('/verify-name-availability', verifyNameAvailabilityRoutes);
 

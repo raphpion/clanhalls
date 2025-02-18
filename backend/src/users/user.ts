@@ -1,13 +1,9 @@
 import Joi from 'joi';
-import {
-  Column,
-  Entity,
-  OneToMany,
-  OneToOne,
-} from 'typeorm';
+import { Column, Entity, OneToMany, OneToOne } from 'typeorm';
 
 import Credentials from './credentials/credentials';
 import BaseEntity from '../baseEntity';
+import ClanInvitation from '../clans/clanInvitation';
 import ClanUser from '../clans/clanUser';
 import MemberActivityReport from '../clans/reports/memberActivityReport';
 import SettingsReport from '../clans/reports/settingsReport';
@@ -63,6 +59,12 @@ class User extends BaseEntity {
 
   @OneToMany(() => Session, (session: Session) => session.user)
   sessions: Promise<Session[]>;
+
+  @OneToMany(
+    () => ClanInvitation,
+    (clanInvitation: ClanInvitation) => clanInvitation.sender,
+  )
+  clanInvitationsSent: Promise<ClanInvitation[]>;
 
   get isDisabled() {
     return this.disabledAt !== null;

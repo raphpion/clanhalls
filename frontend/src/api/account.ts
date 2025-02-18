@@ -35,6 +35,29 @@ export type ClanPlayerQueryData = {
   lastSeenAt: string;
 };
 
+export type ClanInvitationData = {
+  uuid: string;
+  description: string | null;
+  sender: {
+    username: string;
+    pictureUrl: string | null;
+  };
+  disabledAt: Date | null;
+  expiresAt: Date | null;
+  maxUses: number | null;
+  uses: number;
+};
+
+export type ClanInvitationsQueryParams = PaginatedQueryParams<{
+  search: string;
+  expired?: boolean;
+  disabled?: boolean;
+  orderBy: {
+    field: 'description' | 'expiresAt' | 'maxUses' | 'sender' | 'uses';
+    order: 'ASC' | 'DESC';
+  };
+}>;
+
 export type ClanPlayerQueryParams = PaginatedQueryParams<{
   search: string;
   orderBy: {
@@ -107,6 +130,11 @@ export type VerifyClanNameAvailabilityData = {
   available: boolean;
 };
 
+export type CreateInvitationPayload = {
+  expiresAt: number | null;
+  maxUses: number | null;
+};
+
 export async function createClan(name: string): Promise<void> {
   await post<CreateClanPayload>('/api/account/clan', { name });
 }
@@ -135,6 +163,30 @@ export async function queryClanPlayers(
 
   const response = await get<PaginatedQueryResult<ClanPlayerQueryData>>(
     `/api/account/clan/players?${searchParams.toString()}`,
+  );
+  return response.data;
+}
+
+export async function queryClanInvitations(
+  params: ClanInvitationsQueryParams,
+): Promise<PaginatedQueryResult<ClanInvitationData>> {
+  const searchParams = new URLSearchParams();
+  searchParams.append('search', params.search);
+  searchParams.append('sort', params.orderBy.field);
+  searchParams.append('order', params.orderBy.order);
+  searchParams.append('ipp', String(params.ipp));
+  searchParams.append('page', String(params.page));
+
+  if (params.expired !== undefined) {
+    searchParams.append('expired', String(params.expired));
+  }
+
+  if (params.disabled !== undefined) {
+    searchParams.append('disabled', String(params.disabled));
+  }
+
+  const response = await get<PaginatedQueryResult<ClanInvitationData>>(
+    `/api/account/clan/invitations?${searchParams.toString()}`,
   );
   return response.data;
 }
@@ -215,4 +267,10 @@ export async function verifyUsernameAvailability(
 
 export async function setUsername(username: string): Promise<void> {
   await post<SetUsernamePayload>('/api/account/set-username', { username });
+}
+
+export async function createInvitation(
+  payload: CreateInvitationPayload,
+): Promise<void> {
+  await post<CreateInvitationPayload>('/api/account/clan/invitations', payload);
 }

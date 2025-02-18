@@ -14,6 +14,7 @@ import { Route as rootRoute } from './routes/__root'
 import { Route as SignInImport } from './routes/sign-in'
 import { Route as AdminImport } from './routes/admin'
 import { Route as IndexImport } from './routes/index'
+import { Route as InvitationsIndexImport } from './routes/invitations/index'
 import { Route as AdminIndexImport } from './routes/admin/index'
 import { Route as OnboardingSyncClanImport } from './routes/onboarding/sync-clan'
 import { Route as OnboardingSetUsernameImport } from './routes/onboarding/set-username'
@@ -35,6 +36,11 @@ const AdminRoute = AdminImport.update({
 
 const IndexRoute = IndexImport.update({
   path: '/',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const InvitationsIndexRoute = InvitationsIndexImport.update({
+  path: '/invitations/',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -135,6 +141,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminIndexImport
       parentRoute: typeof AdminImport
     }
+    '/invitations/': {
+      id: '/invitations/'
+      path: '/invitations'
+      fullPath: '/invitations'
+      preLoaderRoute: typeof InvitationsIndexImport
+      parentRoute: typeof rootRoute
+    }
   }
 }
 
@@ -151,6 +164,7 @@ export const routeTree = rootRoute.addChildren({
   OnboardingCreateClanRoute,
   OnboardingSetUsernameRoute,
   OnboardingSyncClanRoute,
+  InvitationsIndexRoute,
 })
 
 /* prettier-ignore-end */
@@ -166,7 +180,8 @@ export const routeTree = rootRoute.addChildren({
         "/sign-in",
         "/onboarding/create-clan",
         "/onboarding/set-username",
-        "/onboarding/sync-clan"
+        "/onboarding/sync-clan",
+        "/invitations/"
       ]
     },
     "/": {
@@ -203,6 +218,9 @@ export const routeTree = rootRoute.addChildren({
     "/admin/": {
       "filePath": "admin/index.tsx",
       "parent": "/admin"
+    },
+    "/invitations/": {
+      "filePath": "invitations/index.tsx"
     }
   }
 }
