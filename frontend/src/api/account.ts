@@ -42,8 +42,8 @@ export type ClanInvitationData = {
     username: string;
     pictureUrl: string | null;
   };
-  disabledAt: Date | null;
-  expiresAt: Date | null;
+  disabledAt: string | null;
+  expiresAt: string | null;
   maxUses: number | null;
   uses: number;
 };
@@ -52,6 +52,7 @@ export type ClanInvitationsQueryParams = PaginatedQueryParams<{
   search: string;
   expired?: boolean;
   disabled?: boolean;
+  used?: boolean;
   orderBy: {
     field: 'description' | 'expiresAt' | 'maxUses' | 'sender' | 'uses';
     order: 'ASC' | 'DESC';
@@ -135,6 +136,10 @@ export type CreateInvitationPayload = {
   maxUses: number | null;
 };
 
+export type DisableClanInvitationPayload = {
+  uuid: string;
+};
+
 export async function createClan(name: string): Promise<void> {
   await post<CreateClanPayload>('/api/account/clan', { name });
 }
@@ -183,6 +188,10 @@ export async function queryClanInvitations(
 
   if (params.disabled !== undefined) {
     searchParams.append('disabled', String(params.disabled));
+  }
+
+  if (params.used !== undefined) {
+    searchParams.append('used', String(params.used));
   }
 
   const response = await get<PaginatedQueryResult<ClanInvitationData>>(
@@ -273,4 +282,8 @@ export async function createInvitation(
   payload: CreateInvitationPayload,
 ): Promise<void> {
   await post<CreateInvitationPayload>('/api/account/clan/invitations', payload);
+}
+
+export async function disableClanInvitation(uuid: string): Promise<void> {
+  await post(`/api/account/clan/invitations/${uuid}/disable`);
 }

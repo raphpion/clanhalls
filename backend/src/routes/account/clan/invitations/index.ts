@@ -1,6 +1,7 @@
 import express from 'express';
 import Joi from 'joi';
 
+import invitationsUuidRoutes from './[uuid]';
 import CreateClanInvitationCommand from '../../../../clans/commands/createClanInvitationCommand';
 import ClanInvitationsQuery, {
   type Params as ClanInvitationsQueryParams,
@@ -15,6 +16,7 @@ import { requireAuth } from '../../../../middleware/authMiddleware';
 import validate, {
   ValidationType,
 } from '../../../../middleware/validationMiddleware';
+import { queryParamToBoolean } from '../../../../query';
 
 type QueryInvitationsPayload = {
   ipp: number;
@@ -24,6 +26,7 @@ type QueryInvitationsPayload = {
   search: string;
   expired?: boolean;
   disabled?: boolean;
+  used?: boolean;
 };
 
 type CreateInvitationPayload = {
@@ -39,6 +42,8 @@ const createInvitationSchema = Joi.object<CreateInvitationPayload>({
 });
 
 const invitationsRoutes = express.Router();
+
+invitationsRoutes.use('/:uuid', invitationsUuidRoutes);
 
 invitationsRoutes.get(
   '/',
@@ -69,7 +74,8 @@ async function queryInvitations(
       throw new AppError(AppErrorCodes.BAD_REQUEST, 'User is not in a clan');
     }
 
-    const { ipp, page, sort, order, search, expired, disabled } = req.query;
+    const { ipp, page, sort, order, search, expired, disabled, used } =
+      req.query;
 
     const data = await new ClanInvitationsQuery({
       clan,
@@ -82,8 +88,9 @@ async function queryInvitations(
         order: (order ||
           'ASC') as ClanInvitationsQueryParams['orderBy']['order'],
       },
-      expired: expired === 'true',
-      disabled: disabled === 'true',
+      expired: queryParamToBoolean(expired),
+      disabled: queryParamToBoolean(disabled),
+      used: queryParamToBoolean(used),
       withTotalCount: true,
     }).execute();
 
@@ -109,7 +116,7 @@ async function createInvitation(
     await new CreateClanInvitationCommand({
       user: req.userEntity,
       description,
-      expiresAt: new Date(expiresAt),
+      expiresAt: expiresAt ? new Date(expiresAt) : null,
       maxUses,
     }).execute();
 

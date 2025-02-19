@@ -1,6 +1,14 @@
+import type { ParsedQs } from 'qs';
 import type { DataSource } from 'typeorm';
 
 import container from './container';
+
+export function queryParamToBoolean(
+  value: string | ParsedQs | string[] | ParsedQs[],
+) {
+  if (!value) return undefined;
+  return value === 'true';
+}
 
 abstract class Query<TParams, TResult> {
   protected readonly db: DataSource = container.resolve('DataSource');

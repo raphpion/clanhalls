@@ -45,7 +45,7 @@ type FormValues = {
   maxUses: number | null;
 };
 
-function CreateOrEditInvitation({ onCreateSuccess, ...sheetProps }: Props) {
+function CreateInvitation({ onCreateSuccess, ...sheetProps }: Props) {
   const { toast, genericErrorToast } = useToast();
 
   const createInvitationMutation = useMutation({
@@ -187,4 +187,4 @@ function CreateOrEditInvitation({ onCreateSuccess, ...sheetProps }: Props) {
   );
 }
 
-export default CreateOrEditInvitation;
+export default CreateInvitation;

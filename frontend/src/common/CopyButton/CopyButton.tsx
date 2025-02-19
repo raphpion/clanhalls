@@ -36,7 +36,7 @@ function CopyButton({ value }: Props) {
   }, [hasCopied]);
 
   return (
-    <TooltipProvider>
+    <TooltipProvider delayDuration={0}>
       <Tooltip open={isTooltipOpen} onOpenChange={setIsTooltipOpen}>
         <TooltipTrigger asChild>
           <Button variant="outline" className="px-3" onClick={handleClickCopy}>

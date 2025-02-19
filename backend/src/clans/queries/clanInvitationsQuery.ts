@@ -12,6 +12,7 @@ export type Params = PaginatedQueryParams<{
   search: string;
   expired?: boolean;
   disabled?: boolean;
+  used?: boolean;
   orderBy: {
     field: 'description' | 'expiresAt' | 'maxUses' | 'sender' | 'uses';
     order: 'ASC' | 'DESC';
@@ -56,12 +57,28 @@ class ClanInvitationsQuery extends Query<Params, Result> {
       });
     }
 
-    if (params.expired) {
-      query = query.andWhere('clanInvitation.expiresAt < NOW()');
+    if (params.expired === true) {
+      query = query.andWhere('clanInvitation.expiresAt <= NOW()');
+    } else if (params.expired === false) {
+      query = query.andWhere(
+        '(clanInvitation.expiresAt IS NULL OR clanInvitation.expiresAt > NOW())',
+      );
     }
 
-    if (params.disabled) {
+    if (params.disabled === true) {
       query = query.andWhere('clanInvitation.disabledAt IS NOT NULL');
+    } else if (params.disabled === false) {
+      query = query.andWhere('clanInvitation.disabledAt IS NULL');
+    }
+
+    if (params.used === true) {
+      query = query.andWhere(
+        '(clanInvitation.maxUses IS NOT NULL AND clanInvitation.uses >= clanInvitation.maxUses)',
+      );
+    } else if (params.used === false) {
+      query = query.andWhere(
+        '(clanInvitation.maxUses IS NULL OR clanInvitation.uses < clanInvitation.maxUses)',
+      );
     }
 
     query = query.orderBy(sort, params.orderBy.order);
