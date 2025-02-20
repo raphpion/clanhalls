@@ -31,9 +31,22 @@ class CreateClanInvitationCommand extends Command<Params> {
       );
     }
 
+    let unique = false;
+    const code = ClanInvitation.generateCode();
+    while (!unique) {
+      const existing = await repository
+        .createQueryBuilder('clanInvitation')
+        .where('code = :code', { code })
+        .getOne();
+      if (!existing) {
+        unique = true;
+      }
+    }
+
     const clanInvitation = new ClanInvitation();
     clanInvitation.sender = Promise.resolve(user);
     clanInvitation.clan = clanUser.clan;
+    clanInvitation.code = code;
     clanInvitation.description = description;
     clanInvitation.expiresAt = expiresAt;
     clanInvitation.maxUses = maxUses;

@@ -1,5 +1,6 @@
 import { Fragment } from 'react';
 
+import { AvatarFallback } from '@radix-ui/react-avatar';
 import { useMutation } from '@tanstack/react-query';
 import {
   Check,
@@ -155,6 +156,9 @@ function View({ data, loading, refetch }: Props) {
             src={user.pictureUrl || ''}
             alt={user.username || user.email}
           />
+          <AvatarFallback>
+            {user.username ? user.username[0].toUpperCase() : '—'}
+          </AvatarFallback>
         </Avatar>
         {user.username || '—'}
       </TableCell>

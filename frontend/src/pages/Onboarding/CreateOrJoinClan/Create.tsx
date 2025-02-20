@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { Fragment, useMemo } from 'react';
 
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { useNavigate } from '@tanstack/react-router';
@@ -9,20 +9,22 @@ import * as yup from 'yup';
 
 import { createClan, verifyClanNameAvailability } from '$api/account';
 import Loading from '$common/Loading';
-import OnboardingLayout from '$common/OnboardingLayout';
 import { usePageTitle } from '$hooks';
 import { Button } from '$ui/button';
 import { toast } from '$ui/hooks/use-toast';
 import { Input } from '$ui/input';
 import { Label } from '$ui/label';
 
+import BackButton from './BackButton';
+import { type ViewProps } from './CreateOrJoinClan';
+
 type CreateClanFormValues = {
   name: string;
 };
 
-function CreateClan() {
-  const navigate = useNavigate();
+function Create({ setView }: ViewProps) {
   usePageTitle('Create a clan');
+  const navigate = useNavigate();
 
   const createClanMutation = useMutation({
     mutationKey: ['create-clan'],
@@ -108,8 +110,9 @@ function CreateClan() {
   ]);
 
   return (
-    <OnboardingLayout title="Create a clan">
-      <p className="mb-8">
+    <Fragment>
+      <BackButton onClick={() => setView('intro')} />
+      <p className="mb-8 text-justify">
         Welcome to Clan Halls! First, let's create your clan and synchronize it
         with in-game data.
       </p>
@@ -135,8 +138,8 @@ function CreateClan() {
           </div>
         </Form>
       </FormikProvider>
-    </OnboardingLayout>
+    </Fragment>
   );
 }
 
-export default CreateClan;
+export default Create;

@@ -2,6 +2,8 @@ import express from 'express';
 import Joi from 'joi';
 
 import invitationsUuidRoutes from './[uuid]';
+import acceptInvitationsRoutes from './accept';
+import verifyInvitationsRoutes from './verify';
 import CreateClanInvitationCommand from '../../../../clans/commands/createClanInvitationCommand';
 import ClanInvitationsQuery, {
   type Params as ClanInvitationsQueryParams,
@@ -18,17 +20,6 @@ import validate, {
 } from '../../../../middleware/validationMiddleware';
 import { queryParamToBoolean } from '../../../../query';
 
-type QueryInvitationsPayload = {
-  ipp: number;
-  page: number;
-  sort: ClanInvitationsQueryParams['orderBy']['field'];
-  order: ClanInvitationsQueryParams['orderBy']['order'];
-  search: string;
-  expired?: boolean;
-  disabled?: boolean;
-  used?: boolean;
-};
-
 type CreateInvitationPayload = {
   description: string | null;
   expiresAt: number | null;
@@ -43,6 +34,8 @@ const createInvitationSchema = Joi.object<CreateInvitationPayload>({
 
 const invitationsRoutes = express.Router();
 
+invitationsRoutes.use('/accept', acceptInvitationsRoutes);
+invitationsRoutes.use('/verify', verifyInvitationsRoutes);
 invitationsRoutes.use('/:uuid', invitationsUuidRoutes);
 
 invitationsRoutes.get(

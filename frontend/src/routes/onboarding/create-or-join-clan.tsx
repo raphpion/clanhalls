@@ -4,9 +4,9 @@ import {
   handleOnboardingRedirection,
   ONBOARDING_STEPS,
 } from '$helpers/onboarding';
-import CreateClan from '$pages/Onboarding/CreateClan';
+import CreateOrJoinClan from '$pages/Onboarding/CreateOrJoinClan';
 
-export const Route = createFileRoute('/onboarding/create-clan')({
+export const Route = createFileRoute('/onboarding/create-or-join-clan')({
   beforeLoad: ({ context, location }) => {
     handleOnboardingRedirection(
       context,
@@ -14,5 +14,5 @@ export const Route = createFileRoute('/onboarding/create-clan')({
       ONBOARDING_STEPS.CREATE_CLAN,
     );
   },
-  component: CreateClan,
+  component: CreateOrJoinClan,
 });

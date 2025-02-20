@@ -37,6 +37,7 @@ export type ClanPlayerQueryData = {
 
 export type ClanInvitationData = {
   uuid: string;
+  code: string;
   description: string | null;
   sender: {
     username: string;
@@ -46,6 +47,18 @@ export type ClanInvitationData = {
   expiresAt: string | null;
   maxUses: number | null;
   uses: number;
+};
+
+export type VerifyClanInvitationData = {
+  valid: boolean;
+  clan?: {
+    name: string;
+    nameInGame: string;
+  };
+  sender?: {
+    username: string;
+    pictureUrl: string | null;
+  };
 };
 
 export type ClanInvitationsQueryParams = PaginatedQueryParams<{
@@ -286,4 +299,17 @@ export async function createInvitation(
 
 export async function disableClanInvitation(uuid: string): Promise<void> {
   await post(`/api/account/clan/invitations/${uuid}/disable`);
+}
+
+export async function verifyInvitation(
+  code: string,
+): Promise<VerifyClanInvitationData> {
+  const response = await get<VerifyClanInvitationData>(
+    `/api/account/clan/invitations/verify?code=${code}`,
+  );
+  return response.data;
+}
+
+export async function acceptInvitation(code: string): Promise<void> {
+  await post(`/api/account/clan/invitations/accept?code=${code}`);
 }

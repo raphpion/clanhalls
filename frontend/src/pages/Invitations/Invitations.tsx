@@ -267,8 +267,8 @@ function Invitations() {
                   </TableCell>
                   <TableCell>
                     <div className="flex items-center gap-4">
-                      <pre>{invitation.uuid}</pre>
-                      <CopyButton value={invitation.uuid} />
+                      <pre>{invitation.code}</pre>
+                      <CopyButton value={invitation.code} />
                     </div>
                   </TableCell>
                   <TableCell>{invitation.description || '-'}</TableCell>

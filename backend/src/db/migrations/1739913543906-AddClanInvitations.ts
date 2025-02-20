@@ -5,7 +5,7 @@ export class AddClanInvitations1739913543906 implements MigrationInterface {
 
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(
-      `CREATE TABLE "clan_invitation" ("id" SERIAL NOT NULL, "uuid" uuid NOT NULL DEFAULT uuid_generate_v4(), "description" character varying, "clanId" integer NOT NULL, "senderId" integer NOT NULL, "expiresAt" TIMESTAMP WITH TIME ZONE, "disabledAt" TIMESTAMP WITH TIME ZONE, "maxUses" integer, "uses" integer NOT NULL DEFAULT '0', CONSTRAINT "UQ_5d25cf2d8a31db0a9de9a2db1ea" UNIQUE ("uuid"), CONSTRAINT "PK_c82a75feb2240f4579b7221fe5e" PRIMARY KEY ("id"))`,
+      `CREATE TABLE "clan_invitation" ("id" SERIAL NOT NULL, "uuid" uuid NOT NULL DEFAULT uuid_generate_v4(), "code" character varying NOT NULL, "description" character varying, "clanId" integer NOT NULL, "senderId" integer NOT NULL, "expiresAt" TIMESTAMP WITH TIME ZONE, "disabledAt" TIMESTAMP WITH TIME ZONE, "maxUses" integer, "uses" integer NOT NULL DEFAULT '0', CONSTRAINT "UQ_5d25cf2d8a31db0a9de9a2db1ea" UNIQUE ("uuid"), CONSTRAINT "PK_c82a75feb2240f4579b7221fe5e" PRIMARY KEY ("id"))`,
     );
     await queryRunner.query(
       `ALTER TABLE "clan_user" ADD "clanInvitationId" integer`,

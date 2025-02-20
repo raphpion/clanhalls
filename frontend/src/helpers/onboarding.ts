@@ -5,7 +5,7 @@ import { type SessionData } from '../api/account';
 export const ONBOARDING_STEPS = {
   SIGN_IN: '/sign-in',
   SET_USERNAME: '/onboarding/set-username',
-  CREATE_CLAN: '/onboarding/create-clan',
+  CREATE_CLAN: '/onboarding/create-or-join-clan',
   SYNC_CLAN: '/onboarding/sync-clan',
 } as const;
 

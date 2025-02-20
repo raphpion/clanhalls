@@ -92,11 +92,19 @@ class ClanInvitationsQuery extends Query<Params, Result> {
       items.map(async (clanInvitation) => {
         const sender = await clanInvitation.sender;
         const { username, pictureUrl } = sender;
-        const { uuid, description, disabledAt, expiresAt, maxUses, uses } =
-          clanInvitation;
+        const {
+          uuid,
+          code,
+          description,
+          disabledAt,
+          expiresAt,
+          maxUses,
+          uses,
+        } = clanInvitation;
 
         return {
           uuid,
+          code,
           description,
           sender: { username, pictureUrl },
           disabledAt,

@@ -18,7 +18,7 @@ import { Route as InvitationsIndexImport } from './routes/invitations/index'
 import { Route as AdminIndexImport } from './routes/admin/index'
 import { Route as OnboardingSyncClanImport } from './routes/onboarding/sync-clan'
 import { Route as OnboardingSetUsernameImport } from './routes/onboarding/set-username'
-import { Route as OnboardingCreateClanImport } from './routes/onboarding/create-clan'
+import { Route as OnboardingCreateOrJoinClanImport } from './routes/onboarding/create-or-join-clan'
 import { Route as AdminUsersImport } from './routes/admin/users'
 import { Route as AdminClansImport } from './routes/admin/clans'
 
@@ -59,10 +59,12 @@ const OnboardingSetUsernameRoute = OnboardingSetUsernameImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
-const OnboardingCreateClanRoute = OnboardingCreateClanImport.update({
-  path: '/onboarding/create-clan',
-  getParentRoute: () => rootRoute,
-} as any)
+const OnboardingCreateOrJoinClanRoute = OnboardingCreateOrJoinClanImport.update(
+  {
+    path: '/onboarding/create-or-join-clan',
+    getParentRoute: () => rootRoute,
+  } as any,
+)
 
 const AdminUsersRoute = AdminUsersImport.update({
   path: '/users',
@@ -113,11 +115,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminUsersImport
       parentRoute: typeof AdminImport
     }
-    '/onboarding/create-clan': {
-      id: '/onboarding/create-clan'
-      path: '/onboarding/create-clan'
-      fullPath: '/onboarding/create-clan'
-      preLoaderRoute: typeof OnboardingCreateClanImport
+    '/onboarding/create-or-join-clan': {
+      id: '/onboarding/create-or-join-clan'
+      path: '/onboarding/create-or-join-clan'
+      fullPath: '/onboarding/create-or-join-clan'
+      preLoaderRoute: typeof OnboardingCreateOrJoinClanImport
       parentRoute: typeof rootRoute
     }
     '/onboarding/set-username': {
@@ -161,7 +163,7 @@ export const routeTree = rootRoute.addChildren({
     AdminIndexRoute,
   }),
   SignInRoute,
-  OnboardingCreateClanRoute,
+  OnboardingCreateOrJoinClanRoute,
   OnboardingSetUsernameRoute,
   OnboardingSyncClanRoute,
   InvitationsIndexRoute,
@@ -178,7 +180,7 @@ export const routeTree = rootRoute.addChildren({
         "/",
         "/admin",
         "/sign-in",
-        "/onboarding/create-clan",
+        "/onboarding/create-or-join-clan",
         "/onboarding/set-username",
         "/onboarding/sync-clan",
         "/invitations/"
@@ -206,8 +208,8 @@ export const routeTree = rootRoute.addChildren({
       "filePath": "admin/users.tsx",
       "parent": "/admin"
     },
-    "/onboarding/create-clan": {
-      "filePath": "onboarding/create-clan.tsx"
+    "/onboarding/create-or-join-clan": {
+      "filePath": "onboarding/create-or-join-clan.tsx"
     },
     "/onboarding/set-username": {
       "filePath": "onboarding/set-username.tsx"

@@ -22,6 +22,9 @@ class ClanInvitation {
   @Generated('uuid')
   readonly uuid: string;
 
+  @Column({ unique: true })
+  code: string;
+
   @Column({ nullable: true })
   description: string | null = null;
 
@@ -63,9 +66,13 @@ class ClanInvitation {
   get isAvailable() {
     return (
       this.disabledAt === null &&
-      (this.expiresAt === null || this.expiresAt > new Date()) &&
+      (this.expiresAt === null || this.expiresAt >= new Date()) &&
       (this.maxUses === null || this.uses < this.maxUses)
     );
+  }
+
+  static generateCode() {
+    return Math.random().toString(36).slice(2, 8);
   }
 
   disable() {
